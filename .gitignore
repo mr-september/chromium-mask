@@ -1,6 +1,5 @@
 dist/
 node_modules/
-package-lock.json
 opera-chrome-mask.zip
 web-ext-artifacts/
 *.xpi

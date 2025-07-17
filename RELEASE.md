@@ -21,6 +21,7 @@ Releases are automatically created when you push a version tag to the repository
    ```
 
 The GitHub Actions workflow will automatically:
+
 - Build the extension
 - Run tests and linting
 - Create a GitHub release
@@ -30,6 +31,7 @@ The GitHub Actions workflow will automatically:
 ### Manual Release
 
 You can also trigger a release manually from the GitHub Actions tab:
+
 1. Go to the "Actions" tab in the repository
 2. Select "Build and Release" workflow
 3. Click "Run workflow"
@@ -45,12 +47,14 @@ You can also trigger a release manually from the GitHub Actions tab:
 ## Files Updated During Release
 
 The release process automatically updates:
+
 - `package.json` - version field
 - `src/manifest.json` - version field
 
 ## Artifacts
 
 Each release includes:
+
 - `chrome-mask-for-opera.zip` - Ready-to-install extension package
 - Automatic release notes generated from commit history
 - Installation instructions

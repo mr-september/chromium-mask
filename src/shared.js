@@ -87,7 +87,7 @@ class ChromeUAStringManager {
 
     // Set up periodic refresh using chrome.alarms instead of setInterval
     chrome.alarms.create("version-check", { periodInMinutes: 60 });
-    
+
     await this.maybeRefreshRemote();
   }
 
@@ -130,23 +130,22 @@ class ChromeUAStringManager {
   // Generate Chrome-like userAgentData for modern browsers
   getUserAgentData() {
     const actualPlatform = this.#currentPlatform;
-    const effectivePlatform = (actualPlatform === "linux" && this.#linuxSpoofAsWindows) ? "win" : actualPlatform;
-    
-    const platformName = effectivePlatform === "mac" ? "macOS" : 
-                        effectivePlatform === "linux" ? "Linux" : "Windows";
-    
-    const platformVersion = effectivePlatform === "mac" ? "14.0.0" : 
-                           effectivePlatform === "linux" ? "5.15.0" : "15.0.0";
-    
+    const effectivePlatform = actualPlatform === "linux" && this.#linuxSpoofAsWindows ? "win" : actualPlatform;
+
+    const platformName = effectivePlatform === "mac" ? "macOS" : effectivePlatform === "linux" ? "Linux" : "Windows";
+
+    const platformVersion =
+      effectivePlatform === "mac" ? "14.0.0" : effectivePlatform === "linux" ? "5.15.0" : "15.0.0";
+
     return {
       brands: [
         { brand: "Google Chrome", version: this.#currentChromeVersion },
         { brand: "Chromium", version: this.#currentChromeVersion },
-        { brand: "Not_A Brand", version: "24" }
+        { brand: "Not_A Brand", version: "24" },
       ],
       mobile: false,
       platform: platformName,
-      
+
       // High entropy values that getHighEntropyValues() method should return
       highEntropyValues: {
         architecture: "x86",
@@ -154,13 +153,13 @@ class ChromeUAStringManager {
         fullVersionList: [
           { brand: "Google Chrome", version: `${this.#currentChromeVersion}.0.0.0` },
           { brand: "Chromium", version: `${this.#currentChromeVersion}.0.0.0` },
-          { brand: "Not_A Brand", version: "24.0.0.0" }
+          { brand: "Not_A Brand", version: "24.0.0.0" },
         ],
         model: "",
         platformVersion: platformVersion,
         uaFullVersion: `${this.#currentChromeVersion}.0.0.0`,
-        wow64: false
-      }
+        wow64: false,
+      },
     };
   }
 
@@ -192,7 +191,7 @@ class ChromeUAStringManager {
     };
 
     this.#currentUAString = ChromeUAStrings[targetPlatform];
-    
+
     // Store spoofing data whenever UA string is rebuilt
     await this.storeSpoofingData();
   }
@@ -213,9 +212,9 @@ class ChromeUAStringManager {
         console.error("failed to update remote, unexpected status code", remoteResponseRaw.status);
         return;
       }
-      
+
       const remoteResponse = await remoteResponseRaw.text();
-      
+
       await chrome.storage.local.set({
         remoteStorageVersionNumber: {
           version: remoteResponse.trim(),
@@ -239,8 +238,8 @@ class ChromeUAStringManager {
         vendor: this.getVendor(),
         userAgentData: this.getUserAgentData(),
         chromeVersion: this.#currentChromeVersion,
-        updatedAt: Date.now()
-      }
+        updatedAt: Date.now(),
+      },
     });
   }
 }

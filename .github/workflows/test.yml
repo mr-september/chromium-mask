@@ -15,25 +15,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          
+          node-version: "18"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Run style linting
         run: npm run lint-check
-        
+
       - name: Validate extension manifest
         run: |
           # Basic JSON validation
           node -e "JSON.parse(require('fs').readFileSync('src/manifest.json', 'utf8'))"
           echo "✓ manifest.json is valid JSON"
-          
+
           # Check required fields
           node -e "
             const manifest = JSON.parse(require('fs').readFileSync('src/manifest.json', 'utf8'));
@@ -49,31 +49,31 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          
+          node-version: "18"
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
-        
+
       - name: Test build process
         run: npm run build
-        
+
       - name: Verify build output
         run: |
           if [ ! -f "dist/chrome-mask-for-opera.zip" ]; then
             echo "❌ Build failed - no ZIP file created"
             exit 1
           fi
-          
+
           # Check if ZIP contains expected files
           if ! unzip -l dist/chrome-mask-for-opera.zip | grep -q "manifest.json"; then
             echo "❌ Build failed - no manifest.json in ZIP"
             exit 1
           fi
-          
+
           echo "✓ Build successful"
           unzip -l dist/chrome-mask-for-opera.zip

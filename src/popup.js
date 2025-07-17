@@ -28,21 +28,19 @@ async function updateUiState() {
   let platformInfo = null;
   const maxRetries = 5;
   let retryCount = 0;
-  
+
   while (retryCount < maxRetries && !platformInfo) {
     try {
       console.log(`Attempting to get platform info (attempt ${retryCount + 1}/${maxRetries})`);
-      
+
       // Add a timeout to the message sending
       const response = await Promise.race([
         chrome.runtime.sendMessage({ action: "get_platform_info" }),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error("Timeout")), 5000)
-        )
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000)),
       ]);
-      
+
       console.log("Received response:", response);
-      
+
       if (response && response.success) {
         platformInfo = response.data;
         console.log("Successfully got platform info:", platformInfo);
@@ -51,18 +49,18 @@ async function updateUiState() {
         console.warn(`Failed to get platform info (attempt ${retryCount + 1}/${maxRetries}) - response:`, response);
         retryCount++;
         if (retryCount < maxRetries) {
-          await new Promise(resolve => setTimeout(resolve, 200 * retryCount)); // Exponential backoff
+          await new Promise((resolve) => setTimeout(resolve, 200 * retryCount)); // Exponential backoff
         }
       }
     } catch (error) {
       console.error(`Failed to get platform info (attempt ${retryCount + 1}/${maxRetries}):`, error);
       retryCount++;
       if (retryCount < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, 200 * retryCount)); // Exponential backoff
+        await new Promise((resolve) => setTimeout(resolve, 200 * retryCount)); // Exponential backoff
       }
     }
   }
-  
+
   // If we still don't have platform info, use fallback
   if (!platformInfo) {
     console.warn("Using fallback platform info");
@@ -71,7 +69,7 @@ async function updateUiState() {
       platformInfo = {
         actualPlatform: fallbackPlatformInfo.os,
         linuxSpoofAsWindows: true,
-        platformInfo: fallbackPlatformInfo
+        platformInfo: fallbackPlatformInfo,
       };
     } catch (fallbackError) {
       console.error("Failed to get fallback platform info:", fallbackError);
@@ -79,7 +77,7 @@ async function updateUiState() {
       platformInfo = {
         actualPlatform: "unknown",
         linuxSpoofAsWindows: true,
-        platformInfo: null
+        platformInfo: null,
       };
     }
   }
@@ -88,16 +86,16 @@ async function updateUiState() {
   if (platformInfo && platformInfo.actualPlatform === "linux") {
     linuxToggleContainer.style.display = "flex";
     linuxCheckbox.checked = platformInfo.linuxSpoofAsWindows;
-    
+
     // Update the toggle text with localized message
     const linuxToggleText = document.getElementById("linuxToggleText");
     linuxToggleText.innerText = chrome.i18n.getMessage("linuxSpoofToggle");
-    
+
     // Update tooltip and description with localized message
     const linuxInfoIcon = document.getElementById("linuxInfoIcon");
     const linuxDescriptionText = document.getElementById("linuxDescriptionText");
     const description = chrome.i18n.getMessage("linuxSpoofToggleDescription");
-    
+
     linuxInfoIcon.title = description;
     linuxDescriptionText.innerText = description;
   } else {
@@ -119,7 +117,7 @@ async function updateUiState() {
   const mainToggleInfo = document.getElementById("mainToggleInfo");
   const mainToggleDescriptionText = document.getElementById("mainToggleDescriptionText");
   const mainToggleDescription = chrome.i18n.getMessage("mainToggleDescription");
-  
+
   if (mainToggleInfo && mainToggleDescriptionText) {
     mainToggleInfo.title = mainToggleDescription;
     mainToggleDescriptionText.innerText = mainToggleDescription;
@@ -134,15 +132,11 @@ async function updateUiState() {
   supportLink.innerText = "supporting its development";
   supportLink.target = "_blank";
 
-  supportMessage.innerHTML = chrome.i18n.getMessage("supportMessage", [
-    supportLink.outerHTML,
-  ]);
+  supportMessage.innerHTML = chrome.i18n.getMessage("supportMessage", [supportLink.outerHTML]);
 
   breakageWarning.innerText = chrome.i18n.getMessage("breakageWarning");
 
-  reportBrokenSite.innerHTML = chrome.i18n.getMessage("reportBrokenSite", [
-    webcompatLink.outerHTML,
-  ]);
+  reportBrokenSite.innerHTML = chrome.i18n.getMessage("reportBrokenSite", [webcompatLink.outerHTML]);
 
   // On Android, opening the options page programmatically has limitations,
   // so we display a fallback text for Android users.
@@ -192,11 +186,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Linux spoof toggle event listener
   document.getElementById("linux_spoof_enabled").addEventListener("change", async (ev) => {
     try {
-      const response = await chrome.runtime.sendMessage({ 
-        action: "set_linux_spoof", 
-        enabled: ev.target.checked 
+      const response = await chrome.runtime.sendMessage({
+        action: "set_linux_spoof",
+        enabled: ev.target.checked,
       });
-      
+
       if (!response || !response.success) {
         console.error("Failed to update Linux spoof setting - response:", response);
         // Revert the checkbox state

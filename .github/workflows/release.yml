@@ -3,128 +3,128 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v*'
-      - '[0-9]+.[0-9]+.[0-9]+'
+      - "v*"
+      - "[0-9]+.[0-9]+.[0-9]+"
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to release (e.g., 1.0.2)'
+        description: "Version to release (e.g., 1.0.2)"
         required: true
         type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run linting
-      run: npm run lint-check
-      
-    - name: Get version from tag or input
-      id: version
-      run: |
-        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-          echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-        else
-          # Extract version from tag (remove 'v' prefix if present)
-          VERSION=$(echo "${{ github.ref_name }}" | sed 's/^v//')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-        fi
-        
-    - name: Update version in files
-      run: |
-        VERSION="${{ steps.version.outputs.version }}"
-        # Update package.json version
-        sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$VERSION\"/" package.json
-        # Update manifest.json version
-        sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$VERSION\"/" src/manifest.json
-        
-    - name: Build extension
-      run: npm run build
-      
-    - name: Verify build output
-      run: |
-        ls -la dist/
-        unzip -l dist/chrome-mask-for-opera.zip
-        
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: chrome-mask-for-opera-${{ steps.version.outputs.version }}
-        path: dist/chrome-mask-for-opera.zip
-        retention-days: 90
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint-check
+
+      - name: Get version from tag or input
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            # Extract version from tag (remove 'v' prefix if present)
+            VERSION=$(echo "${{ github.ref_name }}" | sed 's/^v//')
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update version in files
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          # Update package.json version
+          sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$VERSION\"/" package.json
+          # Update manifest.json version
+          sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$VERSION\"/" src/manifest.json
+
+      - name: Build extension
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          ls -la dist/
+          unzip -l dist/chrome-mask-for-opera.zip
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-mask-for-opera-${{ steps.version.outputs.version }}
+          path: dist/chrome-mask-for-opera.zip
+          retention-days: 90
 
   release:
     needs: build
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Get version from tag
-      id: version
-      run: |
-        VERSION=$(echo "${{ github.ref_name }}" | sed 's/^v//')
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-        
-    - name: Download build artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: chrome-mask-for-opera-${{ steps.version.outputs.version }}
-        path: dist/
-        
-    - name: Generate release notes
-      id: release_notes
-      run: |
-        # Get commits since last tag
-        LAST_TAG=$(git tag --sort=-version:refname | grep -v "^${{ github.ref_name }}$" | head -n 1)
-        if [ -z "$LAST_TAG" ]; then
-          COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD~10..HEAD)
-        else
-          COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_TAG..HEAD)
-        fi
-        
-        # Create release notes
-        {
-          echo "## What's Changed"
-          echo ""
-          echo "$COMMITS"
-          echo ""
-          echo "## Installation"
-          echo ""
-          echo "### Manual Installation"
-          echo "1. Download \`chrome-mask-for-opera.zip\` from the assets below"
-          echo "2. Extract the ZIP file"
-          echo "3. Open Opera and go to \`opera://extensions/\`"
-          echo "4. Enable \"Developer mode\" in the top right corner"
-          echo "5. Click \"Load unpacked\" and select the extracted folder"
-          echo ""
-          echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/$LAST_TAG...${{ github.ref_name }}"
-        } > release_notes.md
-        
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        name: Chrome Mask for Opera v${{ steps.version.outputs.version }}
-        body_path: release_notes.md
-        files: |
-          dist/chrome-mask-for-opera.zip
-        draft: false
-        prerelease: ${{ contains(github.ref_name, '-') }}
-        generate_release_notes: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: |
+          VERSION=$(echo "${{ github.ref_name }}" | sed 's/^v//')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: chrome-mask-for-opera-${{ steps.version.outputs.version }}
+          path: dist/
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          # Get commits since last tag
+          LAST_TAG=$(git tag --sort=-version:refname | grep -v "^${{ github.ref_name }}$" | head -n 1)
+          if [ -z "$LAST_TAG" ]; then
+            COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD~10..HEAD)
+          else
+            COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_TAG..HEAD)
+          fi
+
+          # Create release notes
+          {
+            echo "## What's Changed"
+            echo ""
+            echo "$COMMITS"
+            echo ""
+            echo "## Installation"
+            echo ""
+            echo "### Manual Installation"
+            echo "1. Download \`chrome-mask-for-opera.zip\` from the assets below"
+            echo "2. Extract the ZIP file"
+            echo "3. Open Opera and go to \`opera://extensions/\`"
+            echo "4. Enable \"Developer mode\" in the top right corner"
+            echo "5. Click \"Load unpacked\" and select the extracted folder"
+            echo ""
+            echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/$LAST_TAG...${{ github.ref_name }}"
+          } > release_notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Chrome Mask for Opera v${{ steps.version.outputs.version }}
+          body_path: release_notes.md
+          files: |
+            dist/chrome-mask-for-opera.zip
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

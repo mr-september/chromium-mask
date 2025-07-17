@@ -22,20 +22,20 @@ async function setupLinuxPlatformSection() {
   const maxRetries = 5;
   let retryCount = 0;
   let response = null;
-  
+
   while (retryCount < maxRetries && !response) {
     try {
       console.log(`Attempting to get platform info (attempt ${retryCount + 1}/${maxRetries})`);
       response = await chrome.runtime.sendMessage({ action: "get_platform_info" });
       console.log("Received platform info response:", response);
-      
+
       if (response && response.success) {
         break;
       } else {
         console.warn(`Failed to get platform info (attempt ${retryCount + 1}/${maxRetries}) - response:`, response);
         retryCount++;
         if (retryCount < maxRetries) {
-          await new Promise(resolve => setTimeout(resolve, 200 * retryCount)); // Exponential backoff
+          await new Promise((resolve) => setTimeout(resolve, 200 * retryCount)); // Exponential backoff
         }
         response = null;
       }
@@ -43,40 +43,42 @@ async function setupLinuxPlatformSection() {
       console.error(`Failed to get platform info (attempt ${retryCount + 1}/${maxRetries}):`, error);
       retryCount++;
       if (retryCount < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, 200 * retryCount)); // Exponential backoff
+        await new Promise((resolve) => setTimeout(resolve, 200 * retryCount)); // Exponential backoff
       }
       response = null;
     }
   }
-  
+
   if (!response || !response.success) {
     console.error("Failed to get platform info after all retries - Linux platform section will not be available");
     return;
   }
-  
+
   try {
     if (response.data.actualPlatform === "linux") {
       const linuxSection = document.getElementById("linuxPlatformSection");
       linuxSection.style.display = "block";
-      
+
       // Update text content with localized strings
       document.getElementById("linuxPlatformTitle").innerText = chrome.i18n.getMessage("linuxPlatformTitle");
       document.getElementById("linuxSpoofOptionText").innerText = chrome.i18n.getMessage("linuxSpoofToggle");
-      document.getElementById("linuxSpoofOptionDescription").innerText = chrome.i18n.getMessage("linuxSpoofToggleDescription");
-      document.getElementById("linuxSpoofOptionNote").innerHTML = `<strong>Note:</strong> ${chrome.i18n.getMessage("linuxSpoofOptionNote")}`;
-      
+      document.getElementById("linuxSpoofOptionDescription").innerText =
+        chrome.i18n.getMessage("linuxSpoofToggleDescription");
+      document.getElementById("linuxSpoofOptionNote").innerHTML =
+        `<strong>Note:</strong> ${chrome.i18n.getMessage("linuxSpoofOptionNote")}`;
+
       // Set checkbox state
       const linuxCheckbox = document.getElementById("linuxSpoofOption");
       linuxCheckbox.checked = response.data.linuxSpoofAsWindows;
-      
+
       // Add event listener for checkbox changes
       linuxCheckbox.addEventListener("change", async (ev) => {
         try {
-          const updateResponse = await chrome.runtime.sendMessage({ 
-            action: "set_linux_spoof", 
-            enabled: ev.target.checked 
+          const updateResponse = await chrome.runtime.sendMessage({
+            action: "set_linux_spoof",
+            enabled: ev.target.checked,
           });
-          
+
           if (!updateResponse || !updateResponse.success) {
             console.error("Failed to update Linux spoof setting - response:", updateResponse);
             // Revert the checkbox state

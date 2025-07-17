@@ -14,9 +14,7 @@
     "alarms",
     "scripting"
   ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>"],
   "icons": {
     "16": "assets/icon-16.png",
     "32": "assets/icon-32.png",

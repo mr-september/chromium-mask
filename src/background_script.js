@@ -79,11 +79,11 @@ function updateBadgeStatus(currentTab) {
     chrome.browserAction.setIcon({
       tabId: currentTab.id,
       path: {
-        "16": `assets/badge-indicator-${isOn ? "on" : "off"}-16.png`,
-        "32": `assets/badge-indicator-${isOn ? "on" : "off"}-32.png`,
-        "48": `assets/badge-indicator-${isOn ? "on" : "off"}-48.png`,
-        "128": `assets/badge-indicator-${isOn ? "on" : "off"}-128.png`
-      }
+        16: `assets/badge-indicator-${isOn ? "on" : "off"}-16.png`,
+        32: `assets/badge-indicator-${isOn ? "on" : "off"}-32.png`,
+        48: `assets/badge-indicator-${isOn ? "on" : "off"}-48.png`,
+        128: `assets/badge-indicator-${isOn ? "on" : "off"}-128.png`,
+      },
     });
     chrome.browserAction.setTitle({
       tabId: currentTab.id,

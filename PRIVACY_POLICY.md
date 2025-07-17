@@ -9,6 +9,7 @@ Chrome Mask for Opera is committed to protecting your privacy. This privacy poli
 ## Data Collection
 
 ### What We DO NOT Collect
+
 - **Personal Information**: No personal data such as names, email addresses, or user identifiers
 - **Browsing History**: No tracking of websites you visit or pages you view
 - **Search Queries**: No recording of your search terms or browsing patterns
@@ -18,17 +19,20 @@ Chrome Mask for Opera is committed to protecting your privacy. This privacy poli
 - **Analytics**: No usage statistics, crash reports, or behavioral analytics
 
 ### What We DO Collect
+
 **Nothing**. This extension operates entirely locally on your device.
 
 ## Data Storage
 
 ### Local Storage Only
+
 - **Site Preferences**: Your enabled/disabled sites list is stored locally in your Opera browser
 - **Settings**: Extension configuration is saved locally using Opera's built-in storage API
 - **Cache**: Chrome version information is cached locally for performance
 - **No Cloud Storage**: No data is uploaded to external servers or cloud services
 
 ### Data Persistence
+
 - All data remains on your device
 - Data is automatically removed if you uninstall the extension
 - You can clear extension data through Opera's settings at any time
@@ -36,6 +40,7 @@ Chrome Mask for Opera is committed to protecting your privacy. This privacy poli
 ## Network Requests
 
 ### Chrome Version Updates
+
 The extension makes a single daily network request to maintain up-to-date Chrome version spoofing:
 
 - **Endpoint**: `chrome-mask-remote-storage.0b101010.services/current-chrome-major-version.txt`
@@ -46,6 +51,7 @@ The extension makes a single daily network request to maintain up-to-date Chrome
 - **Security**: All requests use HTTPS encryption
 
 ### Request Details
+
 - **Method**: GET request
 - **Headers**: Standard browser headers only, no custom tracking headers
 - **Response**: Plain text version number only
@@ -55,6 +61,7 @@ The extension makes a single daily network request to maintain up-to-date Chrome
 ## Third-Party Services
 
 ### Cloudflare R2
+
 - **Purpose**: Hosts the Chrome version update file
 - **Data Processing**: No user data is processed or stored
 - **Privacy**: Subject to Cloudflare's privacy policy for infrastructure only
@@ -76,11 +83,13 @@ The extension requires certain permissions to function:
 ## Data Security
 
 ### Local Security
+
 - All data is stored using Opera's secure storage APIs
 - No data is transmitted to external parties
 - Extension follows Opera's security guidelines and best practices
 
 ### Network Security
+
 - Chrome version updates use HTTPS encryption
 - No sensitive data is transmitted over the network
 - Minimal attack surface due to limited network activity
@@ -88,12 +97,14 @@ The extension requires certain permissions to function:
 ## User Rights
 
 ### Data Control
+
 - **Access**: View your enabled sites through the extension's options page
 - **Modify**: Add or remove sites from the enabled list at any time
 - **Delete**: Clear all extension data by uninstalling the extension
 - **Export**: No data export needed as everything is stored locally
 
 ### Transparency
+
 - Source code is available for inspection
 - This privacy policy is included with the extension
 - No hidden data collection or tracking mechanisms
@@ -101,23 +112,27 @@ The extension requires certain permissions to function:
 ## Changes to This Policy
 
 ### Updates
+
 - Policy changes will be reflected in extension updates
 - Users will be notified of significant privacy changes
 - Version history maintained in the extension's changelog
 
 ### Notification
+
 - Material changes will be highlighted in release notes
 - Users can review changes before updating the extension
 
 ## Contact Information
 
 For privacy-related questions or concerns:
+
 - **GitHub Issues**: [Create an issue](https://github.com/mr-september/chrome-mask-for-opera/issues)
 - **Email**: Contact through GitHub profile
 
 ## Compliance
 
 This extension is designed to comply with:
+
 - Opera Add-ons Store policies
 - General Data Protection Regulation (GDPR) principles
 - California Consumer Privacy Act (CCPA) guidelines

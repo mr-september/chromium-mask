@@ -41,7 +41,7 @@ Even though Opera is built on Chromium (the same foundation as Chrome), many web
 **Key advantages over generic user-agent spoofing extensions:**
 
 - **Always Up-to-Date**: Automatically updates to the latest Chrome version every 24 hours by querying an official API
-- **Smart OS Detection**: Automatically matches your operating system (Windows, macOS, Linux) 
+- **Smart OS Detection**: Automatically matches your operating system (Windows, macOS, Linux)
 - **Linux Platform Flexibility**: On Linux, optionally spoof as Windows Chrome to bypass Linux-specific blocks
 - **Complete Spoofing**: Modifies both HTTP headers and JavaScript properties for comprehensive masking
 - **Modern Client Hints**: Supports Chrome's User-Agent Client Hints for advanced compatibility
@@ -51,9 +51,11 @@ Even though Opera is built on Chromium (the same foundation as Chrome), many web
 ## 🚀 Installation
 
 ### From Opera Add-ons Store (Recommended)
-*Coming soon - extension is currently under review*
+
+_Coming soon - extension is currently under review_
 
 ### Manual Installation (Developer Mode)
+
 1. Download and unzip the latest release from the [Releases page](https://github.com/mr-september/chrome-mask-for-opera/releases)
 2. Open Opera and go to `opera://extensions/`
 3. Enable "Developer mode" in the top right corner
@@ -62,18 +64,21 @@ Even though Opera is built on Chromium (the same foundation as Chrome), many web
 ## 📖 How to Use
 
 ### Basic Usage
+
 1. **Navigate to a website** that doesn't work well with Opera
 2. **Click the extension icon** in the toolbar
 3. **Toggle the switch** to enable Chrome masking for that site
 4. **(Hard) Reload the page** (Ctrl+F5) to see the changes take effect
 
 ### Platform Configuration (Linux Users)
+
 - **Access Platform Settings**: Right-click extension icon → "Options" → "Linux Platform Settings"
 - **Windows Spoofing**: Toggle "Spoof as Windows instead of Linux" if sites block Linux browsers
 - **Automatic Application**: Setting applies to all sites where masking is enabled
 - **Immediate Effect**: Changes take effect after reloading affected pages
 
 ### Managing Sites
+
 - **Popup Interface**: Quick toggle for the current site
 - **Options Page**: Manage all enabled sites in one place
   - Access via right-click on extension icon → "Options"
@@ -82,11 +87,13 @@ Even though Opera is built on Chromium (the same foundation as Chrome), many web
 - **Linux Platform Settings**: Configure Windows vs Linux Chrome spoofing (Linux only)
 
 ### Status Indicators
+
 - **Green badge**: Chrome masking is active on the current site
 - **Gray badge**: Chrome masking is disabled on the current site
 - **Tooltip**: Hover over the icon to see the current status
 
 ### Platform-Specific Features
+
 - **Linux Users**: Option to spoof as Windows Chrome instead of Linux Chrome
   - Some websites specifically block Linux browsers
   - Toggle this setting in the Options page
@@ -95,10 +102,11 @@ Even though Opera is built on Chromium (the same foundation as Chrome), many web
 ## 🔧 Technical Details
 
 ### What Gets Spoofed
-- **HTTP Headers**: 
+
+- **HTTP Headers**:
   - `User-Agent` header in all requests
   - Chrome User-Agent Client Hints (`sec-ch-ua-*` headers)
-- **JavaScript Properties**: 
+- **JavaScript Properties**:
   - `navigator.userAgent`
   - `navigator.userAgentData` (including high-entropy values)
   - `navigator.vendor` → "Google Inc."
@@ -107,6 +115,7 @@ Even though Opera is built on Chromium (the same foundation as Chrome), many web
 - **Platform Detection**: Automatically adapts to your OS or optionally spoofs as Windows on Linux
 
 ### What This Extension Does NOT Do
+
 - **Web Platform APIs**: Does not shim Chrome-specific APIs that don't exist in Opera
 - **Canvas/WebGL**: Does not modify fingerprinting beyond basic navigator properties
 - **Performance**: Does not affect page loading speed or Opera's performance
@@ -116,21 +125,27 @@ Even though Opera is built on Chromium (the same foundation as Chrome), many web
 ### Common Issues
 
 **Q: The extension icon shows as active but the site still detects Opera**
+
 - **A**: Some sites use advanced detection methods. If clearing your browser cache and cookies for that site doesn't work, try opening an issue here and we'll have a look.
 
 **Q: A website stopped working after enabling the mask**
+
 - **A**: Some sites have Chrome-specific code that may not work in Opera. Disable the mask for that site if issues persist, and fall back to using the actual Chrome browser.
 
 **Q: The extension doesn't work on certain pages**
+
 - **A**: Extensions cannot run on internal Opera pages (opera://) or certain restricted domains. This is a browser security limitation.
 
 **Q: How do I know if it's working?**
+
 - **A**: Visit [whatismybrowser.com](https://www.whatismybrowser.com/detect/what-is-my-user-agent) with the mask enabled to verify your user agent appears as Chrome.
 
 **Q: Should I enable "Spoof as Windows" on Linux?**
+
 - **A**: Enable this if you encounter sites that specifically block Linux browsers. Many streaming services and some enterprise sites have better Linux compatibility when appearing as Windows.
 
 ### Advanced Troubleshooting
+
 1. **Check Console**: Open Developer Tools (F12) and look for any JavaScript errors
 2. **Verify Headers**: Use the Network tab to confirm User-Agent headers are being modified
 3. **Test Different Sites**: Try enabling the mask on a simple site first to verify basic functionality
@@ -138,16 +153,19 @@ Even though Opera is built on Chromium (the same foundation as Chrome), many web
 ## 🔒 Privacy & Security
 
 ### Data Collection
+
 - **No Personal Data**: This extension does not collect or store any personal information
 - **No Tracking**: No analytics, cookies, or user behavior tracking
 - **Local Storage**: Site preferences are stored locally on your device only
 
 ### Network Requests
+
 - **Version Updates**: Connects to `https://raw.githubusercontent.com/mr-september/central_automation_hub/main/current-chrome-version.txt` once daily to fetch current Chrome version
 - **No User Data**: Only the Chrome version number is downloaded, no user data is sent
 - **Secure Connection**: All requests use HTTPS encryption
 
 ### Permissions Explained
+
 - **Storage**: Save your site preferences and platform settings locally
 - **Tabs**: Access current tab information for per-site toggling
 - **Host Permissions**: Modify headers and inject scripts on websites you choose
@@ -158,6 +176,7 @@ Even though Opera is built on Chromium (the same foundation as Chrome), many web
 ## 🌍 Supported Languages
 
 The extension interface is available in 14 languages:
+
 - English
 - Simplified Chinese (简体中文)
 - Traditional Chinese (繁體中文)
@@ -178,6 +197,7 @@ The extension interface is available in 14 languages:
 Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests.
 
 ### Development Setup
+
 ```bash
 # Install dependencies
 npm install
@@ -205,6 +225,7 @@ Based on the original ["Chrome Mask for Firefox" extension by Dennis Schubert](h
 **Note**: This extension is designed to help with website compatibility issues. Use responsibly and respect websites' terms of service.
 
 ## Star History
+
 <div align="center">
   <a href="https://www.star-history.com/#mr-september/chrome-mask-for-opera&Date">
   <picture>

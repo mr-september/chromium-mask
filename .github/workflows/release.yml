@@ -54,6 +54,8 @@ jobs:
       - name: Build extension
         run: |
           VERSION="${{ steps.version.outputs.version }}"
+          # Clean dist directory to avoid old builds
+          rm -rf dist/*
           npm run build
 
       - name: Verify build output
@@ -120,6 +122,13 @@ jobs:
           ls -la
           echo "Looking for zip files:"
           find . -name "*.zip" -type f
+          # Remove any non-versioned zip files to avoid confusion
+          if [ -f "chrome-mask-for-opera.zip" ]; then
+            echo "Removing non-versioned zip file"
+            rm chrome-mask-for-opera.zip
+          fi
+          echo "Final zip files:"
+          find . -name "*.zip" -type f
 
       - name: Generate release notes
         id: release_notes
@@ -147,7 +156,7 @@ jobs:
             echo "## Installation"
             echo ""
             echo "### Manual Installation"
-            echo "1. Download \`chrome-mask-for-opera.zip\` from the assets below"
+            echo "1. Download \`chrome-mask-for-opera-v${{ steps.version.outputs.version }}.zip\` from the assets below"
             echo "2. Extract the ZIP file"
             echo "3. Open Opera and go to \`opera://extensions/\`"
             echo "4. Enable \"Developer mode\" in the top right corner"
@@ -169,7 +178,6 @@ jobs:
             chrome-mask-for-opera-v${{ steps.version.outputs.version }}.zip
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
-          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

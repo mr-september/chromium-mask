@@ -59,7 +59,7 @@ _Coming soon - extension is currently under review_
 1. Download and unzip the latest release from the [Releases page](https://github.com/mr-september/chrome-mask-for-opera/releases)
 2. Open Opera and go to `opera://extensions/`
 3. Enable "Developer mode" in the top right corner
-4. Click "Load unpacked" and select the unzipped extension folder (`src` directory)
+4. Click "Load unpacked" and select the unzipped extension folder
 
 ## 📖 How to Use
 

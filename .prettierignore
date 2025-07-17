@@ -1,0 +1,11 @@
+# Ignore husky hooks and other binary/generated files
+.husky/
+node_modules/
+dist/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+package-lock.json

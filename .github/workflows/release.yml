@@ -131,7 +131,13 @@ jobs:
           # Get commits since last tag
           LAST_TAG=$(git tag --sort=-version:refname | grep -v "^${{ github.ref_name }}$" | head -n 1)
           if [ -z "$LAST_TAG" ]; then
-            COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD~10..HEAD)
+            # No previous tag found, get commits from the beginning or last 10 (whichever is smaller)
+            COMMIT_COUNT=$(git rev-list --count HEAD)
+            if [ "$COMMIT_COUNT" -gt 10 ]; then
+              COMMITS=$(git log --oneline --pretty=format:"- %s" HEAD~10..HEAD)
+            else
+              COMMITS=$(git log --oneline --pretty=format:"- %s")
+            fi
           else
             COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_TAG..HEAD)
           fi
@@ -151,7 +157,11 @@ jobs:
             echo "4. Enable \"Developer mode\" in the top right corner"
             echo "5. Click \"Load unpacked\" and select the extracted folder"
             echo ""
-            echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/$LAST_TAG...${{ github.ref_name }}"
+            if [ -n "$LAST_TAG" ]; then
+              echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/$LAST_TAG...${{ github.ref_name }}"
+            else
+              echo "**Full Changelog**: https://github.com/${{ github.repository }}/commits/${{ github.ref_name }}"
+            fi
           } > release_notes.md
 
       - name: Create GitHub Release

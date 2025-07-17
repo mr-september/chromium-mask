@@ -17,7 +17,7 @@ This extension will be available on the Opera Add-ons store once submitted for r
 
 **My work developing, contributing to, and maintaing FOSS software is made possible solely by your donations. Your support is vital to the ongoing development of open-source software.**
 
-</div>
+
 
 <p align="center">
 <a href="https://www.paypal.com/donate/?hosted_button_id=WFXL2T42BBCRN">
@@ -33,6 +33,13 @@ This extension will be available on the Opera Add-ons store once submitted for r
   <img src="https://nowpayments.io/images/embeds/donation-button-black.svg" alt="Crypto donation button by NOWPayments" height="36">
 </a>
 </p>
+
+### 🌟 Other Ways to Help
+⭐ **Star the repository** to show your support  
+🐦 **Share** to help others discover Chrome Mask for Opera  
+📝 **Write reviews** and share your experience  
+🎥 **Create content** - tutorials, guides, or showcase videos
+</div>
 
 ## 🎭 Why Chrome Mask for Opera?
 

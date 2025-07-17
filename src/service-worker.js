@@ -389,6 +389,26 @@ function generateDNRRules(hostnames, uaString) {
             operation: "set",
             value: `"Chromium";v="${chromeVersion}", "Not:A-Brand";v="24.0.0.0", "Google Chrome";v="${chromeVersion}"`,
           },
+          {
+            header: "sec-ch-ua-arch",
+            operation: "set",
+            value: '"x86"',
+          },
+          {
+            header: "sec-ch-ua-bitness",
+            operation: "set",
+            value: '"64"',
+          },
+          {
+            header: "sec-ch-ua-wow64",
+            operation: "set",
+            value: "?0",
+          },
+          {
+            header: "sec-fetch-user",
+            operation: "set",
+            value: "?1",
+          },
         ],
       },
       condition: {
@@ -453,6 +473,26 @@ function generateDNRRules(hostnames, uaString) {
               operation: "set",
               value: `"Chromium";v="${chromeVersion}", "Not:A-Brand";v="24.0.0.0", "Google Chrome";v="${chromeVersion}"`,
             },
+            {
+              header: "sec-ch-ua-arch",
+              operation: "set",
+              value: '"x86"',
+            },
+            {
+              header: "sec-ch-ua-bitness",
+              operation: "set",
+              value: '"64"',
+            },
+            {
+              header: "sec-ch-ua-wow64",
+              operation: "set",
+              value: "?0",
+            },
+            {
+              header: "sec-fetch-user",
+              operation: "set",
+              value: "?1",
+            },
           ],
         },
         condition: {
@@ -494,19 +534,37 @@ async function updateContentScriptRegistration() {
 
     // Register new content script if we have enabled hostnames
     if (hostnames.length > 0) {
-      const matches = hostnames.map((hostname) => `*://${hostname}/*`);
+      // Create matches array including both hostname and www.hostname variants
+      const matches = [];
+      for (const hostname of hostnames) {
+        matches.push(`*://${hostname}/*`);
+        // Add www variant if not already a www subdomain and not already in the list
+        if (!hostname.startsWith("www.") && !hostnames.includes(`www.${hostname}`)) {
+          matches.push(`*://www.${hostname}/*`);
+        }
+      }
 
+      // Register multiple content scripts for maximum coverage
       await chrome.scripting.registerContentScripts([
         {
-          id: "chrome-mask-content-script",
+          id: "chrome-mask-content-script-main",
           matches: matches,
           js: ["content-spoofer.js"],
           runAt: "document_start",
           allFrames: true,
+          world: "MAIN", // Inject into main world for deeper access
+        },
+        {
+          id: "chrome-mask-content-script-isolated",
+          matches: matches,
+          js: ["content-spoofer.js"],
+          runAt: "document_start",
+          allFrames: true,
+          world: "ISOLATED", // Also inject into isolated world as backup
         },
       ]);
 
-      console.log(`Registered content script for ${hostnames.length} hostnames`);
+      console.log(`Registered content scripts for ${hostnames.length} hostnames (${matches.length} total patterns)`);
     } else {
       console.log("No hostnames enabled, content script not registered");
     }

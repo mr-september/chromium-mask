@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
           cache: "npm"
 
       - name: Install dependencies
@@ -78,14 +78,14 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
-            
+
             // Keep only the 3 most recent artifacts for this extension
             const extensionArtifacts = artifacts.data.artifacts
               .filter(artifact => artifact.name.startsWith('chrome-mask-for-opera-'))
               .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-            
+
             const artifactsToDelete = extensionArtifacts.slice(3);
-            
+
             for (const artifact of artifactsToDelete) {
               console.log(`Deleting old artifact: ${artifact.name} (${artifact.created_at})`);
               await github.rest.actions.deleteArtifact({
@@ -175,13 +175,13 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
             });
-            
+
             // Keep only the 5 most recent releases, delete older ones
             const releasesToDelete = releases.data
               .filter(release => !release.draft && !release.prerelease)
               .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
               .slice(5);
-            
+
             for (const release of releasesToDelete) {
               console.log(`Deleting old release: ${release.name} (${release.tag_name})`);
               await github.rest.repos.deleteRelease({

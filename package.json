@@ -7,7 +7,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "mkdir -p dist && cd src && zip -r ../dist/chrome-mask-for-opera.zip .",
+    "build": "mkdir -p dist && cd src && zip -r ../dist/chrome-mask-for-opera-v$(node -p \"require('../package.json').version\").zip .",
+    "build-simple": "mkdir -p dist && cd src && zip -r ../dist/chrome-mask-for-opera.zip .",
     "lint-check": "npx prettier --check .",
     "lint": "npx prettier --write .",
     "pre-commit": "lint-staged"

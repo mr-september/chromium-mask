@@ -55,8 +55,6 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           npm run build
-          # Rename the zip file to include version
-          mv dist/chrome-mask-for-opera.zip dist/chrome-mask-for-opera-v${VERSION}.zip
 
       - name: Verify build output
         run: |
@@ -122,8 +120,6 @@ jobs:
           ls -la
           echo "Looking for zip files:"
           find . -name "*.zip" -type f
-          # Rename to simpler name for release
-          mv chrome-mask-for-opera-v${{ steps.version.outputs.version }}.zip chrome-mask-for-opera.zip
 
       - name: Generate release notes
         id: release_notes
@@ -170,7 +166,7 @@ jobs:
           name: Chrome Mask for Opera v${{ steps.version.outputs.version }}
           body_path: release_notes.md
           files: |
-            chrome-mask-for-opera.zip
+            chrome-mask-for-opera-v${{ steps.version.outputs.version }}.zip
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
           generate_release_notes: true

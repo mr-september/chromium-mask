@@ -60,7 +60,7 @@ jobs:
         run: npm ci
 
       - name: Test build process
-        run: npm run build
+        run: npm run build-simple
 
       - name: Verify build output
         run: |

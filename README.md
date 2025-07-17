@@ -15,9 +15,7 @@ This extension will be available on the Opera Add-ons store once submitted for r
 
 ## 💖 Support FOSS Projects
 
-**My work developing, contributing to, and maintaing FOSS software is made possible solely by your donations. Your support is vital to the ongoing development of open-source software.**
-
-
+**My work developing, contributing to, and maintaining open-source software is made possible solely by your donations. Your support is vital to the ongoing development of FOSS solutions.**
 
 <p align="center">
 <a href="https://www.paypal.com/donate/?hosted_button_id=WFXL2T42BBCRN">

@@ -9,6 +9,46 @@
 (function () {
   "use strict";
 
+  // IMMEDIATE SPOOFING - before any other scripts can detect Opera
+  // This must happen synchronously at document_start
+
+  // Create a comprehensive Opera detection blocker
+  const operaBlocked = Symbol("opera-blocked");
+
+  // Immediately block access to common Opera detection methods
+  const blockOperaAccess = (obj, properties) => {
+    properties.forEach((prop) => {
+      try {
+        Object.defineProperty(obj, prop, {
+          get: () => {
+            console.debug(`Blocked access to ${obj.constructor.name}.${prop}`);
+            return undefined;
+          },
+          set: () => {},
+          configurable: false,
+          enumerable: false,
+        });
+      } catch (e) {
+        // If property already exists and is non-configurable, try to delete it
+        try {
+          delete obj[prop];
+        } catch (e2) {
+          // Last resort - set to undefined
+          obj[prop] = undefined;
+        }
+      }
+    });
+  };
+
+  // Block Opera properties immediately
+  if (typeof window !== "undefined") {
+    blockOperaAccess(window, ["opera", "opr", "operaVersion", "operaBuild", "operaAPI"]);
+  }
+
+  if (typeof navigator !== "undefined") {
+    blockOperaAccess(navigator, ["opera", "opr", "operaVersion", "operaBuild"]);
+  }
+
   // Execute immediately before any other scripts can run
   const originalUserAgent = navigator.userAgent;
   const isAlreadySpoofed =
@@ -22,7 +62,7 @@
     return;
   }
 
-  // Immediately hide any traces of Opera/OPR in the user agent before other scripts can see it
+  // CRITICAL: Immediately hide any traces of Opera/OPR in the user agent before other scripts can see it
   if (originalUserAgent.includes("OPR/") || originalUserAgent.includes("Opera/")) {
     // Create a temporary Chrome-like user agent immediately
     const tempChromeUA =
@@ -37,6 +77,7 @@
       });
     } catch (e) {
       // Fallback if descriptor can't be set
+      console.warn("Failed to immediately spoof user agent:", e);
     }
   }
 
@@ -341,7 +382,21 @@
     }
 
     // Remove Opera-specific properties and APIs
-    const operaProperties = ["opera", "opr", "addons", "sidebar"];
+    const operaProperties = [
+      "opera",
+      "opr",
+      "addons",
+      "sidebar",
+      "operaVersion",
+      "operaBuild",
+      "operaPrefs",
+      "operaAPI",
+      "operaTouchAPI",
+      "operaMailAPI",
+      "operaMediaAPI",
+      "operaHistory",
+      "operaExtension",
+    ];
 
     operaProperties.forEach((prop) => {
       if (window[prop]) {
@@ -387,6 +442,44 @@
         }
       }
     });
+
+    // Hide Opera-specific CSS features and capabilities
+    try {
+      // Override CSS supports to hide Opera-specific features
+      const originalSupports = CSS.supports;
+      CSS.supports = function (property, value) {
+        // Hide Opera-specific CSS properties
+        if (property && typeof property === "string") {
+          const operaCSSFeatures = ["-o-", "opera-", "-webkit-opera-"];
+          if (operaCSSFeatures.some((prefix) => property.toLowerCase().includes(prefix))) {
+            return false;
+          }
+        }
+        return originalSupports.apply(this, arguments);
+      };
+    } catch (e) {
+      // CSS.supports might not be available
+    }
+
+    // Spoof console properties that might reveal Opera
+    try {
+      // Some Opera versions add console.profile methods or modify console behavior
+      if (console.profile && console.profileEnd) {
+        const originalProfile = console.profile;
+        const originalProfileEnd = console.profileEnd;
+
+        console.profile = function (...args) {
+          // Make it behave like Chrome's console.profile
+          return originalProfile.apply(this, args);
+        };
+
+        console.profileEnd = function (...args) {
+          return originalProfileEnd.apply(this, args);
+        };
+      }
+    } catch (e) {
+      // Console manipulation might fail
+    }
 
     // Spoof plugins if needed (though most modern browsers have limited plugin support)
     if (navigator.plugins && navigator.plugins.length === 0) {
@@ -439,6 +532,57 @@
 
         return pc;
       };
+    }
+
+    // Spoof fetch and XMLHttpRequest headers that might reveal Opera
+    if (window.fetch) {
+      const originalFetch = window.fetch;
+      window.fetch = function (input, init) {
+        // Ensure User-Agent header matches our spoofed version
+        if (init && init.headers) {
+          const headers = new Headers(init.headers);
+          if (headers.has("User-Agent")) {
+            headers.set("User-Agent", currentData.userAgent);
+          }
+          init.headers = headers;
+        }
+        return originalFetch.apply(this, arguments);
+      };
+    }
+
+    // Override XMLHttpRequest setRequestHeader to ensure consistent User-Agent
+    if (window.XMLHttpRequest) {
+      const originalXHR = window.XMLHttpRequest;
+      const originalSetRequestHeader = originalXHR.prototype.setRequestHeader;
+
+      originalXHR.prototype.setRequestHeader = function (name, value) {
+        if (name.toLowerCase() === "user-agent") {
+          value = currentData.userAgent;
+        }
+        return originalSetRequestHeader.call(this, name, value);
+      };
+    }
+
+    // Spoof Error stack traces that might reveal Opera in file paths
+    try {
+      const originalError = window.Error;
+      window.Error = function (...args) {
+        const error = new originalError(...args);
+        if (error.stack) {
+          // Replace any Opera-related paths in stack traces
+          error.stack = error.stack
+            .replace(/opera[\/\\]/gi, "chrome/")
+            .replace(/opr[\/\\]/gi, "chrome/")
+            .replace(/Opera[\/\\]/gi, "Chrome/");
+        }
+        return error;
+      };
+
+      // Copy properties from original Error
+      Object.setPrototypeOf(window.Error, originalError);
+      Object.setPrototypeOf(window.Error.prototype, originalError.prototype);
+    } catch (e) {
+      // Error override might fail
     }
 
     // Spoof screen properties to be more generic but platform-appropriate

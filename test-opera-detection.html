@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Opera Detection Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .test-result {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .pass {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+      }
+      .fail {
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+      }
+      .info {
+        background-color: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+      }
+      code {
+        background-color: #f8f9fa;
+        padding: 2px 4px;
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Opera Detection Test</h1>
+    <p>This page tests various methods that websites might use to detect Opera browser.</p>
+
+    <div id="test-results"></div>
+
+    <script>
+      const results = [];
+
+      function addResult(test, passed, value) {
+        results.push({ test, passed, value });
+      }
+
+      function displayResults() {
+        const container = document.getElementById("test-results");
+        results.forEach((result) => {
+          const div = document.createElement("div");
+          div.className = `test-result ${result.passed ? "pass" : "fail"}`;
+          div.innerHTML = `
+                    <strong>${result.test}</strong><br>
+                    Result: <code>${result.value}</code><br>
+                    Status: ${result.passed ? "✅ PASSED (appears as Chrome)" : "❌ FAILED (Opera detected)"}
+                `;
+          container.appendChild(div);
+        });
+      }
+
+      // Test 1: User Agent String
+      const userAgent = navigator.userAgent;
+      const hasOpera = userAgent.includes("Opera") || userAgent.includes("OPR");
+      addResult("User Agent Test", !hasOpera, userAgent);
+
+      // Test 2: Navigator vendor
+      const vendor = navigator.vendor;
+      const isGoogleVendor = vendor === "Google Inc.";
+      addResult("Navigator Vendor Test", isGoogleVendor, vendor);
+
+      // Test 3: Window.opera property
+      const hasWindowOpera = typeof window.opera !== "undefined";
+      addResult("Window.opera Property Test", !hasWindowOpera, typeof window.opera);
+
+      // Test 4: Navigator.opera property
+      const hasNavigatorOpera = typeof navigator.opera !== "undefined";
+      addResult("Navigator.opera Property Test", !hasNavigatorOpera, typeof navigator.opera);
+
+      // Test 5: OPR property
+      const hasOPR = typeof window.opr !== "undefined";
+      addResult("Window.opr Property Test", !hasOPR, typeof window.opr);
+
+      // Test 6: Chrome object existence
+      const hasChromeObject = typeof window.chrome !== "undefined";
+      addResult("Window.chrome Object Test", hasChromeObject, typeof window.chrome);
+
+      // Test 7: Navigator.userAgentData (Client Hints)
+      if (navigator.userAgentData) {
+        const brands = navigator.userAgentData.brands;
+        const hasOperaBrand = brands.some(
+          (brand) => brand.brand.toLowerCase().includes("opera") || brand.brand.toLowerCase().includes("opr"),
+        );
+        addResult("User Agent Data Brands Test", !hasOperaBrand, JSON.stringify(brands));
+      } else {
+        addResult("User Agent Data Test", true, "Not supported (expected)");
+      }
+
+      // Test 8: Error stack traces (might reveal Opera paths)
+      try {
+        throw new Error("Test error");
+      } catch (e) {
+        const hasOperaInStack =
+          e.stack && (e.stack.toLowerCase().includes("opera") || e.stack.toLowerCase().includes("opr"));
+        addResult("Error Stack Trace Test", !hasOperaInStack, "Stack trace checked");
+      }
+
+      // Test 9: CSS.supports for Opera-specific features
+      if (typeof CSS !== "undefined" && CSS.supports) {
+        const operaCSS = CSS.supports("-o-transform", "rotate(45deg)");
+        addResult("CSS Opera Features Test", !operaCSS, `-o-transform support: ${operaCSS}`);
+      } else {
+        addResult("CSS.supports Test", true, "Not supported");
+      }
+
+      // Test 10: Additional Opera properties
+      const operaProps = ["operaVersion", "operaBuild", "operaAPI", "addons", "sidebar"];
+      let foundOperaProps = [];
+      operaProps.forEach((prop) => {
+        if (window[prop] !== undefined) {
+          foundOperaProps.push(prop);
+        }
+      });
+      addResult(
+        "Additional Opera Properties Test",
+        foundOperaProps.length === 0,
+        foundOperaProps.length > 0 ? `Found: ${foundOperaProps.join(", ")}` : "None found",
+      );
+
+      // Test 11: Console profile methods (Opera sometimes modifies these)
+      const hasProfileMethods = typeof console.profile === "function" && typeof console.profileEnd === "function";
+      addResult(
+        "Console Profile Methods Test",
+        hasProfileMethods,
+        `profile: ${typeof console.profile}, profileEnd: ${typeof console.profileEnd}`,
+      );
+
+      // Display all results
+      displayResults();
+
+      // Summary
+      const passedTests = results.filter((r) => r.passed).length;
+      const totalTests = results.length;
+      const summaryDiv = document.createElement("div");
+      summaryDiv.className = `test-result ${passedTests === totalTests ? "pass" : "info"}`;
+      summaryDiv.innerHTML = `
+            <h3>Summary</h3>
+            <strong>Passed: ${passedTests}/${totalTests} tests</strong><br>
+            ${
+              passedTests === totalTests
+                ? "🎉 All tests passed! Browser appears as Chrome."
+                : "⚠️ Some tests failed. Opera may still be detectable."
+            }
+        `;
+      document.getElementById("test-results").appendChild(summaryDiv);
+    </script>
+  </body>
+</html>

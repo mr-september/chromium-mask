@@ -409,6 +409,19 @@ function generateDNRRules(hostnames, uaString) {
             operation: "set",
             value: "?1",
           },
+          // Remove any Opera-specific headers that might leak through
+          {
+            header: "x-opera-mini-mode",
+            operation: "remove",
+          },
+          {
+            header: "x-opera-info",
+            operation: "remove",
+          },
+          {
+            header: "x-forwarded-for-opera-mini",
+            operation: "remove",
+          },
         ],
       },
       condition: {

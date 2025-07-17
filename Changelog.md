@@ -1,5 +1,25 @@
 # Changelog - Chrome Mask for Opera
 
+## 1.2.1 (Property Redefinition Fix) - July 2025
+
+**🔧 Critical Bug Fixes**
+
+Fixed navigator property redefinition errors that were causing console spam and potential spoofing failures.
+
+### 🐛 Bug Fixes
+
+- **Fixed Property Redefinition Errors**: Resolved "Cannot redefine property" TypeError messages for `userAgent`, `appVersion`, `vendor`, and `userAgentData`
+- **Improved Double-Spoofing Protection**: Enhanced checks to prevent multiple spoofing attempts on the same page
+- **Better Error Handling**: Suppressed harmless redefinition warnings while preserving legitimate error reporting
+- **Property Descriptor Validation**: Added strict validation before attempting to redefine non-configurable navigator properties
+
+### 🛠️ Technical Improvements
+
+- Enhanced property configurability checks using `Object.getOwnPropertyDescriptor()`
+- Improved spoofing state management with `__chromeMaskSpoofingApplied` flag
+- More robust error filtering to reduce console noise
+- Better handling of already-defined navigator properties
+
 ## 1.0.1 (Language Pack Update) - July 2025
 
 **🌍 Extended Language Support**

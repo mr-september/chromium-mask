@@ -9,6 +9,12 @@
 (function () {
   "use strict";
 
+  // Check if spoofing has already been applied to avoid double-spoofing
+  if (window.__chromeMaskSpoofingApplied) {
+    console.debug("Chrome Mask spoofing already applied, skipping");
+    return;
+  }
+
   // IMMEDIATE SPOOFING - before any other scripts can detect Opera
   // This must happen synchronously at document_start
 
@@ -63,18 +69,30 @@
   }
 
   // CRITICAL: Immediately hide any traces of Opera/OPR in the user agent before other scripts can see it
+  // Store original values before any spoofing
+  const originalValues = {
+    userAgent: navigator.userAgent,
+    appVersion: navigator.appVersion,
+    vendor: navigator.vendor,
+    userAgentData: navigator.userAgentData,
+  };
+
   if (originalUserAgent.includes("OPR/") || originalUserAgent.includes("Opera/")) {
     // Create a temporary Chrome-like user agent immediately
     const tempChromeUA =
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
     try {
-      Object.defineProperty(navigator, "userAgent", {
-        get: function () {
-          return tempChromeUA;
-        },
-        configurable: false,
-        enumerable: true,
-      });
+      // Only define if not already defined or if configurable
+      const descriptor = Object.getOwnPropertyDescriptor(navigator, "userAgent");
+      if (!descriptor || descriptor.configurable !== false) {
+        Object.defineProperty(navigator, "userAgent", {
+          get: function () {
+            return tempChromeUA;
+          },
+          configurable: true, // Keep configurable so we can redefine later
+          enumerable: true,
+        });
+      }
     } catch (e) {
       // Fallback if descriptor can't be set
       console.warn("Failed to immediately spoof user agent:", e);
@@ -134,10 +152,14 @@
     applySpoofing();
   })();
 
-  // Apply spoofing synchronously with fallback data, then update when async data loads
+  // Apply spoofing synchronously with fallback data
   applySpoofing();
 
   function applySpoofing() {
+    // Skip if already applied
+    if (window.__chromeMaskSpoofingApplied) {
+      return;
+    }
     // Use current spoofingData or fallback
     const currentData = spoofingData || {
       userAgent:
@@ -172,123 +194,136 @@
 
     // Spoof navigator.userAgent
     try {
-      Object.defineProperty(navigator, "userAgent", {
-        get: function () {
-          return currentData.userAgent;
-        },
-        set: function () {
-          // Silently ignore attempts to set userAgent
-        },
-        configurable: false,
-        enumerable: true,
-      });
+      const descriptor = Object.getOwnPropertyDescriptor(navigator, "userAgent");
+      if (!descriptor || descriptor.configurable === true) {
+        Object.defineProperty(navigator, "userAgent", {
+          get: function () {
+            return currentData.userAgent;
+          },
+          set: function () {},
+          configurable: false,
+          enumerable: true,
+        });
+      } // else: do nothing, property is non-configurable
     } catch (e) {
-      console.warn("Could not spoof navigator.userAgent:", e);
+      // Only log if not a TypeError about non-configurable property
+      if (!(e instanceof TypeError && /Cannot redefine property/.test(e.message))) {
+        console.warn("Could not spoof navigator.userAgent:", e);
+      }
     }
 
     // Spoof navigator.appVersion
     try {
-      Object.defineProperty(navigator, "appVersion", {
-        get: function () {
-          return currentData.appVersion;
-        },
-        set: function () {
-          // Silently ignore attempts to set appVersion
-        },
-        configurable: false,
-        enumerable: true,
-      });
+      const descriptor = Object.getOwnPropertyDescriptor(navigator, "appVersion");
+      if (!descriptor || descriptor.configurable === true) {
+        Object.defineProperty(navigator, "appVersion", {
+          get: function () {
+            return currentData.appVersion;
+          },
+          set: function () {},
+          configurable: false,
+          enumerable: true,
+        });
+      }
     } catch (e) {
-      console.warn("Could not spoof navigator.appVersion:", e);
+      if (!(e instanceof TypeError && /Cannot redefine property/.test(e.message))) {
+        console.warn("Could not spoof navigator.appVersion:", e);
+      }
     }
 
     // Spoof navigator.vendor
     try {
-      Object.defineProperty(navigator, "vendor", {
-        get: function () {
-          return currentData.vendor;
-        },
-        set: function () {
-          // Silently ignore attempts to set vendor
-        },
-        configurable: false,
-        enumerable: true,
-      });
+      const descriptor = Object.getOwnPropertyDescriptor(navigator, "vendor");
+      if (!descriptor || descriptor.configurable === true) {
+        Object.defineProperty(navigator, "vendor", {
+          get: function () {
+            return currentData.vendor;
+          },
+          set: function () {},
+          configurable: false,
+          enumerable: true,
+        });
+      }
     } catch (e) {
-      console.warn("Could not spoof navigator.vendor:", e);
+      if (!(e instanceof TypeError && /Cannot redefine property/.test(e.message))) {
+        console.warn("Could not spoof navigator.vendor:", e);
+      }
     }
 
     // Spoof navigator.userAgentData (for modern browsers)
     if (navigator.userAgentData) {
       try {
-        // Create a more comprehensive userAgentData object that matches Chrome
-        const fakeUserAgentData = {
-          brands: currentData.userAgentData.brands || [
-            { brand: "Google Chrome", version: "134" },
-            { brand: "Chromium", version: "134" },
-            { brand: "Not_A Brand", version: "24" },
-          ],
-          mobile: currentData.userAgentData.mobile || false,
-          platform: currentData.userAgentData.platform || "Windows",
+        const descriptor = Object.getOwnPropertyDescriptor(navigator, "userAgentData");
+        if (!descriptor || descriptor.configurable === true) {
+          // Create a more comprehensive userAgentData object that matches Chrome
+          const fakeUserAgentData = {
+            brands: currentData.userAgentData.brands || [
+              { brand: "Google Chrome", version: "134" },
+              { brand: "Chromium", version: "134" },
+              { brand: "Not_A Brand", version: "24" },
+            ],
+            mobile: currentData.userAgentData.mobile || false,
+            platform: currentData.userAgentData.platform || "Windows",
 
-          // Add getHighEntropyValues method
-          getHighEntropyValues: function (hints) {
-            const highEntropyData = currentData.userAgentData.highEntropyValues || {
-              architecture: "x86",
-              bitness: "64",
-              fullVersionList: [
-                { brand: "Google Chrome", version: "134.0.0.0" },
-                { brand: "Chromium", version: "134.0.0.0" },
-                { brand: "Not_A Brand", version: "24.0.0.0" },
-              ],
-              model: "",
-              platformVersion: "15.0.0",
-              uaFullVersion: "134.0.0.0",
-              wow64: false,
-            };
+            // Add getHighEntropyValues method
+            getHighEntropyValues: function (hints) {
+              const highEntropyData = currentData.userAgentData.highEntropyValues || {
+                architecture: "x86",
+                bitness: "64",
+                fullVersionList: [
+                  { brand: "Google Chrome", version: "134.0.0.0" },
+                  { brand: "Chromium", version: "134.0.0.0" },
+                  { brand: "Not_A Brand", version: "24.0.0.0" },
+                ],
+                model: "",
+                platformVersion: "15.0.0",
+                uaFullVersion: "134.0.0.0",
+                wow64: false,
+              };
 
-            // Return only the requested hints, or all if no hints specified
-            const result = {
-              brands: this.brands,
-              mobile: this.mobile,
-              platform: this.platform,
-            };
+              // Return only the requested hints, or all if no hints specified
+              const result = {
+                brands: this.brands,
+                mobile: this.mobile,
+                platform: this.platform,
+              };
 
-            if (!hints || hints.length === 0) {
-              return Promise.resolve(Object.assign(result, highEntropyData));
-            }
-
-            hints.forEach((hint) => {
-              if (highEntropyData.hasOwnProperty(hint)) {
-                result[hint] = highEntropyData[hint];
+              if (!hints || hints.length === 0) {
+                return Promise.resolve(Object.assign(result, highEntropyData));
               }
-            });
 
-            return Promise.resolve(result);
-          },
+              hints.forEach((hint) => {
+                if (highEntropyData.hasOwnProperty(hint)) {
+                  result[hint] = highEntropyData[hint];
+                }
+              });
 
-          // Add toJSON method for serialization
-          toJSON: function () {
-            return {
-              brands: this.brands,
-              mobile: this.mobile,
-              platform: this.platform,
-            };
-          },
-        };
+              return Promise.resolve(result);
+            },
 
-        Object.defineProperty(navigator, "userAgentData", {
-          get: function () {
-            return fakeUserAgentData;
-          },
-          set: function () {
-            // Silently ignore attempts to set userAgentData
-          },
-          configurable: false,
-          enumerable: true,
-        });
+            // Add toJSON method for serialization
+            toJSON: function () {
+              return {
+                brands: this.brands,
+                mobile: this.mobile,
+                platform: this.platform,
+              };
+            },
+          };
+
+          Object.defineProperty(navigator, "userAgentData", {
+            get: function () {
+              return fakeUserAgentData;
+            },
+            set: function () {},
+            configurable: false,
+            enumerable: true,
+          });
+        }
       } catch (e) {
-        console.warn("Could not spoof navigator.userAgentData:", e);
+        if (!(e instanceof TypeError && /Cannot redefine property/.test(e.message))) {
+          console.warn("Could not spoof navigator.userAgentData:", e);
+        }
       }
     }
 
@@ -617,12 +652,20 @@
     }
 
     // JavaScript spoofing applied successfully
+
+    // Mark that spoofing has been applied
+    Object.defineProperty(window, "__chromeMaskSpoofingApplied", {
+      value: true,
+      writable: false,
+      configurable: false,
+      enumerable: false,
+    });
   }
 
   // Execute spoofing when document loads if async data becomes available
   initPromise
     .then(() => {
-      if (spoofingData) {
+      if (spoofingData && !window.__chromeMaskSpoofingApplied) {
         // Re-apply spoofing with updated data if needed
         applySpoofing();
       }

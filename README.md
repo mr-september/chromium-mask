@@ -13,9 +13,9 @@ This extension will be available on the Opera Add-ons store once submitted for r
 [![Opera Store](https://img.shields.io/badge/Opera%20Store-Under%20Review-orange.svg)](https://addons.opera.com/)
 [![Made for Opera](https://img.shields.io/badge/Made%20for-Opera-red.svg)](https://www.opera.com/)
 
-## 💖 Support the Project
+## 💖 Support FOSS Projects
 
-This project is maintained by Opera users in their free time. Your support helps us continue developing new features and fixing bugs.
+**My work developing, contributing to, and maintaing FOSS software is made possible solely by your donations. Your support is vital to the ongoing development of open-source software.**
 
 </div>
 

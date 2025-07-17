@@ -9,9 +9,17 @@
   "scripts": {
     "build": "mkdir -p dist && cd src && zip -r ../dist/chrome-mask-for-opera.zip .",
     "lint-check": "npx prettier --check .",
-    "lint": "npx prettier --write ."
+    "lint": "npx prettier --write .",
+    "pre-commit": "lint-staged"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
     "prettier": "3.5.3"
+  },
+  "lint-staged": {
+    "*": [
+      "prettier --write"
+    ]
   }
 }

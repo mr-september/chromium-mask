@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "Makes Opera wear a mask to look like Chrome to websites that otherwise won't work."
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "While Chrome Mask for Opera may help if you see a \"Browser unsupported\" message, it could cause unexpected breakage on some sites."
+  },
+
+  "reportBrokenSite": {
+    "message": "If you find a site which works better with Chrome Mask for Opera enabled, please report it $WEBCOMPAT$. Thank you! &hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "through Opera Help & Support"
+  },
+
+  "webcompatLinkText": {
+    "message": "on WebCompat.com"
+  },
+
+  "maskStatusOn": {
+    "message": "The mask is on! I pretend to be Chrome on this site."
+  },
+
+  "maskStatusOff": {
+    "message": "The mask is off. I look like Opera to this site."
+  },
+
+  "maskStatusUnsupported": {
+    "message": "The mask cannot work on this site."
+  },
+
+  "mainToggleDescription": {
+    "message": "After enabling, hard refresh the page (Ctrl+F5) to apply changes and clear cached content."
+  },
+
+  "manageSitesButton": {
+    "message": "Add or remove sites"
+  },
+
+  "manageSitesFallback": {
+    "message": "To add or remove sites, please open the Extension Manager, select Chrome Mask for Opera, and hit Settings."
+  },
+
+  "addSiteTitle": {
+    "message": "Add Site"
+  },
+
+  "addSiteButton": {
+    "message": "Add Site"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "Note: Enter the domain name (e.g., example.com). The extension will work on all pages and subdomains of that site."
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "Please enter a valid domain!"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "Chrome Mask for Opera is already enabled for this domain!"
+  },
+
+  "maskedSitesTitle": {
+    "message": "Currently Masked Sites"
+  },
+
+  "siteListRemoveButton": {
+    "message": "Remove"
+  },
+
+  "siteListEmpty": {
+    "message": "You did not enable Chrome Mask for Opera on any site yet!"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "Spoof as Windows instead of Linux"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "Some sites block Linux browsers. Enable this to appear as Windows Chrome instead of Linux Chrome."
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Linux Platform Settings"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "This affects all sites where Chrome masking is enabled. You can change this setting at any time."
+  }
+}

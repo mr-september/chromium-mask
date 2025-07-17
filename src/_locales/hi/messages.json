@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "Opera को Chrome की तरह दिखने के लिए मास्क पहनाता है ताकि यह उन वेबसाइटों पर काम करे जो अन्यथा काम नहीं करतीं।"
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "जबकि Chrome Mask for Opera मदद कर सकता है यदि आप \"ब्राउज़र समर्थित नहीं\" संदेश देखते हैं, यह कुछ साइटों पर अनपेक्षित समस्याएं पैदा कर सकता है।"
+  },
+
+  "reportBrokenSite": {
+    "message": "यदि आप कोई साइट पाते हैं जो Chrome Mask for Opera सक्षम होने पर बेहतर काम करती है, तो कृपया इसे $WEBCOMPAT$ रिपोर्ट करें। धन्यवाद! &hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "Opera सहायता और समर्थन के माध्यम से"
+  },
+
+  "webcompatLinkText": {
+    "message": "WebCompat.com पर"
+  },
+
+  "maskStatusOn": {
+    "message": "मास्क चालू है! मैं इस साइट पर Chrome होने का नाटक कर रहा हूं।"
+  },
+
+  "maskStatusOff": {
+    "message": "मास्क बंद है। मैं इस साइट पर Opera की तरह दिखता हूं।"
+  },
+
+  "maskStatusUnsupported": {
+    "message": "इस साइट पर मास्क काम नहीं कर सकता।"
+  },
+
+  "mainToggleDescription": {
+    "message": "सक्षम करने के बाद, बदलाव लागू करने और कैश की गई सामग्री को साफ़ करने के लिए पेज को हार्ड रीफ्रेश (Ctrl+F5) करें।"
+  },
+
+  "manageSitesButton": {
+    "message": "साइटें जोड़ें या हटाएं"
+  },
+
+  "manageSitesFallback": {
+    "message": "साइटें जोड़ने या हटाने के लिए, कृपया एक्सटेंशन मैनेजर खोलें, Chrome Mask for Opera का चयन करें, और सेटिंग्स दबाएं।"
+  },
+
+  "addSiteTitle": {
+    "message": "साइट जोड़ें"
+  },
+
+  "addSiteButton": {
+    "message": "साइट जोड़ें"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "नोट: डोमेन नाम दर्ज करें (उदाहरण: example.com)। एक्सटेंशन उस साइट के सभी पेजों और सबडोमेन पर काम करेगा।"
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "कृपया एक वैध डोमेन दर्ज करें!"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "इस डोमेन के लिए Chrome Mask for Opera पहले से ही सक्षम है!"
+  },
+
+  "maskedSitesTitle": {
+    "message": "वर्तमान में मास्क की गई साइटें"
+  },
+
+  "siteListRemoveButton": {
+    "message": "हटाएं"
+  },
+
+  "siteListEmpty": {
+    "message": "आपने अभी तक किसी भी साइट पर Chrome Mask for Opera सक्षम नहीं किया है!"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "Linux के बजाय Windows के रूप में दिखाएं"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "कुछ साइटें Linux ब्राउज़र को ब्लॉक कर देती हैं। Linux Chrome के बजाय Windows Chrome के रूप में दिखाने के लिए इसे सक्षम करें।"
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Linux प्लेटफॉर्म सेटिंग्स"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "यह उन सभी साइटों को प्रभावित करता है जहां Chrome मास्किंग सक्षम है। आप इस सेटिंग को कभी भी बदल सकते हैं।"
+  }
+}

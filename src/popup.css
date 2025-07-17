@@ -1,0 +1,223 @@
+:root {
+  --background-color: #42414c;
+  --border-color: #717079;
+  --color: #fff;
+  --toggle-background: #5f5e68;
+
+  @media (prefers-color-scheme: light) {
+    --background-color: #fff;
+    --border-color: #c4c4c5;
+    --color: #15141a;
+    --toggle-background: #e2e2e3;
+  }
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--color);
+  font-family: sans-serif;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  width: 320px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 1.3rem;
+  line-height: 1.8rem;
+}
+
+p {
+  font-size: 0.8rem;
+  line-height: 1.1rem;
+
+  a,
+  a:focus,
+  a:active {
+    color: var(--color);
+  }
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+
+.fancy_toggle_container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.main_toggle_info {
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.main_toggle_description {
+  background: var(--toggle-background);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  margin-top: 5px;
+}
+
+.main_toggle_info:hover .main_toggle_description {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+.linux_toggle_container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--toggle-background);
+}
+
+.toggle_description {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.platform_icon {
+  width: 16px;
+  height: 16px;
+}
+
+.info_icon {
+  cursor: help;
+  color: var(--color);
+  font-size: 1rem;
+  font-weight: bold;
+  user-select: none;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.info_icon:hover {
+  opacity: 1;
+}
+
+.linux_description {
+  background: var(--toggle-background);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  margin-top: 5px;
+}
+
+.linux_info_icon {
+  position: relative;
+}
+
+.linux_info_icon:hover .linux_description {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.linux_toggle {
+  flex-shrink: 0;
+}
+
+.fancy_toggle {
+  cursor: pointer;
+  display: inline-block;
+
+  div {
+    background: var(--toggle-background);
+    border-radius: 25px;
+    height: 50px;
+    position: relative;
+    width: 100px;
+
+    &::after {
+      background-color: #fff;
+      background-image: url(assets/toggler-icon-opera.png);
+      background-size: contain;
+      border-radius: 30px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+      content: "";
+      height: 60px;
+      left: -5px;
+      position: absolute;
+      top: -5px;
+      width: 60px;
+    }
+  }
+
+  input {
+    display: none;
+
+    &:checked {
+      ~ div {
+        background: #2ac3a2;
+      }
+
+      ~ div::after {
+        background-image: url(assets/toggler-icon-chrome.png);
+        transform: translateX(55px);
+      }
+    }
+  }
+}
+
+.linux_toggle {
+  div {
+    height: 30px;
+    width: 60px;
+
+    &::after {
+      height: 36px;
+      width: 36px;
+      background-image: url(assets/toggler-icon-linux.png);
+      background-size: contain;
+      left: -3px;
+      top: -3px;
+    }
+  }
+
+  input:checked ~ div::after {
+    background-image: url(assets/toggler-icon-windows.png);
+    transform: translateX(33px);
+  }
+}
+
+button {
+  display: block;
+  line-height: 1.5rem;
+  width: 100%;
+}

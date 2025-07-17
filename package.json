@@ -1,0 +1,17 @@
+{
+  "name": "chrome-mask-for-opera",
+  "version": "1.0.1",
+  "description": "Makes Opera wear a Chrome mask for better website compatibility.",
+  "author": "mr-september",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "mkdir -p dist && cd src && zip -r ../dist/chrome-mask-for-opera.zip .",
+    "lint-check": "npx prettier --check .",
+    "lint": "npx prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "3.5.3"
+  }
+}

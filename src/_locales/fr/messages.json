@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "Mettez un masque à Opera afin qu'il ressemble à Chrome sur les sites Web qui autrement ne fonctionneraient pas."
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "Bien que Chrome Mask for Opera puisse vous aider si vous voyez un message « votre navigateur n'est pas supporté », il peut causer des problèmes de façon inattendu sur certains sites."
+  },
+
+  "reportBrokenSite": {
+    "message": "Si vous trouvez qu'un site fonctionne mieux avec Chrome Mask for Opera activé, s'il-vous-plaît veuillez le rapporter $WEBCOMPAT$. Merci! &hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "via l'aide et le support d'Opera"
+  },
+
+  "webcompatLinkText": {
+    "message": "sur WebCompat.com"
+  },
+
+  "maskStatusOn": {
+    "message": "Le masque est activé! Je prétends d'être Chrome pour ce site."
+  },
+
+  "maskStatusOff": {
+    "message": "Le masque est désactivé. Je ressemble à Opera pour ce site."
+  },
+
+  "maskStatusUnsupported": {
+    "message": "Le masque ne peut pas fonctionner sur ce site."
+  },
+
+  "mainToggleDescription": {
+    "message": "Après activation, actualisez la page en dur (Ctrl+F5) pour appliquer les changements et vider le cache."
+  },
+
+  "manageSitesButton": {
+    "message": "Ajouter ou supprimer des sites"
+  },
+
+  "manageSitesFallback": {
+    "message": "Pour ajouter ou supprimer des sites, veuillez ouvrir le gestionnaire d'extensions, sélectionner Chrome Mask for Opera et appuyer sur Préfèrences."
+  },
+
+  "addSiteTitle": {
+    "message": "Ajouter un site"
+  },
+
+  "addSiteButton": {
+    "message": "Ajouter un site"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "Note: Entrez toujours un nom de domaine complet. Si vous entrez example.com, Chrome Mask for Opera ne sera pas actif sur www.example.com"
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "Entrez un nom de domaine valide!"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "Chrome Mask for Opera est déjà activé sur ce site!"
+  },
+
+  "maskedSitesTitle": {
+    "message": "Sites avec un masque actif"
+  },
+
+  "siteListRemoveButton": {
+    "message": "Supprimer"
+  },
+
+  "siteListEmpty": {
+    "message": "Vous n'avez pas encore activé Chrome Mask for Opera sur un site!"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "Se faire passer pour Windows au lieu de Linux"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "Certains sites bloquent les navigateurs Linux. Activez ceci pour apparaître comme Chrome Windows au lieu de Chrome Linux."
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Paramètres de la plateforme Linux"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "Ceci affecte tous les sites où le masquage Chrome est activé. Vous pouvez modifier ce paramètre à tout moment."
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "Membuat Opera memakai topeng untuk kelihatan seperti Chrome kepada laman web yang sebaliknya tidak akan berfungsi."
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "Walaupun Chrome Mask for Opera mungkin membantu jika anda melihat mesej \"Pelayar tidak disokong\", ia boleh menyebabkan kerosakan yang tidak dijangka pada sesetengah laman."
+  },
+
+  "reportBrokenSite": {
+    "message": "Jika anda menemui laman yang berfungsi lebih baik dengan Chrome Mask for Opera diaktifkan, sila laporkan $WEBCOMPAT$. Terima kasih! &hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "melalui Opera Help & Support"
+  },
+
+  "webcompatLinkText": {
+    "message": "di WebCompat.com"
+  },
+
+  "maskStatusOn": {
+    "message": "Topeng dipakai! Saya berpura-pura menjadi Chrome di laman ini."
+  },
+
+  "maskStatusOff": {
+    "message": "Topeng dimatikan. Saya kelihatan seperti Opera di laman ini."
+  },
+
+  "maskStatusUnsupported": {
+    "message": "Topeng tidak boleh berfungsi di laman ini."
+  },
+
+  "mainToggleDescription": {
+    "message": "Selepas mengaktifkan, muat semula secara paksa halaman (Ctrl+F5) untuk melaksanakan perubahan dan mengosongkan kandungan cache."
+  },
+
+  "manageSitesButton": {
+    "message": "Tambah atau buang laman"
+  },
+
+  "manageSitesFallback": {
+    "message": "Untuk menambah atau membuang laman, sila buka Pengurus Ekstensi, pilih Chrome Mask for Opera, dan tekan Tetapan."
+  },
+
+  "addSiteTitle": {
+    "message": "Tambah Laman"
+  },
+
+  "addSiteButton": {
+    "message": "Tambah Laman"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "Nota: Masukkan nama domain (contoh: example.com). Ekstensi akan berfungsi pada semua halaman dan subdomain laman tersebut."
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "Sila masukkan domain yang sah!"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "Chrome Mask for Opera sudah diaktifkan untuk domain ini!"
+  },
+
+  "maskedSitesTitle": {
+    "message": "Laman Bertopeng Semasa"
+  },
+
+  "siteListRemoveButton": {
+    "message": "Buang"
+  },
+
+  "siteListEmpty": {
+    "message": "Anda belum mengaktifkan Chrome Mask for Opera di mana-mana laman lagi!"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "Samar sebagai Windows bukannya Linux"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "Sesetengah laman menyekat pelayar Linux. Aktifkan ini untuk muncul sebagai Windows Chrome bukannya Linux Chrome."
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Tetapan Platform Linux"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "Ini memberi kesan kepada semua laman yang Chrome masking diaktifkan. Anda boleh mengubah tetapan ini pada bila-bila masa."
+  }
+}

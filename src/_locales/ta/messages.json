@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "Opera ஐ Chrome போல் தோற்றமளிக்க முகமூடி அணிவித்து, இல்லையெனில் வேலை செய்யாத வலைதளங்களில் வேலை செய்ய வைக்கிறது."
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "\"ஆதரிக்கப்படாத உலாவி\" செய்தியை நீங்கள் பார்த்தால் Chrome Mask for Opera உதவலாம், ஆனால் இது சில தளங்களில் எதிர்பாராத பிரச்சினைகளை ஏற்படுத்தலாம்."
+  },
+
+  "reportBrokenSite": {
+    "message": "Chrome Mask for Opera இயக்கப்பட்டால் சிறப்பாக வேலை செய்யும் தளத்தை நீங்கள் கண்டறிந்தால், தயவுசெய்து அதை $WEBCOMPAT$ அறிவிக்கவும். நன்றி! &hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "Opera உதவி மற்றும் ஆதரவு மூலம்"
+  },
+
+  "webcompatLinkText": {
+    "message": "WebCompat.com இல்"
+  },
+
+  "maskStatusOn": {
+    "message": "முகமூடி இயக்கப்பட்டுள்ளது! நான் இந்த தளத்தில் Chrome போல் நடிக்கிறேன்."
+  },
+
+  "maskStatusOff": {
+    "message": "முகமூடி அணையப்பட்டுள்ளது. இந்த தளத்தில் நான் Opera போல் தோற்றமளிக்கிறேன்."
+  },
+
+  "maskStatusUnsupported": {
+    "message": "இந்த தளத்தில் முகமூடி வேலை செய்ய முடியாது."
+  },
+
+  "mainToggleDescription": {
+    "message": "இயக்கிய பின், மாற்றங்களை பயன்படுத்த மற்றும் கேச் செய்யப்பட்ட உள்ளடக்கத்தை அழிக்க பக்கத்தை கடின புதுப்பிப்பு (Ctrl+F5) செய்யுங்கள்."
+  },
+
+  "manageSitesButton": {
+    "message": "தளங்களை சேர் அல்லது அகற்று"
+  },
+
+  "manageSitesFallback": {
+    "message": "தளங்களை சேர்க்க அல்லது அகற்ற, நீட்டிப்பு மேலாளரை திறந்து, Chrome Mask for Opera ஐ தேர்ந்தெடுத்து, அமைப்புகளைத் தாக்கவும்."
+  },
+
+  "addSiteTitle": {
+    "message": "தளத்தை சேர்"
+  },
+
+  "addSiteButton": {
+    "message": "தளத்தை சேர்"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "குறிப்பு: டொமைன் பெயரை உள்ளிடவும் (உதாரணம்: example.com). நீட்டிப்பு அந்த தளத்தின் அனைத்து பக்கங்கள் மற்றும் துணை டொமைன்களில் வேலை செய்யும்."
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "தயவுசெய்து சரியான டொமைனை உள்ளிடவும்!"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "இந்த டொமைனுக்கு Chrome Mask for Opera ஏற்கனவே இயக்கப்பட்டுள்ளது!"
+  },
+
+  "maskedSitesTitle": {
+    "message": "தற்போது முகமூடியிட்ட தளங்கள்"
+  },
+
+  "siteListRemoveButton": {
+    "message": "அகற்று"
+  },
+
+  "siteListEmpty": {
+    "message": "நீங்கள் இன்னும் எந்த தளத்திலும் Chrome Mask for Opera ஐ இயக்கவில்லை!"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "Linux க்கு பதிலாக Windows ஆக காட்டு"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "சில தளங்கள் Linux உலாவிகளை தடுக்கின்றன. Linux Chrome க்கு பதிலாக Windows Chrome ஆக தோன்ற இதை இயக்கவும்."
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Linux தளம் அமைப்புகள்"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "இது Chrome முகமூடி இயக்கப்பட்ட அனைத்து தளங்களையும் பாதிக்கிறது. நீங்கள் எந்த நேரத்திலும் இந்த அமைப்பை மாற்றலாம்."
+  }
+}

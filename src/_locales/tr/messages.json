@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "Opera'ya, başka türlü çalışmayan, websitelere Chrome gibi gözükmesi için maske giydirir."
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "Eğer \"Desteklenmeyen tarayıcı\" mesajı görüyorsanız Chrome Mask for Opera yardımcı olabilir ama bazı sitelerde beklenmeyen sorunlara yol açabilir."
+  },
+
+  "reportBrokenSite": {
+    "message": "Eğer Chrome Mask for Opera ile daha iyi çalışan bir site bulursan lütfen $WEBCOMPAT$ bildirin. Teşekkür ederiz! &hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "Opera Yardım ve Destek aracılığıyla"
+  },
+
+  "webcompatLinkText": {
+    "message": "WebCompat.com üzerinden"
+  },
+
+  "maskStatusOn": {
+    "message": "Maske açık! Bu sitede Chrome gibi davranmaya çalışacağım."
+  },
+
+  "maskStatusOff": {
+    "message": "Maske kapalı. Bu siteye Opera olarak gözüküyorum."
+  },
+
+  "maskStatusUnsupported": {
+    "message": "Chrome Mask for Opera bu sitede desteklenmiyor."
+  },
+
+  "mainToggleDescription": {
+    "message": "Etkinleştirdikten sonra değişiklikleri uygulamak ve önbelleği temizlemek için sayfayı sert yenileme (Ctrl+F5) yapın."
+  },
+
+  "manageSitesButton": {
+    "message": "Site ekle ya da kaldır"
+  },
+
+  "manageSitesFallback": {
+    "message": "Site ekleyip kaldırmak için lütfen Eklenti Yöneticisi'ni açın, Chrome Mask for Opera'yi seçin ve Ayarlar'a tıklayın."
+  },
+
+  "addSiteTitle": {
+    "message": "Site ekle"
+  },
+
+  "addSiteButton": {
+    "message": "Ekle"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "Not: Herzaman tam alan adını yazın. Eğer example.com yazarsanız Chrome Mask for Opera www.example.com da açılmayacaktır!"
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "Lütfen geçerli bir alan adı girin!"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "Chrome Mask for Opera bu alan adı için zaten aktif!"
+  },
+
+  "maskedSitesTitle": {
+    "message": "Halihazırda maskeli siteler"
+  },
+
+  "siteListRemoveButton": {
+    "message": "Kaldır"
+  },
+
+  "siteListEmpty": {
+    "message": "Daha herhangi bir sitede Chrome Mask for Opera'yi aktifleştirmedin!"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "Linux yerine Windows olarak görün"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "Bazı siteler Linux tarayıcılarını engeller. Linux Chrome yerine Windows Chrome olarak görünmek için bunu etkinleştirin."
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Linux Platform Ayarları"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "Bu, Chrome maskelemenin etkinleştirildiği tüm siteleri etkiler. Bu ayarı istediğiniz zaman değiştirebilirsiniz."
+  }
+}

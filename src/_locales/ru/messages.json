@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "Заставляет Opera носить маску Chrome для лучшей совместимости с веб-сайтами."
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "Хотя Chrome Mask for Opera может помочь, если вы видите сообщение «Браузер не поддерживается», это может вызвать неожиданные проблемы на некоторых сайтах."
+  },
+
+  "reportBrokenSite": {
+    "message": "Если вы найдете сайт, который работает лучше с включенным Chrome Mask for Opera, пожалуйста, сообщите об этом $WEBCOMPAT$. Спасибо! &hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "через Opera Help & Support"
+  },
+
+  "webcompatLinkText": {
+    "message": "на WebCompat.com"
+  },
+
+  "maskStatusOn": {
+    "message": "Маска включена! Я притворяюсь Chrome на этом сайте."
+  },
+
+  "maskStatusOff": {
+    "message": "Маска выключена. Я выгляжу как Opera на этом сайте."
+  },
+
+  "maskStatusUnsupported": {
+    "message": "Маска не может работать на этом сайте."
+  },
+
+  "mainToggleDescription": {
+    "message": "После включения выполните принудительное обновление страницы (Ctrl+F5), чтобы применить изменения и очистить кэшированное содержимое."
+  },
+
+  "manageSitesButton": {
+    "message": "Добавить или удалить сайты"
+  },
+
+  "manageSitesFallback": {
+    "message": "Чтобы добавить или удалить сайты, откройте Менеджер расширений, выберите Chrome Mask for Opera и нажмите Настройки."
+  },
+
+  "addSiteTitle": {
+    "message": "Добавить сайт"
+  },
+
+  "addSiteButton": {
+    "message": "Добавить сайт"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "Примечание: Введите доменное имя (например, example.com). Расширение будет работать на всех страницах и поддоменах этого сайта."
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "Пожалуйста, введите действительный домен!"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "Chrome Mask for Opera уже включен для этого домена!"
+  },
+
+  "maskedSitesTitle": {
+    "message": "Текущие замаскированные сайты"
+  },
+
+  "siteListRemoveButton": {
+    "message": "Удалить"
+  },
+
+  "siteListEmpty": {
+    "message": "Вы еще не включили Chrome Mask for Opera ни на одном сайте!"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "Маскироваться под Windows вместо Linux"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "Некоторые сайты блокируют браузеры Linux. Включите это, чтобы выглядеть как Windows Chrome вместо Linux Chrome."
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Настройки платформы Linux"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "Это влияет на все сайты, где включена маскировка Chrome. Вы можете изменить этот параметр в любое время."
+  }
+}

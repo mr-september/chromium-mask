@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "Sprawia, że Opera przyjmuje maskę, aby wyglądać jak Chrome dla stron internetowych, które w przeciwnym razie nie będą działać."
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "Chociaż Chrome Mask for Opera może pomóc, jeśli widzisz komunikat \"Przeglądarka nie jest obsługiwana\", może powodować nieoczekiwane problemy na niektórych stronach."
+  },
+
+  "reportBrokenSite": {
+    "message": "Jeśli znajdziesz stronę, która działa lepiej z włączonym Chrome Mask for Opera, prosimy o zgłoszenie tego $WEBCOMPAT$. Dziękuję! &hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "przez Opera Pomoc i Wsparcie"
+  },
+
+  "webcompatLinkText": {
+    "message": "na WebCompat.com"
+  },
+
+  "maskStatusOn": {
+    "message": "Maska jest włączona! Na tej stronie udaję Chrome."
+  },
+
+  "maskStatusOff": {
+    "message": "Maska jest wyłączona. Na tej stronie wyglądam jak Opera."
+  },
+
+  "maskStatusUnsupported": {
+    "message": "Maska nie może działać na tej stronie."
+  },
+
+  "mainToggleDescription": {
+    "message": "Po włączeniu wykonaj twarde odświeżenie strony (Ctrl+F5), aby zastosować zmiany i wyczyścić pamięć podręczną."
+  },
+
+  "manageSitesButton": {
+    "message": "Dodaj lub usuń strony"
+  },
+
+  "manageSitesFallback": {
+    "message": "Aby dodać lub usunąć strony, otwórz Menedżer rozszerzeń, wybierz Chrome Mask for Opera i naciśnij Ustawienia."
+  },
+
+  "addSiteTitle": {
+    "message": "Dodaj stronę"
+  },
+
+  "addSiteButton": {
+    "message": "Dodaj stronę"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "Uwaga: Wprowadź nazwę domeny (np. example.com). Rozszerzenie będzie działać na wszystkich stronach i poddomenach tej witryny."
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "Proszę wprowadzić prawidłową domenę!"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "Chrome Mask for Opera jest już włączona dla tej domeny!"
+  },
+
+  "maskedSitesTitle": {
+    "message": "Obecnie zamaskowane strony"
+  },
+
+  "siteListRemoveButton": {
+    "message": "Usuń"
+  },
+
+  "siteListEmpty": {
+    "message": "Jeszcze nie włączyłeś Chrome Mask for Opera na żadnej stronie!"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "Podawać się za Windows zamiast Linux"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "Niektóre strony blokują przeglądarki Linux. Włącz to, aby wydawać się jak Chrome Windows zamiast Chrome Linux."
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Ustawienia platformy Linux"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "Wpływa to na wszystkie strony, na których włączone jest maskowanie Chrome. Możesz zmienić to ustawienie w każdej chwili."
+  }
+}

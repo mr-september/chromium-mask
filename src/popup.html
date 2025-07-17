@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="popup.css" />
+    <script src="shared.js"></script>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <h2 id="maskStatus">The mask is off. I look like Opera to this site.</h2>
+    <section class="fancy_toggle_container">
+      <label class="fancy_toggle" for="mask_enabled">
+        <input name="mask_enabled" type="checkbox" id="mask_enabled" />
+        <div></div>
+      </label>
+      <span class="info_icon main_toggle_info" id="mainToggleInfo" title="">ⓘ
+        <!-- Main toggle description tooltip (hidden by default) -->
+        <div class="main_toggle_description" id="mainToggleDescription">
+          <p id="mainToggleDescriptionText">After enabling, refresh the page (Ctrl+F5) to apply changes and clear cached content.</p>
+        </div>
+      </span>
+    </section>
+    
+    <!-- Linux-specific toggle (only shown on Linux) -->
+    <section class="linux_toggle_container" id="linuxToggleContainer" style="display: none;">
+      <div class="toggle_description">
+        <img src="assets/linux-icon.png" alt="Linux" class="platform_icon">
+        <span id="linuxToggleText">Spoof as Windows instead of Linux</span>
+        <span class="info_icon linux_info_icon" id="linuxInfoIcon" title="">ⓘ
+          <!-- Linux toggle description tooltip (hidden by default) -->
+          <div class="linux_description" id="linuxDescription">
+            <p id="linuxDescriptionText">Some sites block Linux browsers. Enable this to appear as Windows Chrome instead of Linux Chrome.</p>
+          </div>
+        </span>
+      </div>
+      <label class="fancy_toggle linux_toggle" for="linux_spoof_enabled">
+        <input name="linux_spoof_enabled" type="checkbox" id="linux_spoof_enabled" />
+        <div></div>
+      </label>
+    </section>
+    <hr />
+    <section id="manageSites">
+      <button id="manageSitesButton"></button>
+    </section>
+    <section id="manageSitesFallback" style="display: none">
+      <p id="manageSitesFallbackText"></p>
+    </section>
+    <hr />
+    <p id="supportMessage" style="text-align: center; font-weight: bold;"></p>
+    <hr />
+    <p id="breakageWarning"></p>
+    <p id="reportBrokenSite"></p>
+  </body>
+</html>

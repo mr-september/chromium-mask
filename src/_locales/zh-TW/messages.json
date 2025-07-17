@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "讓 Opera 戴上面具偽裝成 Chrome，以便在不支援的網站上正常運作。"
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "雖然 Chrome Mask for Opera 可能在您看到「不支援的瀏覽器」訊息時提供幫助，但它可能會在某些網站上造成意外問題。"
+  },
+
+  "reportBrokenSite": {
+    "message": "如果您發現啟用 Chrome Mask for Opera 後運作更好的網站，請$WEBCOMPAT$回報。謝謝！&hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "透過 Opera 說明與支援"
+  },
+
+  "webcompatLinkText": {
+    "message": "在 WebCompat.com 上"
+  },
+
+  "maskStatusOn": {
+    "message": "面具已啟用！我在此網站上偽裝成 Chrome。"
+  },
+
+  "maskStatusOff": {
+    "message": "面具已關閉。我在此網站上顯示為 Opera。"
+  },
+
+  "maskStatusUnsupported": {
+    "message": "此網站無法使用面具。"
+  },
+
+  "mainToggleDescription": {
+    "message": "啟用後，請強制重新整理頁面（Ctrl+F5）以套用變更並清除快取內容。"
+  },
+
+  "manageSitesButton": {
+    "message": "新增或移除網站"
+  },
+
+  "manageSitesFallback": {
+    "message": "若要新增或移除網站，請開啟擴充功能管理員，選擇 Chrome Mask for Opera，然後點選設定。"
+  },
+
+  "addSiteTitle": {
+    "message": "新增網站"
+  },
+
+  "addSiteButton": {
+    "message": "新增網站"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "注意：請輸入網域名稱（例如：example.com）。擴充功能將在該網站的所有頁面和子網域上運作。"
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "請輸入有效的網域！"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "此網域已啟用 Chrome Mask for Opera！"
+  },
+
+  "maskedSitesTitle": {
+    "message": "目前偽裝的網站"
+  },
+
+  "siteListRemoveButton": {
+    "message": "移除"
+  },
+
+  "siteListEmpty": {
+    "message": "您尚未在任何網站上啟用 Chrome Mask for Opera！"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "偽裝為 Windows 而非 Linux"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "某些網站會封鎖 Linux 瀏覽器。啟用此選項以顯示為 Windows Chrome 而非 Linux Chrome。"
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Linux 平台設定"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "這會影響所有啟用 Chrome 偽裝的網站。您隨時可以變更此設定。"
+  }
+}

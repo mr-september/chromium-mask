@@ -1,0 +1,111 @@
+{
+  "extensionName": {
+    "message": "Chrome Mask for Opera"
+  },
+
+  "extensionDescription": {
+    "message": "Operaが正常に動作しないウェブサイトに対してChromeのように見せるマスクを着用させます。"
+  },
+
+  "supportMessage": {
+    "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "placeholders": {
+      "SUPPORT_LINK": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "breakageWarning": {
+    "message": "Chrome Mask for Operaは「サポートされていないブラウザ」メッセージが表示される場合に役立ちますが、一部のサイトで予期しない問題を引き起こす可能性があります。"
+  },
+
+  "reportBrokenSite": {
+    "message": "Chrome Mask for Operaを有効にするとより良く動作するサイトを見つけた場合は、$WEBCOMPAT$で報告してください。ありがとうございます！&hearts;",
+    "placeholders": {
+      "WEBCOMPAT": {
+        "content": "$1"
+      }
+    }
+  },
+
+  "inProductReporterLinkText": {
+    "message": "Opera ヘルプ＆サポートを通じて"
+  },
+
+  "webcompatLinkText": {
+    "message": "WebCompat.comで"
+  },
+
+  "maskStatusOn": {
+    "message": "マスクが有効です！このサイトでChromeのふりをしています。"
+  },
+
+  "maskStatusOff": {
+    "message": "マスクが無効です。このサイトではOperaとして表示されています。"
+  },
+
+  "maskStatusUnsupported": {
+    "message": "このサイトではマスクを使用できません。"
+  },
+
+  "mainToggleDescription": {
+    "message": "有効にした後、変更を適用してキャッシュされたコンテンツをクリアするためにページを強制更新（Ctrl+F5）してください。"
+  },
+
+  "manageSitesButton": {
+    "message": "サイトの追加または削除"
+  },
+
+  "manageSitesFallback": {
+    "message": "サイトを追加または削除するには、拡張機能マネージャーを開き、Chrome Mask for Operaを選択して設定をクリックしてください。"
+  },
+
+  "addSiteTitle": {
+    "message": "サイトの追加"
+  },
+
+  "addSiteButton": {
+    "message": "サイトを追加"
+  },
+
+  "addSiteHostnameExplanation": {
+    "message": "注意：ドメイン名を入力してください（例：example.com）。拡張機能はそのサイトのすべてのページとサブドメインで動作します。"
+  },
+
+  "addSiteErrorInvalid": {
+    "message": "有効なドメインを入力してください！"
+  },
+
+  "addSiteErrorAlreadyActive": {
+    "message": "このドメインではChrome Mask for Operaが既に有効になっています！"
+  },
+
+  "maskedSitesTitle": {
+    "message": "現在マスクされているサイト"
+  },
+
+  "siteListRemoveButton": {
+    "message": "削除"
+  },
+
+  "siteListEmpty": {
+    "message": "まだどのサイトでもChrome Mask for Operaを有効にしていません！"
+  },
+
+  "linuxSpoofToggle": {
+    "message": "LinuxではなくWindowsとして表示"
+  },
+
+  "linuxSpoofToggleDescription": {
+    "message": "一部のサイトはLinuxブラウザをブロックします。これを有効にすると、Linux ChromeではなくWindows Chromeとして表示されます。"
+  },
+
+  "linuxPlatformTitle": {
+    "message": "Linuxプラットフォーム設定"
+  },
+
+  "linuxSpoofOptionNote": {
+    "message": "これはChromeマスキングが有効になっているすべてのサイトに影響します。いつでもこの設定を変更できます。"
+  }
+}

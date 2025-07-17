@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="stylesheet" href="options.css" />
+    <script src="shared.js"></script>
+    <script src="options.js"></script>
+  </head>
+  <body>
+    <section>
+      <h2 id="add-site-title"></h2>
+      <form id="add-site-form">
+        <input id="add-site-input" type="text" placeholder="www.example.com" />
+        <input type="submit" id="add-site-button" />
+      </form>
+      <p id="add-site-hostname-explanation"></p>
+    </section>
+    
+    <!-- Linux Platform Configuration (only shown on Linux) -->
+    <section id="linuxPlatformSection" style="display: none;">
+      <h2 id="linuxPlatformTitle">Linux Platform Settings</h2>
+      <div class="platform-setting">
+        <label class="platform-toggle-label">
+          <input type="checkbox" id="linuxSpoofOption" />
+          <span id="linuxSpoofOptionText">Spoof as Windows instead of Linux</span>
+        </label>
+        <div class="platform-description">
+          <p id="linuxSpoofOptionDescription">Some sites block Linux browsers. Enable this to appear as Windows Chrome instead of Linux Chrome.</p>
+          <p id="linuxSpoofOptionNote"><strong>Note:</strong> This affects all sites where Chrome masking is enabled. You can change this setting at any time.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section>
+      <h2 id="masked-sites-title"></h2>
+      <div id="masked-sites"></div>
+    </section>
+  </body>
+</html>

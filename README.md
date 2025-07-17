@@ -1,4 +1,4 @@
-<div align="center">
+<div align[![Extension Version](https://img.shields.io/badge/Extension-v1.1.0-blue.svg)](https://github.com/mr-september/chrome-mask-for-opera/releases)"center">
 
 # Chrome Mask for Opera
 
@@ -8,7 +8,7 @@ This extension will be available on the Opera Add-ons store once submitted for r
 
 [![GitHub release](https://img.shields.io/github/release/mr-september/chrome-mask-for-opera.svg)](https://github.com/mr-september/chrome-mask-for-opera/releases)
 [![GitHub downloads](https://img.shields.io/github/downloads/mr-september/chrome-mask-for-opera/total.svg)](https://github.com/mr-september/chrome-mask-for-opera/releases)
-[![Extension Version](https://img.shields.io/badge/Extension-v1.0.1-blue.svg)](https://github.com/mr-september/chrome-mask-for-opera/releases)
+[![Extension Version](https://img.shields.io/badge/Extension-v1.1.0-blue.svg)](https://github.com/mr-september/chrome-mask-for-opera/releases)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Opera Store](https://img.shields.io/badge/Opera%20Store-Under%20Review-orange.svg)](https://addons.opera.com/)
 [![Made for Opera](https://img.shields.io/badge/Made%20for-Opera-red.svg)](https://www.opera.com/)

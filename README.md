@@ -33,10 +33,12 @@ This extension will be available on the Opera Add-ons store once submitted for r
 </p>
 
 ### 🌟 Other Ways to Help
+
 ⭐ **Star the repository** to show your support  
 🐦 **Share** to help others discover Chrome Mask for Opera  
 📝 **Write reviews** and share your experience  
 🎥 **Create content** - tutorials, guides, or showcase videos
+
 </div>
 
 ## 🎭 Why Chrome Mask for Opera?

@@ -1,5 +1,23 @@
 # Changelog - Chrome Mask for Opera
 
+## 1.3.0 (Robust Enhancement) - July 2025
+
+**🚀 Enhanced Robustness & Performance**
+
+Major improvements to extension stability and reliability with comprehensive error handling and enhanced spoofing mechanisms.
+
+### ✨ New Features
+
+- **Enhanced Robustness**: Improved extension stability and error handling
+- **Performance Optimizations**: Better resource management and efficiency
+- **Comprehensive Testing**: Extensive testing to ensure reliable operation
+
+### 🔧 Improvements
+
+- **Better Error Recovery**: Enhanced error handling throughout the extension
+- **Improved Reliability**: More robust spoofing mechanisms
+- **Stability Enhancements**: Better handling of edge cases and error conditions
+
 ## 1.2.1 (Property Redefinition Fix) - July 2025
 
 **🔧 Critical Bug Fixes**

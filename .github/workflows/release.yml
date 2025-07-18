@@ -128,9 +128,7 @@ jobs:
             rm chrome-mask-for-opera.zip
           fi
           echo "Final zip files:"
-          find . -name "*.zip" -type f
-
-      - name: Generate release notes
+          find . -name "*.zip" -type f      - name: Generate release notes
         id: release_notes
         run: |
           # Get commits since last tag
@@ -147,11 +145,25 @@ jobs:
             COMMITS=$(git log --oneline --pretty=format:"- %s" $LAST_TAG..HEAD)
           fi
 
+          # Fetch current Chrome version
+          echo "Fetching current Chrome version..."
+          CHROME_VERSION=$(curl -s "https://raw.githubusercontent.com/mr-september/central_automation_hub/main/current-chrome-version.txt" | tr -d '\n\r')
+          if [ -z "$CHROME_VERSION" ]; then
+            CHROME_VERSION="Unknown"
+            echo "Warning: Could not fetch Chrome version, using 'Unknown'"
+          else
+            echo "Current Chrome version: $CHROME_VERSION"
+          fi
+
           # Create release notes
           {
             echo "## What's Changed"
             echo ""
             echo "$COMMITS"
+            echo ""
+            echo "## Current Default Chrome Version"
+            echo ""
+            echo "- **$CHROME_VERSION**"
             echo ""
             echo "## Installation"
             echo ""

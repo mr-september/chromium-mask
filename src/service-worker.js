@@ -199,18 +199,18 @@ async function init() {
     } catch (error) {
       console.error("Failed to load EnabledHostnamesList:", error);
       // Don't fail completely, just continue with empty list
-    }    // Store spoofing data for content script access
+    } // Store spoofing data for content script access
     try {
       await chromeUAStringManager.storeSpoofingData();
       console.log("Spoofing data stored successfully");
-      
+
       // Verify the spoofing data was stored correctly
       const storage = await chrome.storage.local.get("spoofingData");
       if (storage.spoofingData) {
         console.log("Verified spoofing data in storage:", {
           userAgent: storage.spoofingData.userAgent?.substring(0, 50) + "...",
           vendor: storage.spoofingData.vendor,
-          platform: storage.spoofingData.userAgentData?.platform
+          platform: storage.spoofingData.userAgentData?.platform,
         });
       } else {
         console.error("Spoofing data was not stored properly!");
@@ -284,7 +284,7 @@ async function updateDeclarativeNetRequestRules() {
     // Wait for the current update to complete instead of skipping
     let retries = 0;
     while (dnrUpdateInProgress && retries < 10) {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
       retries++;
     }
     if (dnrUpdateInProgress) {
@@ -293,7 +293,7 @@ async function updateDeclarativeNetRequestRules() {
   }
 
   dnrUpdateInProgress = true;
-  
+
   try {
     console.log("Starting DNR rules update...");
 
@@ -313,9 +313,9 @@ async function updateDeclarativeNetRequestRules() {
 
     // Validate rule IDs don't conflict with existing ones
     const newRuleIds = newRules.map((rule) => rule.id);
-    const conflictingIds = newRuleIds.filter(id => existingRuleIds.includes(id));
+    const conflictingIds = newRuleIds.filter((id) => existingRuleIds.includes(id));
     if (conflictingIds.length > 0) {
-      console.warn(`Found conflicting rule IDs: ${conflictingIds.join(', ')}, regenerating rules...`);
+      console.warn(`Found conflicting rule IDs: ${conflictingIds.join(", ")}, regenerating rules...`);
       // Regenerate with different starting ID to avoid conflicts
       const maxExistingId = Math.max(0, ...existingRuleIds);
       const newRulesWithoutConflicts = generateDNRRules(hostnames, uaString, maxExistingId + 1);
@@ -352,7 +352,8 @@ async function updateDeclarativeNetRequestRules() {
         hostnames: hostnames.slice(),
         uaString: uaString,
       },
-    });  } catch (error) {
+    });
+  } catch (error) {
     console.error("❌ Error updating DNR rules:", error);
 
     // Store error info for debugging
@@ -540,7 +541,8 @@ function generateDNRRules(hostnames, uaString, startingRuleId = 1000) {
               header: "sec-ch-ua-wow64",
               operation: "set",
               value: "?0",
-            },            {
+            },
+            {
               header: "sec-fetch-user",
               operation: "set",
               value: "?1",
@@ -591,7 +593,7 @@ async function updateContentScriptRegistration() {
     // Wait for the current update to complete instead of skipping
     let retries = 0;
     while (contentScriptUpdateInProgress && retries < 10) {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
       retries++;
     }
     if (contentScriptUpdateInProgress) {
@@ -606,14 +608,14 @@ async function updateContentScriptRegistration() {
     const registeredScripts = await chrome.scripting.getRegisteredContentScripts();
 
     // Unregister existing scripts only if they actually exist
-    const scriptsToUnregister = registeredScripts.filter(script => 
-      script.id === "chrome-mask-content-script-main" || 
-      script.id === "chrome-mask-content-script-isolated"
+    const scriptsToUnregister = registeredScripts.filter(
+      (script) =>
+        script.id === "chrome-mask-content-script-main" || script.id === "chrome-mask-content-script-isolated",
     );
 
     if (scriptsToUnregister.length > 0) {
       const scriptIds = scriptsToUnregister.map((script) => script.id);
-      console.log(`Unregistering existing content scripts: ${scriptIds.join(', ')}`);
+      console.log(`Unregistering existing content scripts: ${scriptIds.join(", ")}`);
       await chrome.scripting.unregisterContentScripts({ ids: scriptIds });
     }
 

@@ -1,202 +1,218 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Debug Chrome Mask Spoofing</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .test-result {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: monospace;
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .warning {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        .info {
-            background-color: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .opera-detected {
-            background-color: #f8d7da !important;
-            color: #721c24;
-        }
-        .chrome-detected {
-            background-color: #d4edda !important;
-            color: #155724;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .test-result {
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        font-family: monospace;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+      }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      .info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      .opera-detected {
+        background-color: #f8d7da !important;
+        color: #721c24;
+      }
+      .chrome-detected {
+        background-color: #d4edda !important;
+        color: #155724;
+      }
     </style>
-</head>
-<body>    <div class="container">
-        <h1>🔍 Chrome Mask Spoofing Debug</h1>
-        <p>This page tests if the Chrome Mask spoofing is working correctly.</p>
-        
-        <div id="setup-info" class="test-result warning">
-            <h2>⚠️ Important Setup Information</h2>
-            <div>
-                <p><strong>Chrome Mask only works on websites that you explicitly enable in the extension settings.</strong></p>
-                <p>To test spoofing on localhost:</p>
-                <ol>
-                    <li>Click the Chrome Mask extension icon in your browser toolbar</li>
-                    <li>Toggle the switch to enable spoofing for "localhost"</li>
-                    <li>Refresh this page (Ctrl+F5)</li>
-                    <li>Or use the button below to enable it automatically:</li>
-                </ol>
-                <button id="enable-localhost-btn" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 10px 0;">
-                    Enable Chrome Mask for localhost
-                </button>
-                <div id="enable-result" style="margin-top: 10px;"></div>
-            </div>
-        </div>
-        
-        <div id="general-info">
-            <h2>General Browser Information</h2>
-            <table>
-                <tr>
-                    <th>Property</th>
-                    <th>Value</th>
-                    <th>Status</th>
-                </tr>
-                <tr id="user-agent-row">
-                    <td>navigator.userAgent</td>
-                    <td id="user-agent-value">Loading...</td>
-                    <td id="user-agent-status">Checking...</td>
-                </tr>
-                <tr id="vendor-row">
-                    <td>navigator.vendor</td>
-                    <td id="vendor-value">Loading...</td>
-                    <td id="vendor-status">Checking...</td>
-                </tr>
-                <tr id="app-version-row">
-                    <td>navigator.appVersion</td>
-                    <td id="app-version-value">Loading...</td>
-                    <td id="app-version-status">Checking...</td>
-                </tr>
-            </table>
-        </div>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔍 Chrome Mask Spoofing Debug</h1>
+      <p>This page tests if the Chrome Mask spoofing is working correctly.</p>
 
-        <div id="user-agent-data-info">
-            <h2>User Agent Data (Client Hints)</h2>
-            <table>
-                <tr>
-                    <th>Property</th>
-                    <th>Value</th>
-                    <th>Status</th>
-                </tr>
-                <tr id="ua-brands-row">
-                    <td>userAgentData.brands</td>
-                    <td id="ua-brands-value">Loading...</td>
-                    <td id="ua-brands-status">Checking...</td>
-                </tr>
-                <tr id="ua-platform-row">
-                    <td>userAgentData.platform</td>
-                    <td id="ua-platform-value">Loading...</td>
-                    <td id="ua-platform-status">Checking...</td>
-                </tr>
-                <tr id="ua-mobile-row">
-                    <td>userAgentData.mobile</td>
-                    <td id="ua-mobile-value">Loading...</td>
-                    <td id="ua-mobile-status">Checking...</td>
-                </tr>
-            </table>
+      <div id="setup-info" class="test-result warning">
+        <h2>⚠️ Important Setup Information</h2>
+        <div>
+          <p>
+            <strong>Chrome Mask only works on websites that you explicitly enable in the extension settings.</strong>
+          </p>
+          <p>To test spoofing on localhost:</p>
+          <ol>
+            <li>Click the Chrome Mask extension icon in your browser toolbar</li>
+            <li>Toggle the switch to enable spoofing for "localhost"</li>
+            <li>Refresh this page (Ctrl+F5)</li>
+            <li>Or use the button below to enable it automatically:</li>
+          </ol>
+          <button
+            id="enable-localhost-btn"
+            style="
+              background-color: #4caf50;
+              color: white;
+              padding: 10px 20px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              margin: 10px 0;
+            "
+          >
+            Enable Chrome Mask for localhost
+          </button>
+          <div id="enable-result" style="margin-top: 10px"></div>
         </div>
+      </div>
 
-        <div id="opera-detection">
-            <h2>Opera Detection Tests</h2>
-            <table>
-                <tr>
-                    <th>Test</th>
-                    <th>Result</th>
-                    <th>Status</th>
-                </tr>
-                <tr id="window-opera-row">
-                    <td>window.opera exists</td>
-                    <td id="window-opera-value">Testing...</td>
-                    <td id="window-opera-status">Checking...</td>
-                </tr>
-                <tr id="window-opr-row">
-                    <td>window.opr exists</td>
-                    <td id="window-opr-value">Testing...</td>
-                    <td id="window-opr-status">Checking...</td>
-                </tr>
-                <tr id="ua-opera-row">
-                    <td>User Agent contains "Opera" or "OPR"</td>
-                    <td id="ua-opera-value">Testing...</td>
-                    <td id="ua-opera-status">Checking...</td>
-                </tr>
-            </table>
-        </div>
+      <div id="general-info">
+        <h2>General Browser Information</h2>
+        <table>
+          <tr>
+            <th>Property</th>
+            <th>Value</th>
+            <th>Status</th>
+          </tr>
+          <tr id="user-agent-row">
+            <td>navigator.userAgent</td>
+            <td id="user-agent-value">Loading...</td>
+            <td id="user-agent-status">Checking...</td>
+          </tr>
+          <tr id="vendor-row">
+            <td>navigator.vendor</td>
+            <td id="vendor-value">Loading...</td>
+            <td id="vendor-status">Checking...</td>
+          </tr>
+          <tr id="app-version-row">
+            <td>navigator.appVersion</td>
+            <td id="app-version-value">Loading...</td>
+            <td id="app-version-status">Checking...</td>
+          </tr>
+        </table>
+      </div>
 
-        <div id="chrome-detection">
-            <h2>Chrome Detection Tests</h2>
-            <table>
-                <tr>
-                    <th>Test</th>
-                    <th>Result</th>
-                    <th>Status</th>
-                </tr>
-                <tr id="window-chrome-row">
-                    <td>window.chrome exists</td>
-                    <td id="window-chrome-value">Testing...</td>
-                    <td id="window-chrome-status">Checking...</td>
-                </tr>
-                <tr id="ua-chrome-row">
-                    <td>User Agent contains "Chrome"</td>
-                    <td id="ua-chrome-value">Testing...</td>
-                    <td id="ua-chrome-status">Checking...</td>
-                </tr>
-                <tr id="vendor-google-row">
-                    <td>navigator.vendor is "Google Inc."</td>
-                    <td id="vendor-google-value">Testing...</td>
-                    <td id="vendor-google-status">Checking...</td>
-                </tr>
-            </table>
-        </div>        <div id="spoofing-status" class="test-result info">
-            <h2>Overall Spoofing Status</h2>
-            <div id="spoofing-result">Analyzing...</div>
-        </div>
+      <div id="user-agent-data-info">
+        <h2>User Agent Data (Client Hints)</h2>
+        <table>
+          <tr>
+            <th>Property</th>
+            <th>Value</th>
+            <th>Status</th>
+          </tr>
+          <tr id="ua-brands-row">
+            <td>userAgentData.brands</td>
+            <td id="ua-brands-value">Loading...</td>
+            <td id="ua-brands-status">Checking...</td>
+          </tr>
+          <tr id="ua-platform-row">
+            <td>userAgentData.platform</td>
+            <td id="ua-platform-value">Loading...</td>
+            <td id="ua-platform-status">Checking...</td>
+          </tr>
+          <tr id="ua-mobile-row">
+            <td>userAgentData.mobile</td>
+            <td id="ua-mobile-value">Loading...</td>
+            <td id="ua-mobile-status">Checking...</td>
+          </tr>
+        </table>
+      </div>
+
+      <div id="opera-detection">
+        <h2>Opera Detection Tests</h2>
+        <table>
+          <tr>
+            <th>Test</th>
+            <th>Result</th>
+            <th>Status</th>
+          </tr>
+          <tr id="window-opera-row">
+            <td>window.opera exists</td>
+            <td id="window-opera-value">Testing...</td>
+            <td id="window-opera-status">Checking...</td>
+          </tr>
+          <tr id="window-opr-row">
+            <td>window.opr exists</td>
+            <td id="window-opr-value">Testing...</td>
+            <td id="window-opr-status">Checking...</td>
+          </tr>
+          <tr id="ua-opera-row">
+            <td>User Agent contains "Opera" or "OPR"</td>
+            <td id="ua-opera-value">Testing...</td>
+            <td id="ua-opera-status">Checking...</td>
+          </tr>
+        </table>
+      </div>
+
+      <div id="chrome-detection">
+        <h2>Chrome Detection Tests</h2>
+        <table>
+          <tr>
+            <th>Test</th>
+            <th>Result</th>
+            <th>Status</th>
+          </tr>
+          <tr id="window-chrome-row">
+            <td>window.chrome exists</td>
+            <td id="window-chrome-value">Testing...</td>
+            <td id="window-chrome-status">Checking...</td>
+          </tr>
+          <tr id="ua-chrome-row">
+            <td>User Agent contains "Chrome"</td>
+            <td id="ua-chrome-value">Testing...</td>
+            <td id="ua-chrome-status">Checking...</td>
+          </tr>
+          <tr id="vendor-google-row">
+            <td>navigator.vendor is "Google Inc."</td>
+            <td id="vendor-google-value">Testing...</td>
+            <td id="vendor-google-status">Checking...</td>
+          </tr>
+        </table>
+      </div>
+      <div id="spoofing-status" class="test-result info">
+        <h2>Overall Spoofing Status</h2>
+        <div id="spoofing-result">Analyzing...</div>
+      </div>
     </div>
 
     <script src="debug-spoofing.js"></script>
-</body>
+  </body>
 </html>

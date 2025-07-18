@@ -193,7 +193,8 @@ hr {
   }
 }
 
-.linux_toggle {  div {
+.linux_toggle {
+  div {
     height: 50px;
     transition: background 0.3s ease;
     width: 100px;

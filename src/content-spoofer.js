@@ -105,13 +105,13 @@
       console.log("Fetching spoofing data from storage...");
       const storage = await chrome.storage.local.get("spoofingData");
       spoofingData = storage.spoofingData;
-      
+
       if (spoofingData) {
         console.log("Successfully loaded spoofing data:", {
           userAgent: spoofingData.userAgent?.substring(0, 50) + "...",
           vendor: spoofingData.vendor,
           platform: spoofingData.userAgentData?.platform,
-          updatedAt: new Date(spoofingData.updatedAt).toISOString()
+          updatedAt: new Date(spoofingData.updatedAt).toISOString(),
         });
       } else {
         console.warn("No spoofing data found in storage, using fallback");
@@ -171,9 +171,9 @@
       console.log("Chrome Mask spoofing already applied, skipping");
       return;
     }
-    
+
     console.log("Applying Chrome Mask spoofing...");
-    
+
     // Use current spoofingData or fallback
     const currentData = spoofingData || {
       userAgent:
@@ -203,13 +203,14 @@
           wow64: false,
         },
       },
-      chromeVersion: "134",    };
+      chromeVersion: "134",
+    };
 
     console.log("Using spoofing data:", {
       userAgent: currentData.userAgent?.substring(0, 50) + "...",
       vendor: currentData.vendor,
       platform: currentData.userAgentData?.platform,
-      source: spoofingData ? "storage" : "fallback"
+      source: spoofingData ? "storage" : "fallback",
     });
 
     // Spoof navigator.userAgent
@@ -678,7 +679,7 @@
       configurable: false,
       enumerable: false,
     });
-    
+
     console.log("✅ Chrome Mask spoofing applied successfully");
   }
 

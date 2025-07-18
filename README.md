@@ -1,4 +1,4 @@
-<div align[![Extension Version](https://img.shields.io/badge/Extension-v1.1.0-blue.svg)](https://github.com/mr-september/chrome-mask-for-opera/releases)"center">
+<div align="center">
 
 # Chrome Mask for Opera
 

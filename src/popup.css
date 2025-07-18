@@ -83,25 +83,13 @@ hr {
 .linux_toggle_container {
   align-items: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin: 1rem 0;
   padding: 0.5rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;
   background: var(--toggle-background);
-}
-
-.toggle_description {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 1;
-  font-size: 0.9rem;
-}
-
-.platform_icon {
-  width: 16px;
-  height: 16px;
+  position: relative;
 }
 
 .info_icon {
@@ -136,7 +124,10 @@ hr {
 }
 
 .linux_info_icon {
-  position: relative;
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .linux_info_icon:hover .linux_description {
@@ -162,12 +153,12 @@ hr {
 .fancy_toggle {
   cursor: pointer;
   display: inline-block;
-
   div {
     background: var(--toggle-background);
     border-radius: 25px;
     height: 50px;
     position: relative;
+    transition: background 0.3s ease;
     width: 100px;
 
     &::after {
@@ -181,6 +172,7 @@ hr {
       left: -5px;
       position: absolute;
       top: -5px;
+      transition: transform 0.3s ease;
       width: 60px;
     }
   }
@@ -201,24 +193,34 @@ hr {
   }
 }
 
-.linux_toggle {
-  div {
-    height: 30px;
-    width: 60px;
+.linux_toggle {  div {
+    height: 50px;
+    transition: background 0.3s ease;
+    width: 100px;
 
     &::after {
-      height: 36px;
-      width: 36px;
+      background-color: #fff;
       background-image: url(assets/toggler-icon-linux.png);
       background-size: contain;
-      left: -3px;
-      top: -3px;
+      border-radius: 30px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+      content: "";
+      height: 60px;
+      left: -5px;
+      position: absolute;
+      top: -5px;
+      transition: transform 0.3s ease;
+      width: 60px;
     }
+  }
+
+  input:checked ~ div {
+    background: #2ac3a2;
   }
 
   input:checked ~ div::after {
     background-image: url(assets/toggler-icon-windows.png);
-    transform: translateX(33px);
+    transform: translateX(55px);
   }
 }
 

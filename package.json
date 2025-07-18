@@ -5,10 +5,10 @@
   "author": "mr-september",
   "license": "MIT",
   "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "mkdir -p dist && cd src && zip -r ../dist/chrome-mask-for-opera-v$(node -p \"require('../package.json').version\").zip .",
-    "build-simple": "mkdir -p dist && cd src && zip -r ../dist/chrome-mask-for-opera.zip .",
+  "type": "module",  "scripts": {
+    "clean": "node -e \"const fs = require('fs'); if (fs.existsSync('dist')) fs.rmSync('dist', {recursive: true, force: true});\"",
+    "build": "npm run clean && node -e \"const fs = require('fs'); if (!fs.existsSync('dist')) fs.mkdirSync('dist');\" && node build.js",
+    "build-simple": "npm run clean && node -e \"const fs = require('fs'); if (!fs.existsSync('dist')) fs.mkdirSync('dist');\" && node build.js --simple",
     "lint-check": "npx prettier --check .",
     "lint": "npx prettier --write .",
     "pre-commit": "lint-staged"

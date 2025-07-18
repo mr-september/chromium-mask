@@ -5,6 +5,8 @@ importScripts("shared.js");
 let chromeUAStringManager;
 let enabledHostnames;
 let initPromise = null;
+let dnrUpdateInProgress = false;
+let contentScriptUpdateInProgress = false;
 
 // Service worker initialization
 chrome.runtime.onInstalled.addListener(async () => {
@@ -197,12 +199,22 @@ async function init() {
     } catch (error) {
       console.error("Failed to load EnabledHostnamesList:", error);
       // Don't fail completely, just continue with empty list
-    }
-
-    // Store spoofing data for content script access
+    }    // Store spoofing data for content script access
     try {
       await chromeUAStringManager.storeSpoofingData();
       console.log("Spoofing data stored successfully");
+      
+      // Verify the spoofing data was stored correctly
+      const storage = await chrome.storage.local.get("spoofingData");
+      if (storage.spoofingData) {
+        console.log("Verified spoofing data in storage:", {
+          userAgent: storage.spoofingData.userAgent?.substring(0, 50) + "...",
+          vendor: storage.spoofingData.vendor,
+          platform: storage.spoofingData.userAgentData?.platform
+        });
+      } else {
+        console.error("Spoofing data was not stored properly!");
+      }
     } catch (error) {
       console.error("Failed to store spoofing data:", error);
     }
@@ -266,6 +278,22 @@ async function handleLinuxSpoofChanged() {
 }
 
 async function updateDeclarativeNetRequestRules() {
+  // Prevent concurrent DNR updates
+  if (dnrUpdateInProgress) {
+    console.log("DNR update already in progress, waiting...");
+    // Wait for the current update to complete instead of skipping
+    let retries = 0;
+    while (dnrUpdateInProgress && retries < 10) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      retries++;
+    }
+    if (dnrUpdateInProgress) {
+      console.warn("DNR update still in progress after waiting, proceeding anyway");
+    }
+  }
+
+  dnrUpdateInProgress = true;
+  
   try {
     console.log("Starting DNR rules update...");
 
@@ -282,6 +310,17 @@ async function updateDeclarativeNetRequestRules() {
 
     // Create new rules for enabled hostnames
     const newRules = generateDNRRules(hostnames, uaString);
+
+    // Validate rule IDs don't conflict with existing ones
+    const newRuleIds = newRules.map((rule) => rule.id);
+    const conflictingIds = newRuleIds.filter(id => existingRuleIds.includes(id));
+    if (conflictingIds.length > 0) {
+      console.warn(`Found conflicting rule IDs: ${conflictingIds.join(', ')}, regenerating rules...`);
+      // Regenerate with different starting ID to avoid conflicts
+      const maxExistingId = Math.max(0, ...existingRuleIds);
+      const newRulesWithoutConflicts = generateDNRRules(hostnames, uaString, maxExistingId + 1);
+      newRules.splice(0, newRules.length, ...newRulesWithoutConflicts);
+    }
 
     // Update rules atomically
     const updateOptions = {
@@ -313,8 +352,7 @@ async function updateDeclarativeNetRequestRules() {
         hostnames: hostnames.slice(),
         uaString: uaString,
       },
-    });
-  } catch (error) {
+    });  } catch (error) {
     console.error("❌ Error updating DNR rules:", error);
 
     // Store error info for debugging
@@ -327,14 +365,16 @@ async function updateDeclarativeNetRequestRules() {
     });
 
     throw error; // Re-throw to allow caller to handle
+  } finally {
+    dnrUpdateInProgress = false;
   }
 }
 
-function generateDNRRules(hostnames, uaString) {
+function generateDNRRules(hostnames, uaString, startingRuleId = 1000) {
   const rules = [];
 
-  // Base rule ID - start from 1000 to avoid conflicts
-  let ruleId = 1000;
+  // Base rule ID - start from provided starting ID to avoid conflicts
+  let ruleId = startingRuleId;
 
   // Extract Chrome version from UA string for Client Hints
   const chromeVersionMatch = uaString.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
@@ -500,11 +540,23 @@ function generateDNRRules(hostnames, uaString) {
               header: "sec-ch-ua-wow64",
               operation: "set",
               value: "?0",
-            },
-            {
+            },            {
               header: "sec-fetch-user",
               operation: "set",
               value: "?1",
+            },
+            // Remove any Opera-specific headers that might leak through
+            {
+              header: "x-opera-mini-mode",
+              operation: "remove",
+            },
+            {
+              header: "x-opera-info",
+              operation: "remove",
+            },
+            {
+              header: "x-forwarded-for-opera-mini",
+              operation: "remove",
             },
           ],
         },
@@ -533,13 +585,35 @@ function generateDNRRules(hostnames, uaString) {
 }
 
 async function updateContentScriptRegistration() {
+  // Prevent concurrent content script updates
+  if (contentScriptUpdateInProgress) {
+    console.log("Content script update already in progress, waiting...");
+    // Wait for the current update to complete instead of skipping
+    let retries = 0;
+    while (contentScriptUpdateInProgress && retries < 10) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      retries++;
+    }
+    if (contentScriptUpdateInProgress) {
+      console.warn("Content script update still in progress after waiting, proceeding anyway");
+    }
+  }
+
+  contentScriptUpdateInProgress = true;
+
   try {
     // Get all registered content scripts
     const registeredScripts = await chrome.scripting.getRegisteredContentScripts();
 
-    // Unregister all existing scripts
-    if (registeredScripts.length > 0) {
-      const scriptIds = registeredScripts.map((script) => script.id);
+    // Unregister existing scripts only if they actually exist
+    const scriptsToUnregister = registeredScripts.filter(script => 
+      script.id === "chrome-mask-content-script-main" || 
+      script.id === "chrome-mask-content-script-isolated"
+    );
+
+    if (scriptsToUnregister.length > 0) {
+      const scriptIds = scriptsToUnregister.map((script) => script.id);
+      console.log(`Unregistering existing content scripts: ${scriptIds.join(', ')}`);
       await chrome.scripting.unregisterContentScripts({ ids: scriptIds });
     }
 
@@ -583,6 +657,8 @@ async function updateContentScriptRegistration() {
     }
   } catch (error) {
     console.error("Error updating content script registration:", error);
+  } finally {
+    contentScriptUpdateInProgress = false;
   }
 }
 

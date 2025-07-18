@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Error Fixes - Chrome Mask for Opera</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .test-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background-color: #45a049;
+        }
+        .test-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Chrome Mask for Opera - Error Fixes Test</h1>
+        <p>This page tests the fixes for DNR rule conflicts and content script registration errors.</p>
+        
+        <div class="test-section">
+            <h3>🔧 DNR Rules Test</h3>
+            <p>Tests the fix for "Rule with id 1000 does not have a unique ID" error.</p>
+            <button id="test-dnr-rules-btn" class="test-button">Test DNR Rules</button>
+            <button id="force-dnr-update-btn" class="test-button">Force DNR Update</button>
+            <button id="inspect-dnr-rules-btn" class="test-button">Inspect Current Rules</button>
+            <div id="dnr-result" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📝 Content Script Test</h3>
+            <p>Tests the fix for "Nonexistent script ID 'chrome-mask-content-script-main'" error.</p>
+            <button id="test-content-scripts-btn" class="test-button">Test Content Script Registration</button>
+            <div id="cs-result" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚀 Service Worker Test</h3>
+            <p>Tests general service worker communication and error handling.</p>
+            <button id="test-service-worker-btn" class="test-button">Test Service Worker</button>
+            <button id="get-dnr-stats-btn" class="test-button">Get DNR Stats</button>
+            <div id="sw-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔄 Race Condition Test</h3>
+            <p>Tests the fix for concurrent update race conditions.</p>
+            <button id="test-dnr-race-btn" class="test-button">Test DNR Race Condition</button>
+            <div id="race-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔄 Content Script Race Condition Test</h3>
+            <p>Tests the fix for concurrent content script update race conditions.</p>
+            <button id="test-cs-race-btn" class="test-button">Test Content Script Race Condition</button>
+            <div id="cs-race-result" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 Run All Tests</h2>
+            <p>Click the button below to run all tests sequentially.</p>
+            <button id="run-all-tests-btn" class="test-button">Run All Tests</button>
+        </div>    </div>
+
+    <script src="test-error-fixes.js"></script>
+</body>
+</html>

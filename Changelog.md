@@ -1,5 +1,47 @@
 # Changelog - Chrome Mask for Opera
 
+## 1.4.0 (Smart Tab Reload Optimization) - July 2025
+
+**🚀 Performance & User Experience Enhancement**
+
+Implemented intelligent tab reload system that significantly reduces unnecessary tab refreshes while maintaining full spoofing functionality.
+
+### ✨ Key Improvements
+
+- **Smart Tab Reload**: Only reloads specific sites being toggled, not all masked sites
+- **Immediate Spoofing Effect**: Sites being enabled get reloaded so spoofing takes effect instantly
+- **Graceful Disabling**: Sites being disabled continue without disruption
+- **Optimized Linux Spoof**: Platform changes apply to new requests without disrupting current tabs
+- **Configurable Reload Behavior**: Advanced users can control when tabs get reloaded
+- **Legacy Mode Option**: Advanced users can enable `forceLegacyTabReload` in storage for original behavior if needed
+
+### 🔧 Technical Details
+
+- **Adding Sites**: Automatically reloads only the newly added site so headers update immediately
+- **Removing Sites**: No reload needed - sites continue normally without spoofing
+- **Linux Platform Toggle**: Headers updated immediately, optional reload via `linuxSpoofReloadAllTabs` setting
+- **UA String Changes**: Smart reload only when User-Agent actually changes (version updates)
+- **Fallback Behavior**: Maintains legacy reload functionality for critical scenarios
+- **Enhanced Logging**: Better debugging information for reload decisions
+
+### 🎯 Benefits
+
+- **Instant Effect**: Toggling a site on immediately applies spoofing (no manual refresh needed)
+- **No More Disruption**: Other sites remain untouched when toggling unrelated sites
+- **Faster Operations**: Only affected sites reload, others continue uninterrupted
+- **Same Functionality**: All spoofing capabilities remain fully intact
+
+### 🔄 Behavior Comparison
+
+| Action                | Old Behavior            | New Behavior                             |
+| --------------------- | ----------------------- | ---------------------------------------- |
+| Enable site A         | Reload ALL masked sites | Reload only site A                       |
+| Disable site A        | Reload ALL masked sites | No reload (graceful)                     |
+| Linux spoof toggle    | Reload ALL sites        | No reload (headers update immediately)\* |
+| Chrome version update | Always reload           | Reload only if UA changed                |
+
+\*_Set `linuxSpoofReloadAllTabs: true` in storage for immediate reload if needed_
+
 ## 1.3.0 (Robust Enhancement) - July 2025
 
 **🚀 Enhanced Robustness & Performance**

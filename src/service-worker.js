@@ -38,11 +38,25 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === "version-check") {
     console.log("Version check alarm fired");
     if (chromeUAStringManager) {
+      const previousUA = chromeUAStringManager.getUAString();
+
       await chromeUAStringManager.maybeRefreshRemote();
       // Store updated spoofing data
       await chromeUAStringManager.storeSpoofingData();
+
+      const newUA = chromeUAStringManager.getUAString();
+
       // After updating UA string, refresh DNR rules
       await updateDeclarativeNetRequestRules();
+
+      // Only reload tabs if the UA string actually changed
+      if (previousUA !== newUA) {
+        console.log("UA string changed during version check, reloading affected tabs");
+        const currentHostnames = new Set(enabledHostnames.get_values());
+        await reloadAffectedTabsSelectively(currentHostnames, currentHostnames, "version_update");
+      } else {
+        console.log("UA string unchanged during version check, no reload needed");
+      }
     }
   }
 });
@@ -121,7 +135,16 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             await chromeUAStringManager.setLinuxSpoofAsWindows(msg.enabled);
             await updateDeclarativeNetRequestRules();
             await updateContentScriptRegistration();
-            await reloadAffectedTabs();
+
+            // Use the same logic as handleLinuxSpoofChanged for consistency
+            const storage = await chrome.storage.local.get("linuxSpoofReloadAllTabs");
+            if (storage.linuxSpoofReloadAllTabs === true) {
+              console.log("Linux spoof reload all tabs enabled - reloading all enabled sites");
+              const currentHostnames = new Set(enabledHostnames.get_values());
+              await reloadAffectedTabsSelectively(currentHostnames, currentHostnames, "ua_change");
+            } else {
+              console.log("Linux spoof changed via message - headers updated, no reload");
+            }
           }
           sendResponse({ success: true });
           return;
@@ -245,8 +268,14 @@ async function init() {
 async function handleEnabledHostnamesChanged() {
   console.log("Handling enabled hostnames changed");
 
+  // Get the previous hostname list before reloading
+  const previousHostnames = new Set(enabledHostnames.get_values());
+
   // Reload the hostnames list
   await enabledHostnames.load();
+
+  // Get the new hostname list
+  const currentHostnames = new Set(enabledHostnames.get_values());
 
   // Refresh spoofing data in case UA string changed
   await chromeUAStringManager.storeSpoofingData();
@@ -257,12 +286,15 @@ async function handleEnabledHostnamesChanged() {
   // Update content script registration
   await updateContentScriptRegistration();
 
-  // Reload affected tabs
-  await reloadAffectedTabs();
+  // Use targeted reload strategy - reload only the specific sites that changed
+  await reloadAffectedTabsSelectively(previousHostnames, currentHostnames, "hostname_change");
 }
 
 async function handleLinuxSpoofChanged() {
   console.log("Handling Linux spoof setting changed");
+
+  // Get current hostnames for selective reload
+  const currentHostnames = new Set(enabledHostnames.get_values());
 
   // Refresh spoofing data with new settings
   await chromeUAStringManager.storeSpoofingData();
@@ -273,8 +305,19 @@ async function handleLinuxSpoofChanged() {
   // Update content script registration
   await updateContentScriptRegistration();
 
-  // Reload affected tabs
-  await reloadAffectedTabs();
+  // For Linux spoof changes, we could be more conservative:
+  // Most modern sites will pick up the new headers on subsequent requests
+  // Only reload if user specifically wants immediate effect for all sites
+  const storage = await chrome.storage.local.get("linuxSpoofReloadAllTabs");
+  if (storage.linuxSpoofReloadAllTabs === true) {
+    console.log("Linux spoof reload all tabs enabled - reloading all enabled sites");
+    await reloadAffectedTabsSelectively(currentHostnames, currentHostnames, "ua_change");
+  } else {
+    console.log("Linux spoof change - headers updated, no tab reload (new requests will use new platform)");
+    console.log("   Benefits: No disruption to current browsing session");
+    console.log("   Effect: New requests and JavaScript will use updated platform info");
+    console.log("   Note: Set 'linuxSpoofReloadAllTabs' to true in storage for immediate reload behavior");
+  }
 }
 
 async function updateDeclarativeNetRequestRules() {
@@ -693,7 +736,136 @@ async function updateBadgeStatus(tab) {
   }
 }
 
-async function reloadAffectedTabs() {
+/**
+ * Selectively reload tabs based on the type of change that occurred.
+ * This optimized approach reduces unnecessary tab reloads while maintaining spoofing functionality.
+ *
+ * @param {Set} previousHostnames - The hostname list before the change
+ * @param {Set} currentHostnames - The hostname list after the change
+ * @param {string} changeType - Type of change: 'hostname_change', 'ua_change', 'version_update', 'critical_update'
+ */
+async function reloadAffectedTabsSelectively(previousHostnames, currentHostnames, changeType) {
+  try {
+    console.log(`Selective tab reload for ${changeType}:`, {
+      previous: Array.from(previousHostnames || []),
+      current: Array.from(currentHostnames || []),
+    });
+
+    // Check for legacy reload mode preference (for advanced users who might need it)
+    const storage = await chrome.storage.local.get("forceLegacyTabReload");
+    if (storage.forceLegacyTabReload === true) {
+      console.log("Legacy tab reload mode enabled - using original behavior");
+      await reloadAffectedTabsLegacy();
+      return;
+    }
+
+    // For hostname changes, we only need to reload in specific scenarios
+    if (changeType === "hostname_change") {
+      // Calculate which hostnames were added or removed
+      const added = new Set([...currentHostnames].filter((x) => !previousHostnames.has(x)));
+      const removed = new Set([...previousHostnames].filter((x) => !currentHostnames.has(x)));
+
+      console.log("Hostname changes detected:", {
+        added: Array.from(added),
+        removed: Array.from(removed),
+      });
+
+      // For sites being enabled (added), we need to reload them so spoofing takes effect immediately
+      if (added.size > 0) {
+        const addedHostnames = Array.from(added);
+        const matchPatterns = addedHostnames.map((hostname) => `*://${hostname}/*`);
+
+        const tabs = await chrome.tabs.query({
+          url: matchPatterns,
+        });
+
+        for (const tab of tabs) {
+          if (tab.id !== chrome.tabs.TAB_ID_NONE) {
+            console.log(`Reloading newly enabled site: ${new URL(tab.url).hostname}`);
+            await chrome.tabs.reload(tab.id, { bypassCache: true });
+          }
+        }
+
+        console.log(`✅ Reloaded ${tabs.length} tabs for newly enabled sites`);
+      }
+
+      // For sites being disabled (removed), no reload needed - they can continue as normal
+      if (removed.size > 0) {
+        console.log(`✅ ${removed.size} sites disabled - no reload needed (graceful degradation)`);
+      }
+
+      // If no actual changes, skip entirely
+      if (added.size === 0 && removed.size === 0) {
+        console.log("✅ No hostname changes detected - skipping reload");
+      }
+
+      console.log("   Benefits: Only affected sites reloaded, others remain undisturbed");
+      return;
+    }
+
+    // For UA changes (like Linux spoof toggle), reload all currently enabled sites
+    if (changeType === "ua_change") {
+      const hostnames = Array.from(currentHostnames);
+      if (hostnames.length === 0) {
+        console.log("No enabled hostnames for UA change reload");
+        return;
+      }
+
+      const matchPatterns = hostnames.map((hostname) => `*://${hostname}/*`);
+
+      // Query for tabs that match our patterns
+      const tabs = await chrome.tabs.query({
+        url: matchPatterns,
+      });
+
+      // Reload each affected tab
+      for (const tab of tabs) {
+        if (tab.id !== chrome.tabs.TAB_ID_NONE) {
+          await chrome.tabs.reload(tab.id, { bypassCache: true });
+        }
+      }
+
+      console.log(`Reloaded ${tabs.length} tabs due to UA string change`);
+      return;
+    }
+
+    // For version updates or other critical changes, reload all enabled sites
+    if (changeType === "version_update" || changeType === "critical_update") {
+      const hostnames = Array.from(currentHostnames);
+      if (hostnames.length === 0) {
+        console.log("No enabled hostnames for version update reload");
+        return;
+      }
+
+      const matchPatterns = hostnames.map((hostname) => `*://${hostname}/*`);
+
+      // Query for tabs that match our patterns
+      const tabs = await chrome.tabs.query({
+        url: matchPatterns,
+      });
+
+      // Reload each affected tab
+      for (const tab of tabs) {
+        if (tab.id !== chrome.tabs.TAB_ID_NONE) {
+          await chrome.tabs.reload(tab.id, { bypassCache: true });
+        }
+      }
+
+      console.log(`Reloaded ${tabs.length} tabs due to ${changeType}`);
+      return;
+    }
+
+    console.log(`Unknown change type: ${changeType}, skipping reload`);
+  } catch (error) {
+    console.error("Error in selective tab reload:", error);
+    // Fallback to legacy behavior on error
+    console.log("Falling back to legacy reload behavior");
+    await reloadAffectedTabsLegacy();
+  }
+}
+
+// Keep the original function as a fallback for critical scenarios
+async function reloadAffectedTabsLegacy() {
   try {
     const hostnames = Array.from(enabledHostnames.get_values());
     if (hostnames.length === 0) {
@@ -714,9 +886,9 @@ async function reloadAffectedTabs() {
       }
     }
 
-    console.log(`Reloaded ${tabs.length} affected tabs`);
+    console.log(`Legacy reload: Reloaded ${tabs.length} affected tabs`);
   } catch (error) {
-    console.error("Error reloading affected tabs:", error);
+    console.error("Error reloading affected tabs (legacy):", error);
   }
 }
 

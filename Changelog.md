@@ -38,6 +38,69 @@ Fixed navigator property redefinition errors that were causing console spam and 
 - More robust error filtering to reduce console noise
 - Better handling of already-defined navigator properties
 
+## 1.2.0 (Opera Detection Enhancement) - July 2025
+
+**🔒 Enhanced Browser Detection Blocking**
+
+Improved Opera detection blocking for better Chrome masking using Manifest V3 capabilities.
+
+### ✨ New Features
+
+- **Enhanced Opera Detection Blocking**: Improved mechanisms to prevent websites from detecting Opera browser
+- **Manifest V3 Optimizations**: Better utilization of Manifest V3 APIs for enhanced blocking
+- **Improved Site Compatibility**: Better Chrome masking for sites with advanced browser detection
+
+### 🔧 Technical Improvements
+
+- Enhanced declarative net request rules for Opera detection blocking
+- Improved header modification strategies
+- Better integration with Manifest V3 service worker architecture
+
+## 1.1.1 (Build System Fix) - July 2025
+
+**🔧 Build & Release Fixes**
+
+Critical fixes to the build system and release process to prevent duplicate files and improve reliability.
+
+### 🐛 Bug Fixes
+
+- **Fixed Duplicate ZIP Files**: Resolved issue causing duplicate ZIP files in releases
+- **Improved Build Process**: Enhanced build script reliability and consistency
+- **Release Cleanup**: Better management of release artifacts
+
+### 🛠️ Technical Improvements
+
+- Streamlined build pipeline
+- Better file management during build process
+- Improved release artifact handling
+
+## 1.1.0 (Enhanced Spoofing & Build) - July 2025
+
+**🚀 Major Spoofing Enhancements**
+
+Significant improvements to spoofing capabilities with deep injection, comprehensive headers, and multi-world coverage.
+
+### ✨ New Features
+
+- **Deep Injection Spoofing**: Enhanced spoofing mechanisms with deeper browser integration
+- **Comprehensive Header Masking**: More thorough header modification for better Chrome compatibility
+- **Multi-World Coverage**: Improved spoofing across different execution contexts
+- **Enhanced Build System**: Better build script with version handling and GitHub release integration
+
+### 🔧 Improvements
+
+- **Robust Spoofing Engine**: More comprehensive navigator object masking
+- **Enhanced Version Management**: Build script now includes version in filename
+- **GitHub Release Integration**: Improved release process with proper version preservation
+- **Documentation Updates**: Updated README with enhanced feature descriptions
+
+### 🛠️ Technical Improvements
+
+- Enhanced content script injection strategies
+- Improved navigator property spoofing coverage
+- Better handling of multiple execution contexts
+- Streamlined build and release workflow
+
 ## 1.0.1 (Language Pack Update) - July 2025
 
 **🌍 Extended Language Support**

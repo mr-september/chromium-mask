@@ -128,7 +128,9 @@ jobs:
             rm chrome-mask-for-opera.zip
           fi
           echo "Final zip files:"
-          find . -name "*.zip" -type f      - name: Generate release notes
+          find . -name "*.zip" -type f
+
+      - name: Generate release notes
         id: release_notes
         run: |
           # Get commits since last tag

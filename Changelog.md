@@ -1,5 +1,68 @@
 # Changelog - Chrome Mask for Opera
 
+## 1.5.0 (Per-Site Linux Platform Control) - July 2025
+
+**🚀 Major Feature: Per-Site Linux Platform Spoofing**
+
+Added comprehensive per-site control for Linux users to choose which sites use Windows Chrome spoofing vs Linux Chrome spoofing, replacing the global all-or-nothing approach.
+
+### 🌟 New Features
+
+- **Per-Site Platform Lists**: Linux users can now manage which sites should use Windows spoofing on a site-by-site basis
+- **Enhanced Options Page**: New "Linux Platform Settings" section with add/remove site functionality
+- **Smart Platform Display**: Popup shows current site's platform identity ("Windows Chrome (spoofed)" vs "Linux Chrome (native)")
+- **Visual Status Indicators**: Options page shows which sites have Chrome masking active vs waiting
+- **Automatic Migration**: Users with global Linux Windows spoofing enabled get all sites automatically added to the per-site list
+
+### 🎯 Use Case Benefits
+
+- **Streaming Services**: Add Netflix/Hulu to Windows spoofing while keeping YouTube as Linux
+- **Development Tools**: Keep GitHub/VS Code Web as Linux for better development experience
+- **Banking/Enterprise**: Add banking sites to Windows spoofing while keeping AWS Console as Linux
+- **Granular Control**: Choose optimal platform identity per site instead of global all-or-nothing
+
+### 🛠️ Technical Architecture
+
+- **`LinuxWindowsSpoofList`**: New class following established `EnabledHostnamesList` patterns
+- **Per-hostname DNR rules**: Each site gets appropriate platform-specific headers dynamically
+- **Smart reloading**: Only affected sites reload when platform settings change
+- **Backward compatibility**: Legacy global setting still works but marked as deprecated
+- **Code unification**: Reuses existing infrastructure and patterns for efficiency
+
+### 📋 Migration & Compatibility
+
+- **Seamless upgrade**: Existing users get identical behavior with new per-site control
+- **Legacy support**: Global toggle remains functional but deprecated
+- **Zero breaking changes**: All existing functionality preserved
+- **Future-ready**: Foundation for additional platform-specific features
+
+## 1.4.1 (Linux Toggle Fix) - July 2025
+
+**🐧 Critical Linux Bug Fix**
+
+Fixed a Linux-specific bug where the Chrome/Opera toggle in the popup would not stay activated, reverting to deactivated state immediately after clicking.
+
+### 🔧 Bug Fixes
+
+- **Fixed Linux Toggle Race Condition**: Resolved timing issues that caused the Linux platform toggle to revert after activation
+- **Enhanced UI State Management**: Linux toggle now properly refreshes UI state after changes (consistent with main toggle)
+- **Improved Storage Operations**: Added proper sequencing and logging for Linux spoof setting changes
+- **Better Error Handling**: Enhanced error recovery and state reversion for failed toggle operations
+
+### 🛠️ Technical Improvements
+
+- Added comprehensive logging for Linux toggle operations
+- Implemented small delay to ensure service worker completes processing before UI refresh
+- Enhanced service worker message handling with better error responses
+- Improved storage operation sequencing in ChromeUAStringManager
+
+### 📋 Affected Platforms
+
+- **Linux**: Primary fix for toggle persistence issue
+- **Windows/macOS**: No functional changes, but improved logging and error handling
+
+---
+
 ## 1.4.0 (Smart Tab Reload Optimization) - July 2025
 
 **🚀 Performance & User Experience Enhancement**

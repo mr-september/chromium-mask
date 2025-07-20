@@ -21,18 +21,41 @@
     <!-- Linux Platform Configuration (only shown on Linux) -->
     <section id="linuxPlatformSection" style="display: none">
       <h2 id="linuxPlatformTitle">Linux Platform Settings</h2>
+
+      <!-- Linux Windows Spoof Sites Section -->
       <div class="platform-setting">
+        <h3 id="linuxWindowsSpoofSitesTitle">Sites Using Windows Spoofing</h3>
+        <p id="linuxWindowsSpoofExplanation">
+          Choose which sites should appear as Windows Chrome instead of Linux Chrome. This only affects sites where
+          Chrome masking is already enabled.
+        </p>
+
+        <!-- Add site form for Linux Windows spoofing -->
+        <form id="add-linux-windows-site-form">
+          <input id="add-linux-windows-site-input" type="text" placeholder="www.example.com" />
+          <input type="submit" id="add-linux-windows-site-button" value="Add Site" />
+        </form>
+        <p id="add-linux-windows-site-explanation">Enter the hostname of a site that should use Windows spoofing</p>
+
+        <!-- List of sites using Windows spoofing -->
+        <div id="linux-windows-spoof-sites"></div>
+      </div>
+
+      <!-- Legacy global setting (deprecated but kept for backward compatibility) -->
+      <div class="platform-setting legacy-setting">
+        <h3>Legacy Global Setting</h3>
         <label class="platform-toggle-label">
           <input type="checkbox" id="linuxSpoofOption" />
-          <span id="linuxSpoofOptionText">Spoof as Windows instead of Linux</span>
+          <span id="linuxSpoofOptionText">Apply Windows spoofing to all sites (deprecated)</span>
         </label>
         <div class="platform-description">
           <p id="linuxSpoofOptionDescription">
-            Some sites block Linux browsers. Enable this to appear as Windows Chrome instead of Linux Chrome.
+            <strong>Deprecated:</strong> Use the per-site list above instead. This global setting affects all sites
+            where Chrome masking is enabled.
           </p>
           <p id="linuxSpoofOptionNote">
-            <strong>Note:</strong> This affects all sites where Chrome masking is enabled. You can change this setting
-            at any time.
+            <strong>Migration:</strong> Consider adding specific sites to the Windows spoofing list above for better
+            control.
           </p>
         </div>
       </div>

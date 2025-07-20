@@ -4,6 +4,7 @@ importScripts("shared.js");
 // Global instances
 let chromeUAStringManager;
 let enabledHostnames;
+let linuxWindowsSpoofList;
 let initPromise = null;
 let dnrUpdateInProgress = false;
 let contentScriptUpdateInProgress = false;
@@ -131,21 +132,42 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           }
           return;
         case "set_linux_spoof":
-          if (chromeUAStringManager) {
-            await chromeUAStringManager.setLinuxSpoofAsWindows(msg.enabled);
-            await updateDeclarativeNetRequestRules();
-            await updateContentScriptRegistration();
+          console.log("Processing set_linux_spoof message with enabled:", msg.enabled);
 
-            // Use the same logic as handleLinuxSpoofChanged for consistency
-            const storage = await chrome.storage.local.get("linuxSpoofReloadAllTabs");
-            if (storage.linuxSpoofReloadAllTabs === true) {
-              console.log("Linux spoof reload all tabs enabled - reloading all enabled sites");
-              const currentHostnames = new Set(enabledHostnames.get_values());
-              await reloadAffectedTabsSelectively(currentHostnames, currentHostnames, "ua_change");
-            } else {
-              console.log("Linux spoof changed via message - headers updated, no reload");
+          if (chromeUAStringManager) {
+            try {
+              await chromeUAStringManager.setLinuxSpoofAsWindows(msg.enabled);
+              console.log("Linux spoof setting updated in ChromeUAStringManager");
+
+              await updateDeclarativeNetRequestRules();
+              console.log("DNR rules updated");
+
+              await updateContentScriptRegistration();
+              console.log("Content script registration updated");
+
+              // Use the same logic as handleLinuxSpoofChanged for consistency
+              const storage = await chrome.storage.local.get("linuxSpoofReloadAllTabs");
+              if (storage.linuxSpoofReloadAllTabs === true) {
+                console.log("Linux spoof reload all tabs enabled - reloading all enabled sites");
+                const currentHostnames = new Set(enabledHostnames.get_values());
+                await reloadAffectedTabsSelectively(currentHostnames, currentHostnames, "ua_change");
+              } else {
+                console.log("Linux spoof changed via message - headers updated, no reload");
+              }
+
+              console.log("Linux spoof setting change completed successfully");
+              sendResponse({ success: true });
+            } catch (error) {
+              console.error("Error updating Linux spoof setting:", error);
+              sendResponse({ success: false, error: error.message });
             }
+          } else {
+            console.error("ChromeUAStringManager not available");
+            sendResponse({ success: false, error: "ChromeUAStringManager not available" });
           }
+          return;
+        case "linux_windows_spoof_hostnames_changed":
+          await handleLinuxWindowsSpoofHostnamesChanged();
           sendResponse({ success: true });
           return;
         case "inspect_dnr_rules":
@@ -206,6 +228,7 @@ async function init() {
     // Initialize global instances
     chromeUAStringManager = new ChromeUAStringManager();
     enabledHostnames = new EnabledHostnamesList();
+    linuxWindowsSpoofList = new LinuxWindowsSpoofList();
 
     // Initialize managers with error handling
     try {
@@ -221,6 +244,17 @@ async function init() {
       console.log("EnabledHostnamesList loaded successfully");
     } catch (error) {
       console.error("Failed to load EnabledHostnamesList:", error);
+      // Don't fail completely, just continue with empty list
+    }
+
+    try {
+      await linuxWindowsSpoofList.load();
+      console.log("LinuxWindowsSpoofList loaded successfully");
+
+      // Make linuxWindowsSpoofList available globally for ChromeUAStringManager
+      self.linuxWindowsSpoofList = linuxWindowsSpoofList;
+    } catch (error) {
+      console.error("Failed to load LinuxWindowsSpoofList:", error);
       // Don't fail completely, just continue with empty list
     } // Store spoofing data for content script access
     try {
@@ -288,6 +322,53 @@ async function handleEnabledHostnamesChanged() {
 
   // Use targeted reload strategy - reload only the specific sites that changed
   await reloadAffectedTabsSelectively(previousHostnames, currentHostnames, "hostname_change");
+}
+
+async function handleLinuxWindowsSpoofHostnamesChanged() {
+  console.log("Handling Linux Windows spoof hostnames changed");
+
+  // Get the previous hostname list before reloading
+  const previousHostnames = new Set(linuxWindowsSpoofList.get_values());
+
+  // Reload the hostnames list
+  await linuxWindowsSpoofList.load();
+
+  // Get the new hostname list
+  const currentHostnames = new Set(linuxWindowsSpoofList.get_values());
+
+  // Refresh spoofing data with new settings
+  await chromeUAStringManager.storeSpoofingData();
+
+  // Update DNR rules since platform spoofing affects headers
+  await updateDeclarativeNetRequestRules();
+
+  // Update content script registration
+  await updateContentScriptRegistration();
+
+  // For Linux platform spoof changes, we need to be more conservative:
+  // Only reload tabs that are affected by the platform change (sites with masking enabled)
+  const affectedHostnames = new Set();
+
+  // Add sites that were added to Linux Windows spoof list (now need Windows UA)
+  for (const hostname of currentHostnames) {
+    if (!previousHostnames.has(hostname) && enabledHostnames.contains(hostname)) {
+      affectedHostnames.add(hostname);
+    }
+  }
+
+  // Add sites that were removed from Linux Windows spoof list (now need Linux UA)
+  for (const hostname of previousHostnames) {
+    if (!currentHostnames.has(hostname) && enabledHostnames.contains(hostname)) {
+      affectedHostnames.add(hostname);
+    }
+  }
+
+  if (affectedHostnames.size > 0) {
+    console.log("Linux Windows spoof hostnames changed, reloading affected sites:", Array.from(affectedHostnames));
+    await reloadAffectedTabsSelectively(affectedHostnames, affectedHostnames, "platform_change");
+  } else {
+    console.log("Linux Windows spoof hostnames changed - headers updated, no tab reload needed");
+  }
 }
 
 async function handleLinuxSpoofChanged() {
@@ -420,17 +501,19 @@ function generateDNRRules(hostnames, uaString, startingRuleId = 1000) {
   // Base rule ID - start from provided starting ID to avoid conflicts
   let ruleId = startingRuleId;
 
-  // Extract Chrome version from UA string for Client Hints
-  const chromeVersionMatch = uaString.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
-  const chromeVersion = chromeVersionMatch ? chromeVersionMatch[1] : "134.0.0.0";
-  const chromeMajorVersion = chromeVersion.split(".")[0];
-
-  // Get platform info for Client Hints
-  const userAgentData = chromeUAStringManager.getUserAgentData();
-  const platformName = userAgentData.platform;
-  const platformVersion = userAgentData.highEntropyValues.platformVersion;
-
   for (const hostname of hostnames) {
+    // Get hostname-specific UA string and platform info
+    const hostnameUAString = chromeUAStringManager.getUAStringForHostname(hostname);
+    const hostnameUserAgentData = chromeUAStringManager.getUserAgentData(hostname);
+
+    // Extract Chrome version from hostname-specific UA string
+    const chromeVersionMatch = hostnameUAString.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
+    const chromeVersion = chromeVersionMatch ? chromeVersionMatch[1] : "134.0.0.0";
+    const chromeMajorVersion = chromeVersion.split(".")[0];
+
+    const platformName = hostnameUserAgentData.platform;
+    const platformVersion = hostnameUserAgentData.highEntropyValues.platformVersion;
+
     // Create rule for the hostname
     const rule = {
       id: ruleId++,
@@ -441,7 +524,7 @@ function generateDNRRules(hostnames, uaString, startingRuleId = 1000) {
           {
             header: "User-Agent",
             operation: "set",
-            value: uaString,
+            value: hostnameUAString,
           },
           {
             header: "sec-ch-ua",
@@ -529,6 +612,18 @@ function generateDNRRules(hostnames, uaString, startingRuleId = 1000) {
 
     // Also create a rule for www subdomain if not already present
     if (!hostname.startsWith("www.") && !hostnames.includes(`www.${hostname}`)) {
+      const wwwHostname = `www.${hostname}`;
+      const wwwUAString = chromeUAStringManager.getUAStringForHostname(wwwHostname);
+      const wwwUserAgentData = chromeUAStringManager.getUserAgentData(wwwHostname);
+
+      // Extract Chrome version from www-specific UA string
+      const wwwChromeVersionMatch = wwwUAString.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
+      const wwwChromeVersion = wwwChromeVersionMatch ? wwwChromeVersionMatch[1] : "134.0.0.0";
+      const wwwChromeMajorVersion = wwwChromeVersion.split(".")[0];
+
+      const wwwPlatformName = wwwUserAgentData.platform;
+      const wwwPlatformVersion = wwwUserAgentData.highEntropyValues.platformVersion;
+
       const wwwRule = {
         id: ruleId++,
         priority: 1,
@@ -538,12 +633,12 @@ function generateDNRRules(hostnames, uaString, startingRuleId = 1000) {
             {
               header: "User-Agent",
               operation: "set",
-              value: uaString,
+              value: wwwUAString,
             },
             {
               header: "sec-ch-ua",
               operation: "set",
-              value: `"Chromium";v="${chromeMajorVersion}", "Not:A-Brand";v="24", "Google Chrome";v="${chromeMajorVersion}"`,
+              value: `"Chromium";v="${wwwChromeMajorVersion}", "Not:A-Brand";v="24", "Google Chrome";v="${wwwChromeMajorVersion}"`,
             },
             {
               header: "sec-ch-ua-mobile",
@@ -553,12 +648,12 @@ function generateDNRRules(hostnames, uaString, startingRuleId = 1000) {
             {
               header: "sec-ch-ua-platform",
               operation: "set",
-              value: `"${platformName}"`,
+              value: `"${wwwPlatformName}"`,
             },
             {
               header: "sec-ch-ua-platform-version",
               operation: "set",
-              value: `"${platformVersion}"`,
+              value: `"${wwwPlatformVersion}"`,
             },
             {
               header: "sec-ch-ua-model",

@@ -65,6 +65,159 @@ class EnabledHostnamesList {
   }
 }
 
+// Linux Windows spoofing hostnames list - similar to EnabledHostnamesList but for platform-specific control
+class LinuxWindowsSpoofList {
+  #set = new Set();
+
+  async load() {
+    const storage = await chrome.storage.local.get(["linuxWindowsSpoofHostnames", "storageVersion"]);
+    if (storage?.linuxWindowsSpoofHostnames) {
+      this.#set = new Set(storage.linuxWindowsSpoofHostnames);
+      return;
+    }
+
+    // Migration: if user had global linuxSpoofAsWindows enabled, migrate to per-site for all currently enabled sites
+    if (storage?.storageVersion >= 3) {
+      const globalSetting = await chrome.storage.local.get("linuxSpoofAsWindows");
+      if (globalSetting?.linuxSpoofAsWindows === true) {
+        // Get currently enabled hostnames and add them to Linux Windows spoof list
+        const enabledStorage = await chrome.storage.local.get("enabledHostnames");
+        if (enabledStorage?.enabledHostnames) {
+          this.#set = new Set(enabledStorage.enabledHostnames);
+          await this.#persist();
+          console.info("Migrated global Linux Windows spoofing to per-site for all enabled hostnames");
+        }
+      }
+      return;
+    }
+
+    await chrome.storage.local.set({ storageVersion: 3 });
+  }
+
+  async #persist() {
+    const linuxWindowsSpoofHostnames = Array.from(this.#set.values());
+    await chrome.storage.local.set({ linuxWindowsSpoofHostnames });
+
+    try {
+      await chrome.runtime.sendMessage({ action: "linux_windows_spoof_hostnames_changed" });
+    } catch (ex) {
+      console.error("Failed to send linux_windows_spoof_hostnames_changed message:", ex);
+    }
+  }
+
+  async add(hostname) {
+    this.#set.add(hostname);
+    await this.#persist();
+  }
+
+  async remove(hostname) {
+    this.#set.delete(hostname);
+    await this.#persist();
+  }
+
+  contains(hostname) {
+    return this.#set.has(hostname);
+  }
+
+  get_values() {
+    return this.#set.values();
+  }
+
+  size() {
+    return this.#set.size;
+  }
+}
+
+// Unified platform info helper to reduce code duplication
+class PlatformInfoHelper {
+  static async getPlatformInfoWithRetry(maxRetries = 5) {
+    let retryCount = 0;
+
+    while (retryCount < maxRetries) {
+      try {
+        console.log(`Attempting to get platform info (attempt ${retryCount + 1}/${maxRetries})`);
+
+        const response = await Promise.race([
+          chrome.runtime.sendMessage({ action: "get_platform_info" }),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000)),
+        ]);
+
+        console.log("Received platform info response:", response);
+
+        if (response && response.success) {
+          console.log("Successfully got platform info:", response.data);
+          return response.data;
+        } else {
+          console.warn(`Failed to get platform info (attempt ${retryCount + 1}/${maxRetries}) - response:`, response);
+        }
+      } catch (error) {
+        console.error(`Failed to get platform info (attempt ${retryCount + 1}/${maxRetries}):`, error);
+      }
+
+      retryCount++;
+      if (retryCount < maxRetries) {
+        await new Promise((resolve) => setTimeout(resolve, 200 * retryCount)); // Exponential backoff
+      }
+    }
+
+    // Fallback logic
+    console.warn("Using fallback platform info after all retries failed");
+    try {
+      const fallbackPlatformInfo = await chrome.runtime.getPlatformInfo();
+      return {
+        actualPlatform: fallbackPlatformInfo.os,
+        linuxSpoofAsWindows: true,
+        platformInfo: fallbackPlatformInfo,
+      };
+    } catch (fallbackError) {
+      console.error("Failed to get fallback platform info:", fallbackError);
+      return {
+        actualPlatform: "unknown",
+        linuxSpoofAsWindows: true,
+        platformInfo: null,
+      };
+    }
+  }
+}
+
+// Unified toggle helper to reduce code duplication between different toggle types
+class ToggleHelper {
+  static async handleToggleChange(checkboxElement, action, actionData, options = {}) {
+    const originalState = checkboxElement.checked;
+    const toggleName = options.toggleName || "setting";
+
+    try {
+      console.log(`${toggleName} toggle changed to:`, originalState);
+
+      const response = await chrome.runtime.sendMessage({
+        action: action,
+        ...actionData,
+      });
+
+      if (!response || !response.success) {
+        console.error(`Failed to update ${toggleName} setting - response:`, response);
+        // Revert the checkbox state
+        checkboxElement.checked = !originalState;
+        return false;
+      }
+
+      console.log(`${toggleName} setting updated successfully`);
+
+      // Call optional post-success callback (e.g., refreshing UI state)
+      if (options.onSuccess) {
+        await options.onSuccess();
+      }
+
+      return true;
+    } catch (error) {
+      console.error(`Error updating ${toggleName} setting:`, error);
+      // Revert the checkbox state
+      checkboxElement.checked = !originalState;
+      return false;
+    }
+  }
+}
+
 class ChromeUAStringManager {
   // Your public repo with the Chrome version file
   #remoteUrl = "https://raw.githubusercontent.com/mr-september/central_automation_hub/main/current-chrome-version.txt";
@@ -111,9 +264,16 @@ class ChromeUAStringManager {
 
   // Set Linux spoofing preference
   async setLinuxSpoofAsWindows(enabled) {
+    console.log("Setting Linux spoof as Windows to:", enabled);
+
     this.#linuxSpoofAsWindows = enabled;
+
+    // Ensure the storage operation completes
     await chrome.storage.local.set({ linuxSpoofAsWindows: enabled });
+    console.log("Linux spoof setting saved to storage");
+
     await this.buildUAStringFromStorage();
+    console.log("UA string rebuilt after Linux spoof change");
   }
 
   // Generate Chrome-like appVersion string for navigator.appVersion spoofing
@@ -128,9 +288,9 @@ class ChromeUAStringManager {
   }
 
   // Generate Chrome-like userAgentData for modern browsers
-  getUserAgentData() {
+  getUserAgentData(hostname = null) {
     const actualPlatform = this.#currentPlatform;
-    const effectivePlatform = actualPlatform === "linux" && this.#linuxSpoofAsWindows ? "win" : actualPlatform;
+    const effectivePlatform = this.#getEffectivePlatform(actualPlatform, hostname);
 
     const platformName = effectivePlatform === "mac" ? "macOS" : effectivePlatform === "linux" ? "Linux" : "Windows";
 
@@ -161,6 +321,37 @@ class ChromeUAStringManager {
         wow64: false,
       },
     };
+  }
+
+  // Helper method to determine effective platform for a hostname
+  #getEffectivePlatform(actualPlatform, hostname) {
+    // Only apply Linux-to-Windows spoofing logic if we're on Linux
+    if (actualPlatform !== "linux") {
+      return actualPlatform;
+    }
+
+    // If hostname is provided, check per-site setting
+    if (hostname && typeof self !== "undefined" && self.linuxWindowsSpoofList) {
+      return self.linuxWindowsSpoofList.contains(hostname) ? "win" : "linux";
+    }
+
+    // Fallback to global setting for backward compatibility
+    return this.#linuxSpoofAsWindows ? "win" : "linux";
+  }
+
+  // Get UA string for specific hostname (supports per-site platform spoofing)
+  getUAStringForHostname(hostname) {
+    const actualPlatform = this.#currentPlatform;
+    const effectivePlatform = this.#getEffectivePlatform(actualPlatform, hostname);
+
+    const ChromeUAStrings = {
+      win: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${this.#currentChromeVersion}.0.0.0 Safari/537.36`,
+      mac: `Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${this.#currentChromeVersion}.0.0.0 Safari/537.36`,
+      linux: `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${this.#currentChromeVersion}.0.0.0 Safari/537.36`,
+      android: `Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${this.#currentChromeVersion}.0.0.0 Mobile Safari/537.36`,
+    };
+
+    return ChromeUAStrings[effectivePlatform] || this.#currentUAString;
   }
 
   async buildUAStringFromStorage() {

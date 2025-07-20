@@ -24,19 +24,17 @@
         </div>
       </span>
     </section>
-    <!-- Linux-specific toggle (only shown on Linux) -->
-    <section class="linux_toggle_container" id="linuxToggleContainer" style="display: none">
-      <span class="info_icon linux_info_icon" id="linuxInfoIcon" title=""
-        >ⓘ
-        <!-- Linux toggle description tooltip (hidden by default) -->
-        <div class="linux_description" id="linuxDescription">
-          <p id="linuxDescriptionText">Spoof as Windows instead of Linux</p>
+    <!-- Linux-specific platform info (only shown on Linux) -->
+    <section class="linux_platform_info" id="linuxPlatformInfo" style="display: none">
+      <div class="platform_status_container">
+        <span class="platform_icon">🖥️</span>
+        <div class="platform_details">
+          <div id="platformStatusText">Platform: Linux Chrome</div>
+          <div id="platformActionLink" class="platform_action_link">
+            <a href="#" id="managePlatformLink">Manage per-site platform settings</a>
+          </div>
         </div>
-      </span>
-      <label class="fancy_toggle linux_toggle" for="linux_spoof_enabled">
-        <input name="linux_spoof_enabled" type="checkbox" id="linux_spoof_enabled" />
-        <div></div>
-      </label>
+      </div>
     </section>
     <hr />
     <section id="manageSites">

@@ -3,12 +3,14 @@
   --border-color: #717079;
   --color: #fff;
   --toggle-background: #5f5e68;
+  --link-color: #66b3ff;
 
   @media (prefers-color-scheme: light) {
     --background-color: #fff;
     --border-color: #c4c4c5;
     --color: #15141a;
     --toggle-background: #e2e2e3;
+    --link-color: #007acc;
   }
 }
 
@@ -85,10 +87,6 @@ hr {
   display: flex;
   justify-content: center;
   margin: 1rem 0;
-  padding: 0.5rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--toggle-background);
   position: relative;
 }
 
@@ -148,6 +146,51 @@ hr {
 
 .linux_toggle {
   flex-shrink: 0;
+}
+
+/* Linux Platform Info Section */
+.linux_platform_info {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  background: var(--toggle-background);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.platform_status_container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.platform_icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.platform_details {
+  flex: 1;
+}
+
+#platformStatusText {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color);
+  margin-bottom: 0.25rem;
+}
+
+.platform_action_link {
+  font-size: 0.8rem;
+}
+
+.platform_action_link a {
+  color: var(--link-color, #007acc);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.platform_action_link a:hover {
+  text-decoration: underline;
 }
 
 .fancy_toggle {

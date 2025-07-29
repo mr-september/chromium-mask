@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "Po włączeniu wykonaj twarde odświeżenie strony (Ctrl+F5), aby zastosować zmiany i wyczyścić pamięć podręczną."
+    "message": "Może być konieczne wymuszenie pełnego odświeżenia (Ctrl+F5), aby wyczyścić pamięć podręczną i zastosować zmiany."
   },
 
   "manageSitesButton": {
@@ -107,5 +107,9 @@
 
   "linuxSpoofOptionNote": {
     "message": "Wpływa to na wszystkie strony, na których włączone jest maskowanie Chrome. Możesz zmienić to ustawienie w każdej chwili."
+  },
+  "managePlatformLinkText": {
+    "message": "Zarządzaj ustawieniami platformy dla każdej strony",
+    "description": "Tekst linku w popupie do otwarcia strony opcji ustawień specyficznych dla Linuksa."
   }
 }

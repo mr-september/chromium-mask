@@ -16,23 +16,28 @@
       </label>
       <span class="info_icon main_toggle_info" id="mainToggleInfo" title=""
         >ⓘ
-        <!-- Main toggle description tooltip (hidden by default) -->
         <div class="main_toggle_description" id="mainToggleDescription">
-          <p id="mainToggleDescriptionText">
-            After enabling, refresh the page (Ctrl+F5) to apply changes and clear cached content.
-          </p>
+          <p id="mainToggleDescriptionText" style="margin-top: 8px; text-align: center"></p>
         </div>
       </span>
     </section>
     <!-- Linux-specific platform info (only shown on Linux) -->
     <section class="linux_platform_info" id="linuxPlatformInfo" style="display: none">
-      <div class="platform_status_container">
-        <span class="platform_icon">🖥️</span>
-        <div class="platform_details">
-          <div id="platformStatusText">Platform: Linux Chrome</div>
-          <div id="platformActionLink" class="platform_action_link">
-            <a href="#" id="managePlatformLink">Manage per-site platform settings</a>
+      <div class="fancy_toggle_container linux_toggle_container">
+        <label class="fancy_toggle linux_toggle" for="linux_mask_enabled">
+          <input name="linux_mask_enabled" type="checkbox" id="linux_mask_enabled" />
+          <div></div>
+        </label>
+        <span class="info_icon linux_toggle_info" id="linuxToggleInfo" title=""
+          >ⓘ
+          <div class="linux_toggle_description" id="linuxToggleDescription">
+            <p id="linuxToggleDescriptionText" style="margin-top: 8px; text-align: center"></p>
           </div>
+        </span>
+      </div>
+      <div class="platform_details">
+        <div id="platformActionLink" class="platform_action_link">
+          <a href="#" id="managePlatformLink"></a>
         </div>
       </div>
     </section>

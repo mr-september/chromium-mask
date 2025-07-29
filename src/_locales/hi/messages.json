@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "सक्षम करने के बाद, बदलाव लागू करने और कैश की गई सामग्री को साफ़ करने के लिए पेज को हार्ड रीफ्रेश (Ctrl+F5) करें।"
+    "message": "परिवर्तन लागू करने के लिए हार्ड रिफ्रेश (Ctrl+F5) से कैश्ड सामग्री साफ़ करनी पड़ सकती है।"
   },
 
   "manageSitesButton": {
@@ -104,8 +104,31 @@
   "linuxPlatformTitle": {
     "message": "Linux प्लेटफॉर्म सेटिंग्स"
   },
-
+  "optionsLinuxSpoofTitle": {
+    "message": "Linux पर Windows स्पूफिंग",
+    "description": "Linux स्पूफिंग फीचर के लिए H3 उप-शीर्षक।"
+  },
+  "optionsLinuxSpoofDescription": {
+    "message": "किसी भी मास्क की गई साइट के लिए, आप Linux उपयोगकर्ताओं के लिए विशिष्ट समस्याओं को हल करने के लिए Windows स्पूफिंग सक्षम कर सकते हैं (जैसे वीडियो स्ट्रीमिंग सेवाओं के साथ)।",
+    "description": "Linux स्पूफिंग फीचर को समझाने वाला पैराग्राफ।"
+  },
+  "addSiteErrorAlreadySpoofing": {
+    "message": "यह साइट पहले से ही Windows स्पूफिंग सूची में है।",
+    "description": "स्पूफ सूची में पहले से मौजूद साइट जोड़ने पर त्रुटि।"
+  },
+  "optionsLinuxSpoofEmpty": {
+    "message": "Windows स्पूफिंग के लिए कोई साइट कॉन्फ़िगर नहीं है।",
+    "description": "Linux स्पूफ सूची खाली होने पर दिखाया जाने वाला संदेश।"
+  },
+  "optionsSpoofingAsWindows": {
+    "message": "(Windows के रूप में स्पूफिंग)",
+    "description": "होस्टनाम के पास छोटा विवरण, जो दर्शाता है कि Windows के रूप में स्पूफिंग हो रही है।"
+  },
   "linuxSpoofOptionNote": {
     "message": "यह उन सभी साइटों को प्रभावित करता है जहां Chrome मास्किंग सक्षम है। आप इस सेटिंग को कभी भी बदल सकते हैं।"
+  },
+  "managePlatformLinkText": {
+    "message": "प्रति साइट प्लेटफ़ॉर्म सेटिंग्स प्रबंधित करें",
+    "description": "लिनक्स-विशिष्ट सेटिंग्स के लिए विकल्प पृष्ठ खोलने के लिए पॉपअप में लिंक टेक्स्ट।"
   }
 }

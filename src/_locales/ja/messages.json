@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "有効にした後、変更を適用してキャッシュされたコンテンツをクリアするためにページを強制更新（Ctrl+F5）してください。"
+    "message": "変更を適用するにはハードリフレッシュ（Ctrl+F5）でキャッシュされたコンテンツをクリアする必要があります。"
   },
 
   "manageSitesButton": {
@@ -104,8 +104,31 @@
   "linuxPlatformTitle": {
     "message": "Linuxプラットフォーム設定"
   },
-
+  "optionsLinuxSpoofTitle": {
+    "message": "LinuxでのWindowsスプーフィング",
+    "description": "Linuxスプーフィング機能のH3サブ見出し。"
+  },
+  "optionsLinuxSpoofDescription": {
+    "message": "マスクされたサイトごとに、Linuxユーザー向けの問題（例：動画配信サービス）を解決するためにWindowsスプーフィングを有効にできます。",
+    "description": "Linuxスプーフィング機能を説明する段落。"
+  },
+  "addSiteErrorAlreadySpoofing": {
+    "message": "このサイトはすでにWindowsスプーフィングリストにあります。",
+    "description": "すでにスプーフィングリストにあるサイトを追加しようとしたときのエラー。"
+  },
+  "optionsLinuxSpoofEmpty": {
+    "message": "Windowsスプーフィング用に設定されたサイトはありません。",
+    "description": "Linuxスプーフィングリストが空のときに表示されるメッセージ。"
+  },
+  "optionsSpoofingAsWindows": {
+    "message": "（Windowsとしてスプーフィング中）",
+    "description": "Windowsとしてスプーフィングしていることを示すホスト名横の小さなテキスト。"
+  },
   "linuxSpoofOptionNote": {
     "message": "これはChromeマスキングが有効になっているすべてのサイトに影響します。いつでもこの設定を変更できます。"
+  },
+  "managePlatformLinkText": {
+    "message": "サイトごとのプラットフォーム設定を管理",
+    "description": "Linux固有の設定のオプションページを開くためのポップアップ内リンクテキスト。"
   }
 }

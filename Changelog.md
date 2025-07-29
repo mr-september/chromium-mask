@@ -1,5 +1,25 @@
 # Changelog - Chrome Mask for Opera
 
+## 1.5.1 (Linux Toggle & UI Unification) - July 2025
+
+🐧 Linux Toggle & UI Unification
+
+- Unified and improved the Linux toggle functionality in both the popup and options UI.
+- Refactored popup and options pages for better localization and consistent UI.
+- Added per-site Linux/Windows spoofing controls to the popup and options page.
+- Improved i18n/localization for new Linux spoofing features across all languages.
+- Updated CSS for unified styling and better dark/light mode support.
+- Enhanced event handling and state refresh for toggles (no more full page reloads).
+- Improved error messages and validation for site management.
+
+🔧 Technical Improvements
+
+- Unified Linux/Windows spoofing controls in popup and options page
+- Improved localization for new spoofing features in all supported languages
+- Updated UI styling for consistency and better dark/light mode support
+- Enhanced toggle event handling and state refresh (no more full reloads)
+- Improved error messages and input validation for site management
+
 ## 1.5.0 (Per-Site Linux Platform Control) - July 2025
 
 **🚀 Major Feature: Per-Site Linux Platform Spoofing**

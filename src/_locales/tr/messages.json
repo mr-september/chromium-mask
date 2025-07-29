@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "Etkinleştirdikten sonra değişiklikleri uygulamak ve önbelleği temizlemek için sayfayı sert yenileme (Ctrl+F5) yapın."
+    "message": "Değişiklikleri uygulamak için sert bir yenileme (Ctrl+F5) ile önbelleğe alınmış içeriği temizlemeniz gerekebilir."
   },
 
   "manageSitesButton": {
@@ -107,5 +107,9 @@
 
   "linuxSpoofOptionNote": {
     "message": "Bu, Chrome maskelemenin etkinleştirildiği tüm siteleri etkiler. Bu ayarı istediğiniz zaman değiştirebilirsiniz."
+  },
+  "managePlatformLinkText": {
+    "message": "Site başına platform ayarlarını yönet",
+    "description": "Linux'a özel ayarlar için seçenekler sayfasını açmak için popup'taki bağlantı metni."
   }
 }

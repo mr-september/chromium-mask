@@ -1,3 +1,40 @@
+.linux_toggle_container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+  position: relative;
+}
+
+.linux_toggle_info {
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.linux_toggle_description {
+  background: var(--toggle-background);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  z-index: 3000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  margin-top: 5px;
+}
+
+.linux_toggle_info:hover .linux_toggle_description {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
 :root {
   --background-color: #42414c;
   --border-color: #717079;
@@ -49,8 +86,9 @@ hr {
   align-items: center;
   display: flex;
   justify-content: center;
-  margin: 2rem 0;
+  margin: 1.25rem 0;
   position: relative;
+  z-index: 10;
 }
 
 .main_toggle_info {
@@ -72,7 +110,8 @@ hr {
   top: 100%;
   right: 0;
   width: 200px;
-  z-index: 1000;
+  /* This z-index is now relative to its parent container, which is fine */
+  z-index: 3001;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   margin-top: 5px;
 }
@@ -80,14 +119,6 @@ hr {
 .main_toggle_info:hover .main_toggle_description {
   display: block;
   animation: fadeIn 0.2s ease;
-}
-
-.linux_toggle_container {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-  position: relative;
 }
 
 .info_icon {
@@ -102,35 +133,6 @@ hr {
 
 .info_icon:hover {
   opacity: 1;
-}
-
-.linux_description {
-  background: var(--toggle-background);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 0.5rem;
-  font-size: 0.8rem;
-  line-height: 1.2;
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: 200px;
-  z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  margin-top: 5px;
-}
-
-.linux_info_icon {
-  position: absolute;
-  right: 60px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.linux_info_icon:hover .linux_description {
-  display: block;
-  animation: fadeIn 0.2s ease;
 }
 
 @keyframes fadeIn {
@@ -151,10 +153,10 @@ hr {
 /* Linux Platform Info Section */
 .linux_platform_info {
   margin: 1rem 0;
-  padding: 0.75rem;
-  background: var(--toggle-background);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+  padding: 0.75rem 0;
+  /* Adding position and a lower z-index to be explicit, though not strictly required after the fix above */
+  position: relative;
+  z-index: 5;
 }
 
 .platform_status_container {
@@ -181,6 +183,7 @@ hr {
 
 .platform_action_link {
   font-size: 0.8rem;
+  text-align: center;
 }
 
 .platform_action_link a {
@@ -193,9 +196,11 @@ hr {
   text-decoration: underline;
 }
 
-.fancy_toggle {
+.fancy_toggle,
+.linux_toggle {
   cursor: pointer;
   display: inline-block;
+
   div {
     background: var(--toggle-background);
     border-radius: 25px;
@@ -206,7 +211,6 @@ hr {
 
     &::after {
       background-color: #fff;
-      background-image: url(assets/toggler-icon-opera.png);
       background-size: contain;
       border-radius: 30px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
@@ -229,42 +233,29 @@ hr {
       }
 
       ~ div::after {
-        background-image: url(assets/toggler-icon-chrome.png);
         transform: translateX(55px);
       }
     }
   }
 }
 
-.linux_toggle {
-  div {
-    height: 50px;
-    transition: background 0.3s ease;
-    width: 100px;
-
-    &::after {
-      background-color: #fff;
-      background-image: url(assets/toggler-icon-linux.png);
-      background-size: contain;
-      border-radius: 30px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-      content: "";
-      height: 60px;
-      left: -5px;
-      position: absolute;
-      top: -5px;
-      transition: transform 0.3s ease;
-      width: 60px;
-    }
+.fancy_toggle {
+  div::after {
+    background-image: url(assets/toggler-icon-opera.png);
   }
 
-  input:checked ~ div {
-    background: #2ac3a2;
+  input:checked ~ div::after {
+    background-image: url(assets/toggler-icon-chrome.png);
+  }
+}
+
+.linux_toggle {
+  div::after {
+    background-image: url(assets/toggler-icon-linux.png);
   }
 
   input:checked ~ div::after {
     background-image: url(assets/toggler-icon-windows.png);
-    transform: translateX(55px);
   }
 }
 

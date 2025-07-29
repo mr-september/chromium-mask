@@ -1,179 +1,168 @@
-* {
-  box-sizing: border-box;
-}
+/* options.css */
 
-body {
-  font-family: sans-serif;
-  padding: 0.5rem 1rem 2rem;
-}
+/* 1. Global Styles & Color Variables */
+:root {
+  --font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --radius: 8px;
+  --padding: 20px;
+  --transition: all 0.2s ease-in-out;
 
-h2 {
-  font-size: 1.3rem;
-  margin: 1.5rem 0 0.5rem;
-}
-
-p {
-  line-height: 1.5rem;
-}
-
-#add-site-form,
-.site-list-item {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr min-content;
-  margin-top: 1rem;
-
-  p,
-  button,
-  input {
-    font-size: 1rem;
-    line-height: 2.5rem;
-    margin: 0;
-  }
-
-  button,
-  input {
-    padding: 0 0.5rem;
-  }
-}
-
-/* Linux Platform Configuration Styles */
-#linuxPlatformSection {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1rem;
-  margin: 1rem 0;
-  background: #f9f9f9;
-}
-
-.platform-setting {
-  margin: 1rem 0;
-}
-
-.platform-toggle-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.platform-toggle-label input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-.platform-description {
-  margin: 0.5rem 0 0 1.5rem;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.platform-description p {
-  margin: 0.5rem 0;
-  line-height: 1.4;
-}
-
-/* Linux Windows Spoof Sites Section */
-h3 {
-  font-size: 1.1rem;
-  margin: 1rem 0 0.5rem;
-  color: #333;
-}
-
-#add-linux-windows-site-form {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr min-content;
-  margin: 1rem 0;
-}
-
-#add-linux-windows-site-form input[type="text"] {
-  font-size: 1rem;
-  line-height: 2.5rem;
-  padding: 0 0.5rem;
-  margin: 0;
-}
-
-#add-linux-windows-site-form input[type="submit"] {
-  font-size: 1rem;
-  line-height: 2.5rem;
-  padding: 0 0.5rem;
-  margin: 0;
-}
-
-#add-linux-windows-site-explanation {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0.5rem 0;
-}
-
-#linux-windows-spoof-sites {
-  margin: 1rem 0;
-}
-
-.linux-windows-site-list-item {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr min-content;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
-  background: #f5f5f5;
-  border-radius: 4px;
-}
-
-.linux-windows-site-list-item p {
-  margin: 0;
-  line-height: 2rem;
-}
-
-.linux-windows-site-list-item button {
-  font-size: 0.9rem;
-  line-height: 2rem;
-  padding: 0 0.5rem;
-  margin: 0;
-}
-
-/* Legacy setting styling */
-.legacy-setting {
-  opacity: 0.7;
-  border-top: 1px solid #ddd;
-  padding-top: 1rem;
-  margin-top: 1rem;
-}
-
-.legacy-setting h3 {
-  color: #888;
+  /* Light Mode Palette */
+  --bg-color: #f0f2f5;
+  --card-bg-color: #ffffff;
+  --text-color: #1c1e21;
+  --text-secondary-color: #606770;
+  --border-color: #dddfe2;
+  --accent-color: #0866ff;
+  --accent-color-hover: #0058e6;
+  --danger-color: #e4e6eb;
+  --danger-color-hover: #d8dadf;
+  --danger-text-color: #333;
 }
 
 @media (prefers-color-scheme: dark) {
-  #linuxPlatformSection {
-    background: #2a2a2a;
-    border-color: #555;
+  :root {
+    /* Dark Mode Palette */
+    --bg-color: #18191a;
+    --card-bg-color: #242526;
+    --text-color: #e4e6eb;
+    --text-secondary-color: #b0b3b8;
+    --border-color: #3e4042;
+    --accent-color: #2374e1;
+    --accent-color-hover: #3982e4;
+    --danger-color: #4b4c4d;
+    --danger-color-hover: #5a5b5c;
+    --danger-text-color: #e4e6eb;
   }
+}
 
-  .platform-description {
-    color: #ccc;
-  }
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: var(--padding);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  h3 {
-    color: #ddd;
-  }
+/* 2. Card Layout */
+.setting-card {
+  background-color: var(--card-bg-color);
+  border-radius: var(--radius);
+  padding: var(--padding);
+  margin-bottom: var(--padding);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
 
-  #add-linux-windows-site-explanation {
-    color: #ccc;
-  }
+h2 {
+  margin-top: 0;
+  font-size: 1.5em;
+  color: var(--text-color);
+}
 
-  .linux-windows-site-list-item {
-    background: #333;
-  }
+h3 {
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+  color: var(--text-color);
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+}
 
-  .legacy-setting {
-    border-top-color: #555;
-  }
+p {
+  color: var(--text-secondary-color);
+  line-height: 1.5;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
 
-  .legacy-setting h3 {
-    color: #aaa;
-  }
+/* 3. Form Styling */
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+input[type="text"] {
+  flex-grow: 1;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-size: 1em;
+  transition: var(--transition);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-color) 20%, transparent);
+}
+
+.button {
+  padding: 10px 16px;
+  font-size: 1em;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.button-primary {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.button-primary:hover {
+  background-color: var(--accent-color-hover);
+}
+
+.button-danger {
+  background-color: var(--danger-color);
+  color: var(--danger-text-color);
+}
+
+.button-danger:hover {
+  background-color: var(--danger-color-hover);
+}
+
+/* 4. List Styling */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item p {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.05em;
+}
+
+.list-item .hostname-details {
+  color: var(--text-secondary-color);
+  font-size: 0.85em;
+  margin-left: 8px;
+}
+
+.empty-list-message {
+  color: var(--text-secondary-color);
+  font-style: italic;
+  padding: 16px;
+  text-align: center;
+  background-color: color-mix(in srgb, var(--border-color) 20%, transparent);
+  border-radius: 6px;
 }

@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "Nach dem Aktivieren die Seite hart aktualisieren (Strg+F5), um Änderungen anzuwenden und den Cache zu leeren."
+    "message": "Möglicherweise ist ein Hard-Refresh (Strg+F5) erforderlich, um den Cache zu leeren und Änderungen anzuwenden."
   },
 
   "manageSitesButton": {
@@ -80,32 +80,38 @@
   "addSiteErrorAlreadyActive": {
     "message": "Die Chrome Mask for Opera ist auf dieser Seite bereits aktiv!"
   },
+  "linuxSpoofOptionNote": {
+    "message": "Dies betrifft alle Seiten, auf denen Chrome-Maskierung aktiviert ist. Du kannst diese Einstellung jederzeit ändern."
+  },
+  "managePlatformLinkText": {
+    "message": "Plattformeinstellungen pro Seite verwalten",
+    "description": "Linktext im Popup, um die Optionsseite für Linux-spezifische Einstellungen zu öffnen."
+  },
 
   "maskedSitesTitle": {
     "message": "Gerade maskierte Seiten"
   },
-
   "siteListRemoveButton": {
     "message": "Entfernen"
   },
-
   "siteListEmpty": {
     "message": "Die Chrome Mask for Opera ist noch auf keiner Seite aktiv!"
   },
-
   "linuxSpoofToggle": {
     "message": "Als Windows statt Linux ausgeben"
   },
-
   "linuxSpoofToggleDescription": {
     "message": "Manche Seiten blockieren Linux-Browser. Aktiviere dies, um als Windows Chrome statt Linux Chrome zu erscheinen."
   },
-
   "linuxPlatformTitle": {
     "message": "Linux-Plattform-Einstellungen"
   },
-
-  "linuxSpoofOptionNote": {
-    "message": "Dies betrifft alle Seiten, auf denen Chrome-Maskierung aktiviert ist. Du kannst diese Einstellung jederzeit ändern."
+  "optionsLinuxSpoofEmpty": {
+    "message": "Es sind keine Seiten für Windows-Spoofing konfiguriert.",
+    "description": "Meldung, wenn die Linux-Spoofing-Liste leer ist."
+  },
+  "optionsSpoofingAsWindows": {
+    "message": "(Spoofing als Windows)",
+    "description": "Kleiner Text neben einem Hostnamen, der anzeigt, dass als Windows gespooft wird."
   }
 }

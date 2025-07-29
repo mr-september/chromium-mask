@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "Selepas mengaktifkan, muat semula secara paksa halaman (Ctrl+F5) untuk melaksanakan perubahan dan mengosongkan kandungan cache."
+    "message": "Mungkin memerlukan segar semula keras (Ctrl+F5) untuk membersihkan kandungan cache dan menerapkan perubahan."
   },
 
   "manageSitesButton": {
@@ -104,8 +104,31 @@
   "linuxPlatformTitle": {
     "message": "Tetapan Platform Linux"
   },
-
+  "optionsLinuxSpoofTitle": {
+    "message": "Spoofing Windows di Linux",
+    "description": "Subtajuk H3 untuk ciri spoofing Windows di Linux."
+  },
+  "optionsLinuxSpoofDescription": {
+    "message": "Untuk mana-mana laman yang bertopeng, anda boleh aktifkan spoofing Windows untuk menyelesaikan isu khusus pengguna Linux (cth: perkhidmatan penstriman video).",
+    "description": "Perenggan yang menerangkan ciri spoofing Windows di Linux."
+  },
+  "addSiteErrorAlreadySpoofing": {
+    "message": "Laman ini sudah ada dalam senarai spoofing Windows.",
+    "description": "Ralat apabila cuba menambah laman yang sudah ada dalam senarai spoofing."
+  },
+  "optionsLinuxSpoofEmpty": {
+    "message": "Tiada laman dikonfigurasi untuk spoofing Windows.",
+    "description": "Mesej apabila senarai spoofing Linux kosong."
+  },
+  "optionsSpoofingAsWindows": {
+    "message": "(Spoofing sebagai Windows)",
+    "description": "Teks kecil di sebelah hostname yang menunjukkan ia spoofing sebagai Windows."
+  },
   "linuxSpoofOptionNote": {
     "message": "Ini memberi kesan kepada semua laman yang Chrome masking diaktifkan. Anda boleh mengubah tetapan ini pada bila-bila masa."
+  },
+  "managePlatformLinkText": {
+    "message": "Urus tetapan platform setiap laman",
+    "description": "Teks pautan dalam popup untuk membuka halaman pilihan tetapan khusus Linux."
   }
 }

@@ -1,73 +1,40 @@
 const enabledHostnames = new EnabledHostnamesList();
 const linuxWindowsSpoofList = new LinuxWindowsSpoofList();
 
-async function initUi() {
-  [
-    ["add-site-hostname-explanation", "addSiteHostnameExplanation"],
-    ["add-site-title", "addSiteTitle"],
-    ["masked-sites-title", "maskedSitesTitle"],
-  ].forEach(([id, i18nKey]) => {
-    document.getElementById(id).innerText = chrome.i18n.getMessage(i18nKey);
+// Helper function to set text from localization files
+function localizePage() {
+  // Localize text content
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = chrome.i18n.getMessage(el.dataset.i18n);
   });
 
-  document.getElementById("add-site-button").value = chrome.i18n.getMessage("addSiteButton");
+  // Localize placeholder attributes
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+    el.placeholder = chrome.i18n.getMessage(el.dataset.i18nPlaceholder);
+  });
+}
 
-  // Setup Linux platform configuration if on Linux
+async function initUi() {
+  // First, apply all translations to the static HTML
+  localizePage();
+
+  // Then, set up the dynamic parts of the UI
   await setupLinuxPlatformSection();
-
   setupAddForm();
   setupSiteList();
 }
 
 async function setupLinuxPlatformSection() {
-  // Use unified platform info helper - same as popup.js
   const response = await PlatformInfoHelper.getPlatformInfoWithRetry();
-
   if (!response) {
-    console.error("Failed to get platform info after all retries - Linux platform section will not be available");
+    console.error("Failed to get platform info - Linux platform section will not be available");
     return;
   }
-
   try {
     if (response.actualPlatform === "linux") {
-      const linuxSection = document.getElementById("linuxPlatformSection");
-      linuxSection.style.display = "block";
-
-      // Update text content with localized strings (keeping existing for backward compatibility)
-      document.getElementById("linuxPlatformTitle").innerText = "Linux Platform Settings";
-      document.getElementById("linuxWindowsSpoofSitesTitle").innerText = "Sites Using Windows Spoofing";
-      document.getElementById("linuxWindowsSpoofExplanation").innerText =
-        "Choose which sites should appear as Windows Chrome instead of Linux Chrome. This only affects sites where Chrome masking is already enabled.";
-
-      document.getElementById("add-linux-windows-site-button").value = "Add Site";
-      document.getElementById("add-linux-windows-site-explanation").innerText =
-        "Enter the hostname of a site that should use Windows spoofing";
-
-      // Setup Linux Windows spoof sites management
+      document.getElementById("linuxPlatformSection").style.display = "block";
       setupLinuxWindowsSpoofAddForm();
       setupLinuxWindowsSpoofSiteList();
-
-      // Legacy global setting - keep for backward compatibility but mark as deprecated
-      const linuxCheckbox = document.getElementById("linuxSpoofOption");
-      linuxCheckbox.checked = response.linuxSpoofAsWindows;
-      document.getElementById("linuxSpoofOptionText").innerText = "Apply Windows spoofing to all sites (deprecated)";
-      document.getElementById("linuxSpoofOptionDescription").innerHTML =
-        "<strong>Deprecated:</strong> Use the per-site list above instead. This global setting affects all sites where Chrome masking is enabled.";
-      document.getElementById("linuxSpoofOptionNote").innerHTML =
-        "<strong>Migration:</strong> Consider adding specific sites to the Windows spoofing list above for better control.";
-
-      // Add event listener for legacy checkbox (still functional but deprecated)
-      linuxCheckbox.addEventListener("change", async (ev) => {
-        await ToggleHelper.handleToggleChange(
-          ev.target,
-          "set_linux_spoof",
-          { enabled: ev.target.checked },
-          { toggleName: "Linux spoof (legacy)" },
-        );
-      });
-    } else {
-      // This is expected behavior on non-Linux platforms
-      console.log(`Platform is ${response.actualPlatform}, Linux platform section not needed`);
     }
   } catch (error) {
     console.error("Error setting up Linux platform section:", error);
@@ -75,14 +42,13 @@ async function setupLinuxPlatformSection() {
 }
 
 function tryValidateHostname(input) {
-  if (URL.canParse(input)) {
-    return URL.parse(input).hostname;
+  try {
+    if (URL.canParse(input)) return new URL(input).hostname;
+    if (URL.canParse(`https://${input}`)) return new URL(`https://${input}`).hostname;
+  } catch (e) {
+    // Catches cases like "http:// " which canParse but not construct
+    return undefined;
   }
-
-  if (URL.canParse(`https://${input}`)) {
-    return URL.parse(`https://${input}`).hostname;
-  }
-
   return undefined;
 }
 
@@ -90,23 +56,17 @@ function setupLinuxWindowsSpoofAddForm() {
   const inputEl = document.getElementById("add-linux-windows-site-input");
   document.getElementById("add-linux-windows-site-form").addEventListener("submit", async (ev) => {
     ev.preventDefault();
-
     const maybeHostname = tryValidateHostname(inputEl.value);
     if (!maybeHostname) {
-      alert("Invalid hostname. Please enter a valid domain like 'example.com'");
+      alert(chrome.i18n.getMessage("addSiteErrorInvalid"));
       return false;
     }
-
     if (linuxWindowsSpoofList.contains(maybeHostname)) {
-      alert("This site is already in the Windows spoofing list");
+      alert(chrome.i18n.getMessage("addSiteErrorAlreadySpoofing"));
       return false;
     }
-
     await linuxWindowsSpoofList.add(maybeHostname);
     inputEl.value = "";
-
-    // Refresh the display
-    setupLinuxWindowsSpoofSiteList();
   });
 }
 
@@ -115,12 +75,7 @@ function setupLinuxWindowsSpoofSiteList() {
   siteList.innerHTML = "";
 
   if (linuxWindowsSpoofList.size() < 1) {
-    const siteListItem = document.createElement("p");
-    siteListItem.innerText =
-      "No sites configured for Windows spoofing. All enabled sites will use Linux Chrome identity.";
-    siteListItem.style.fontStyle = "italic";
-    siteListItem.style.color = "#666";
-    siteList.appendChild(siteListItem);
+    siteList.innerHTML = `<p class="empty-list-message">${chrome.i18n.getMessage("optionsLinuxSpoofEmpty")}</p>`;
     return;
   }
 
@@ -128,23 +83,17 @@ function setupLinuxWindowsSpoofSiteList() {
     .sort((a, b) => a.localeCompare(b))
     .forEach((hostname) => {
       const siteListItem = document.createElement("div");
-      siteListItem.classList.add("linux-windows-site-list-item");
+      siteListItem.classList.add("list-item");
 
       const hostnameLabel = document.createElement("p");
-      hostnameLabel.textContent = hostname;
-
-      // Add status indicator if this hostname is also in the main enabled list
-      if (enabledHostnames.contains(hostname)) {
-        hostnameLabel.innerHTML = `${hostname} <span style="color: green; font-size: 0.8em;">(✓ Chrome masking active)</span>`;
-      } else {
-        hostnameLabel.innerHTML = `${hostname} <span style="color: #888; font-size: 0.8em;">(waiting for Chrome masking)</span>`;
-      }
+      const spoofDetailText = chrome.i18n.getMessage("optionsSpoofingAsWindows");
+      hostnameLabel.innerHTML = `${hostname} <span class="hostname-details">${spoofDetailText}</span>`;
 
       const deleteButton = document.createElement("button");
-      deleteButton.textContent = "Remove";
+      deleteButton.textContent = chrome.i18n.getMessage("siteListRemoveButton");
+      deleteButton.className = "button button-danger";
       deleteButton.addEventListener("click", async () => {
         await linuxWindowsSpoofList.remove(hostname);
-        setupLinuxWindowsSpoofSiteList();
       });
 
       siteListItem.append(hostnameLabel, deleteButton);
@@ -156,21 +105,17 @@ function setupAddForm() {
   const inputEl = document.getElementById("add-site-input");
   document.getElementById("add-site-form").addEventListener("submit", async (ev) => {
     ev.preventDefault();
-
     const maybeHostname = tryValidateHostname(inputEl.value);
     if (!maybeHostname) {
       alert(chrome.i18n.getMessage("addSiteErrorInvalid"));
       return false;
     }
-
     if (enabledHostnames.contains(maybeHostname)) {
       alert(chrome.i18n.getMessage("addSiteErrorAlreadyActive"));
       return false;
     }
-
     await enabledHostnames.add(maybeHostname);
     inputEl.value = "";
-    window.location.reload();
   });
 }
 
@@ -179,9 +124,7 @@ function setupSiteList() {
   siteList.innerHTML = "";
 
   if (enabledHostnames.size() < 1) {
-    const siteListItem = document.createElement("p");
-    siteListItem.innerText = chrome.i18n.getMessage("siteListEmpty");
-    siteList.appendChild(siteListItem);
+    siteList.innerHTML = `<p class="empty-list-message">${chrome.i18n.getMessage("siteListEmpty")}</p>`;
     return;
   }
 
@@ -189,16 +132,16 @@ function setupSiteList() {
     .sort((a, b) => a.localeCompare(b))
     .forEach((hostname) => {
       const siteListItem = document.createElement("div");
-      siteListItem.classList.add("site-list-item");
+      siteListItem.classList.add("list-item");
 
       const hostnameLabel = document.createElement("p");
       hostnameLabel.textContent = hostname;
 
       const deleteButton = document.createElement("button");
       deleteButton.textContent = chrome.i18n.getMessage("siteListRemoveButton");
+      deleteButton.className = "button button-danger";
       deleteButton.addEventListener("click", async () => {
         await enabledHostnames.remove(hostname);
-        window.location.reload();
       });
 
       siteListItem.append(hostnameLabel, deleteButton);
@@ -214,14 +157,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   chrome.runtime.onMessage.addListener(async (msg) => {
     switch (msg.action) {
       case "enabled_hostnames_changed":
-        window.location.reload();
+        setupSiteList();
+        setupLinuxWindowsSpoofSiteList();
         break;
       case "linux_windows_spoof_hostnames_changed":
-        // Refresh the Linux Windows spoof site list display
         setupLinuxWindowsSpoofSiteList();
         break;
       default:
-        throw new Error("unexpected message received", msg);
+        console.warn("Unexpected message received in options.js:", msg);
     }
+    return true;
   });
 });

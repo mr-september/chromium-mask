@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "Après activation, actualisez la page en dur (Ctrl+F5) pour appliquer les changements et vider le cache."
+    "message": "Un rafraîchissement complet (Ctrl+F5) peut être nécessaire pour vider le cache et appliquer les modifications."
   },
 
   "manageSitesButton": {
@@ -104,8 +104,31 @@
   "linuxPlatformTitle": {
     "message": "Paramètres de la plateforme Linux"
   },
-
+  "optionsLinuxSpoofTitle": {
+    "message": "Usurpation Windows sur Linux",
+    "description": "Le sous-titre H3 pour la fonctionnalité d'usurpation Windows sur Linux."
+  },
+  "optionsLinuxSpoofDescription": {
+    "message": "Pour tout site masqué, vous pouvez activer l'usurpation Windows pour résoudre des problèmes spécifiques aux utilisateurs Linux (ex : services de streaming vidéo).",
+    "description": "Le paragraphe expliquant la fonctionnalité d'usurpation Windows sur Linux."
+  },
+  "addSiteErrorAlreadySpoofing": {
+    "message": "Ce site est déjà dans la liste d'usurpation Windows.",
+    "description": "Erreur lors de l'ajout d'un site déjà dans la liste d'usurpation."
+  },
+  "optionsLinuxSpoofEmpty": {
+    "message": "Aucun site n'est configuré pour l'usurpation Windows.",
+    "description": "Message affiché lorsque la liste d'usurpation Linux est vide."
+  },
+  "optionsSpoofingAsWindows": {
+    "message": "(Usurpation Windows)",
+    "description": "Petit texte à côté d'un nom d'hôte indiquant qu'il est usurpé en tant que Windows."
+  },
   "linuxSpoofOptionNote": {
     "message": "Ceci affecte tous les sites où le masquage Chrome est activé. Vous pouvez modifier ce paramètre à tout moment."
+  },
+  "managePlatformLinkText": {
+    "message": "Gérer les paramètres de plateforme par site",
+    "description": "Texte du lien dans le popup pour ouvrir la page d'options des paramètres spécifiques à Linux."
   }
 }

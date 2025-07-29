@@ -1,111 +1,136 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera"
+    "message": "Chrome Mask for Opera",
+    "description": "The name of the extension."
   },
-
   "extensionDescription": {
-    "message": "Makes Opera wear a mask to look like Chrome to websites that otherwise won't work."
+    "message": "Makes Opera wear a mask to look like Chrome to websites that otherwise won't work.",
+    "description": "The description of the extension shown in the add-on store."
   },
-
+  "maskStatusOn": {
+    "message": "The mask is on! I pretend to be Chrome on this site.",
+    "description": "Status message in the popup when masking is active for the current site."
+  },
+  "maskStatusOff": {
+    "message": "The mask is off. I appear as Opera for this site.",
+    "description": "Status message in the popup when masking is inactive for the current site."
+  },
+  "maskStatusUnsupported": {
+    "message": "The mask cannot work on this site.",
+    "description": "Status message in the popup for sites where the extension cannot run (e.g., chrome:// pages)."
+  },
+  "mainToggleDescription": {
+    "message": "May require a hard refresh (Ctrl+F5) to clear cached content and apply changes.",
+    "description": "A note in the popup explaining that a refresh might be needed."
+  },
+  "manageSitesButton": {
+    "message": "Add or remove sites",
+    "description": "Button text in the popup that opens the options page."
+  },
+  "manageSitesFallback": {
+    "message": "To add or remove sites, please open the Extension Manager, select Chrome Mask for Opera, and hit Settings.",
+    "description": "Fallback text for when the options page cannot be opened directly."
+  },
+  "linuxSpoofToggle": {
+    "message": "Spoof as Windows instead of Linux",
+    "description": "Label for the global Linux spoofing toggle in the popup."
+  },
+  "linuxSpoofToggleDescription": {
+    "message": "Some sites block Linux browsers. Enable this to appear as Windows Chrome instead of Linux Chrome.",
+    "description": "Explanation for the global Linux spoofing toggle."
+  },
+  "managePlatformLinkText": {
+    "message": "Manage per-site platform settings",
+    "description": "Link text in the popup to open the options page for Linux-specific settings."
+  },
+  "optionsPageTitle": {
+    "message": "Extension Options",
+    "description": "The title of the options HTML page's browser tab."
+  },
+  "optionsMainTitle": {
+    "message": "Chrome Masking for Opera",
+    "description": "The main H2 title on the options page."
+  },
+  "optionsMainDescription": {
+    "message": "For sites that don't work correctly in Opera, add them here to make them identify as Chrome.",
+    "description": "The primary paragraph explaining the main feature on the options page."
+  },
+  "optionsInputPlaceholder": {
+    "message": "e.g., www.example.com",
+    "description": "Placeholder text for the hostname input fields on the options page."
+  },
+  "addSiteButton": {
+    "message": "Add Site",
+    "description": "Text for buttons that add a site to a list."
+  },
+  "siteListRemoveButton": {
+    "message": "Remove",
+    "description": "Text for buttons that remove a site from a list."
+  },
+  "siteListEmpty": {
+    "message": "No sites are currently being masked.",
+    "description": "Message shown when the main list of masked sites is empty on the options page."
+  },
+  "linuxPlatformTitle": {
+    "message": "Linux Platform Settings",
+    "description": "The H2 title for the Linux-specific section on the options page."
+  },
+  "optionsLinuxSpoofTitle": {
+    "message": "Windows Spoofing on Linux",
+    "description": "The H3 sub-heading for the Linux spoofing feature on the options page."
+  },
+  "optionsLinuxSpoofDescription": {
+    "message": "For any masked site, you can enable Windows spoofing to solve issues specific to Linux users (e.g., with video streaming services).",
+    "description": "The paragraph explaining the Linux spoofing feature on the options page."
+  },
+  "optionsLinuxSpoofEmpty": {
+    "message": "No sites are configured for Windows spoofing.",
+    "description": "Message shown when the Linux spoof list is empty on the options page."
+  },
+  "optionsSpoofingAsWindows": {
+    "message": "(Spoofing as Windows)",
+    "description": "Small text detail next to a hostname indicating it's spoofing as Windows."
+  },
+  "addSiteErrorInvalid": {
+    "message": "Invalid hostname. Please enter a valid domain like 'example.com'",
+    "description": "Error message for an invalid domain."
+  },
+  "addSiteErrorAlreadyActive": {
+    "message": "This site is already in the masking list.",
+    "description": "Error message when trying to add a site that is already masked."
+  },
+  "addSiteErrorAlreadySpoofing": {
+    "message": "This site is already in the Windows spoofing list.",
+    "description": "Error when trying to add a site that is already in the spoof list."
+  },
   "supportMessage": {
     "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
+    "description": "A message asking for support, likely in the popup.",
     "placeholders": {
       "SUPPORT_LINK": {
         "content": "$1"
       }
     }
   },
-
   "breakageWarning": {
-    "message": "While Chrome Mask for Opera may help if you see a \"Browser unsupported\" message, it could cause unexpected breakage on some sites."
+    "message": "While Chrome Mask for Opera may help if you see a \"Browser unsupported\" message, it could cause unexpected breakage on some sites.",
+    "description": "A general warning about potential side effects."
   },
-
   "reportBrokenSite": {
-    "message": "If you find a site which works better with Chrome Mask for Opera enabled, please report it $WEBCOMPAT$. Thank you! &hearts;",
+    "message": "If you find a site which works better with Chrome Mask for Opera enabled, please report it $WEBCOMPAT$. Thank you! ♥",
+    "description": "A message asking users to report sites.",
     "placeholders": {
       "WEBCOMPAT": {
         "content": "$1"
       }
     }
   },
-
   "inProductReporterLinkText": {
-    "message": "through Opera Help & Support"
+    "message": "through Opera Help & Support",
+    "description": "Link text for a specific reporting method."
   },
-
   "webcompatLinkText": {
-    "message": "on WebCompat.com"
-  },
-
-  "maskStatusOn": {
-    "message": "The mask is on! I pretend to be Chrome on this site."
-  },
-
-  "maskStatusOff": {
-    "message": "The mask is off. I look like Opera to this site."
-  },
-
-  "maskStatusUnsupported": {
-    "message": "The mask cannot work on this site."
-  },
-
-  "mainToggleDescription": {
-    "message": "After enabling, hard refresh the page (Ctrl+F5) to apply changes and clear cached content."
-  },
-
-  "manageSitesButton": {
-    "message": "Add or remove sites"
-  },
-
-  "manageSitesFallback": {
-    "message": "To add or remove sites, please open the Extension Manager, select Chrome Mask for Opera, and hit Settings."
-  },
-
-  "addSiteTitle": {
-    "message": "Add Site"
-  },
-
-  "addSiteButton": {
-    "message": "Add Site"
-  },
-
-  "addSiteHostnameExplanation": {
-    "message": "Note: Enter the domain name (e.g., example.com). The extension will work on all pages and subdomains of that site."
-  },
-
-  "addSiteErrorInvalid": {
-    "message": "Please enter a valid domain!"
-  },
-
-  "addSiteErrorAlreadyActive": {
-    "message": "Chrome Mask for Opera is already enabled for this domain!"
-  },
-
-  "maskedSitesTitle": {
-    "message": "Currently Masked Sites"
-  },
-
-  "siteListRemoveButton": {
-    "message": "Remove"
-  },
-
-  "siteListEmpty": {
-    "message": "You did not enable Chrome Mask for Opera on any site yet!"
-  },
-
-  "linuxSpoofToggle": {
-    "message": "Spoof as Windows instead of Linux"
-  },
-
-  "linuxSpoofToggleDescription": {
-    "message": "Some sites block Linux browsers. Enable this to appear as Windows Chrome instead of Linux Chrome."
-  },
-
-  "linuxPlatformTitle": {
-    "message": "Linux Platform Settings"
-  },
-
-  "linuxSpoofOptionNote": {
-    "message": "This affects all sites where Chrome masking is enabled. You can change this setting at any time."
+    "message": "on WebCompat.com",
+    "description": "Link text for the WebCompat website."
   }
 }

@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "활성화 후 변경사항을 적용하고 캐시된 콘텐츠를 지우려면 페이지를 강제 새로고침(Ctrl+F5)하세요."
+    "message": "변경 사항을 적용하려면 하드 새로고침(Ctrl+F5)으로 캐시된 콘텐츠를 지워야 할 수 있습니다."
   },
 
   "manageSitesButton": {
@@ -104,8 +104,31 @@
   "linuxPlatformTitle": {
     "message": "Linux 플랫폼 설정"
   },
-
+  "optionsLinuxSpoofTitle": {
+    "message": "Linux에서 Windows 스푸핑",
+    "description": "Linux 스푸핑 기능의 H3 소제목."
+  },
+  "optionsLinuxSpoofDescription": {
+    "message": "마스킹된 사이트마다 Linux 사용자에게 특화된 문제(예: 동영상 스트리밍 서비스)를 해결하기 위해 Windows 스푸핑을 활성화할 수 있습니다.",
+    "description": "Linux 스푸핑 기능을 설명하는 문단."
+  },
+  "addSiteErrorAlreadySpoofing": {
+    "message": "이 사이트는 이미 Windows 스푸핑 목록에 있습니다.",
+    "description": "이미 스푸핑 목록에 있는 사이트를 추가하려고 할 때의 오류."
+  },
+  "optionsLinuxSpoofEmpty": {
+    "message": "Windows 스푸핑이 설정된 사이트가 없습니다.",
+    "description": "Linux 스푸핑 목록이 비어 있을 때 표시되는 메시지."
+  },
+  "optionsSpoofingAsWindows": {
+    "message": "(Windows로 스푸핑 중)",
+    "description": "Windows로 스푸핑 중임을 나타내는 호스트명 옆의 작은 텍스트."
+  },
   "linuxSpoofOptionNote": {
-    "message": "이는 Chrome 마스킹이 활성화된 모든 사이트에 영향을 줍니다. 언제든지 이 설정을 변경할 수 있습니다."
+    "message": "이는 Chrome 마스킹이 활성화된 모든 사이트에 영향을 미칩니다. 언제든지 이 설정을 변경할 수 있습니다."
+  },
+  "managePlatformLinkText": {
+    "message": "사이트별 플랫폼 설정 관리",
+    "description": "Linux 관련 설정 옵션 페이지를 열기 위한 팝업 내 링크 텍스트."
   }
 }

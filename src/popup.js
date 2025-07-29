@@ -27,32 +27,35 @@ async function updateUiState() {
   // Use unified platform info helper - reduces code duplication
   const platformInfo = await PlatformInfoHelper.getPlatformInfoWithRetry();
 
+  // Get shared tooltip message from i18n
+  const toggleDescription = chrome.i18n.getMessage("mainToggleDescription");
+
   // Show Linux platform info if on Linux
   if (platformInfo && platformInfo.actualPlatform === "linux") {
     linuxPlatformInfo.style.display = "block";
 
-    const platformStatusText = document.getElementById("platformStatusText");
     const managePlatformLink = document.getElementById("managePlatformLink");
+    const linuxToggleCheckbox = document.getElementById("linux_mask_enabled");
+    const linuxToggleDescriptionText = document.getElementById("linuxToggleDescriptionText");
 
-    // Check if current hostname is in Linux Windows spoof list
-    if (currentHostname && enabledHostnames.contains(currentHostname)) {
-      if (linuxWindowsSpoofList.contains(currentHostname)) {
-        platformStatusText.textContent = "Platform: Windows Chrome (spoofed)";
-        platformStatusText.style.color = "#0066cc";
-      } else {
-        platformStatusText.textContent = "Platform: Linux Chrome (native)";
-        platformStatusText.style.color = "#333";
-      }
-    } else {
-      platformStatusText.textContent = "Platform: Linux Chrome";
-      platformStatusText.style.color = "#666";
+    // Set the state of the Linux/Windows toggle based on the spoof list.
+    if (linuxToggleCheckbox) {
+      linuxToggleCheckbox.checked = linuxWindowsSpoofList.contains(currentHostname);
     }
 
-    // Add click handler to manage platform link
-    managePlatformLink.addEventListener("click", async (e) => {
-      e.preventDefault();
-      await chrome.runtime.openOptionsPage();
-    });
+    // Set the tooltip text for the Linux toggle.
+    if (linuxToggleDescriptionText) {
+      linuxToggleDescriptionText.innerText = toggleDescription;
+    }
+
+    // Set the text for the manage platform link and add click handler
+    if (managePlatformLink) {
+      managePlatformLink.innerText = chrome.i18n.getMessage("managePlatformLinkText");
+      managePlatformLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+        await chrome.runtime.openOptionsPage();
+      });
+    }
   } else {
     linuxPlatformInfo.style.display = "none";
   }
@@ -68,14 +71,10 @@ async function updateUiState() {
     checkbox.checked = false;
   }
 
-  // Update main toggle tooltip
-  const mainToggleInfo = document.getElementById("mainToggleInfo");
+  // Update main toggle tooltip text
   const mainToggleDescriptionText = document.getElementById("mainToggleDescriptionText");
-  const mainToggleDescription = chrome.i18n.getMessage("mainToggleDescription");
-
-  if (mainToggleInfo && mainToggleDescriptionText) {
-    mainToggleInfo.title = mainToggleDescription;
-    mainToggleDescriptionText.innerText = mainToggleDescription;
+  if (mainToggleDescriptionText) {
+    mainToggleDescriptionText.innerText = toggleDescription;
   }
 
   webcompatLink.href = linkWithSearch("https://webcompat.com/issues/new", [["url", activeTab.url]]);
@@ -138,4 +137,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await updateUiState();
   });
+
+  // Linux/Windows toggle event
+  const linuxToggleCheckbox = document.getElementById("linux_mask_enabled");
+  if (linuxToggleCheckbox) {
+    linuxToggleCheckbox.addEventListener("change", async () => {
+      const activeTab = await getActiveTab();
+      const currentHostname = new URL(activeTab.url).hostname;
+
+      if (linuxToggleCheckbox.checked) {
+        // Add to spoof list if not present
+        if (!linuxWindowsSpoofList.contains(currentHostname)) {
+          await linuxWindowsSpoofList.add(currentHostname);
+        }
+      } else {
+        // Remove from spoof list if present
+        if (linuxWindowsSpoofList.contains(currentHostname)) {
+          await linuxWindowsSpoofList.remove(currentHostname);
+        }
+      }
+      await updateUiState();
+    });
+  }
 });

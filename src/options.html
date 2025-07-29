@@ -4,66 +4,41 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark light" />
+    <title data-i18n="optionsPageTitle"></title>
     <link rel="stylesheet" href="options.css" />
     <script src="shared.js"></script>
     <script src="options.js"></script>
   </head>
   <body>
-    <section>
-      <h2 id="add-site-title"></h2>
+    <section class="setting-card">
+      <h2 data-i18n="optionsMainTitle"></h2>
+      <p data-i18n="optionsMainDescription"></p>
       <form id="add-site-form">
-        <input id="add-site-input" type="text" placeholder="www.example.com" />
-        <input type="submit" id="add-site-button" />
+        <input id="add-site-input" type="text" data-i18n-placeholder="optionsInputPlaceholder" />
+        <button type="submit" class="button button-primary" data-i18n="addSiteButton"></button>
       </form>
-      <p id="add-site-hostname-explanation"></p>
+      <div id="masked-sites"></div>
     </section>
 
     <!-- Linux Platform Configuration (only shown on Linux) -->
     <section id="linuxPlatformSection" style="display: none">
-      <h2 id="linuxPlatformTitle">Linux Platform Settings</h2>
-
-      <!-- Linux Windows Spoof Sites Section -->
-      <div class="platform-setting">
-        <h3 id="linuxWindowsSpoofSitesTitle">Sites Using Windows Spoofing</h3>
-        <p id="linuxWindowsSpoofExplanation">
-          Choose which sites should appear as Windows Chrome instead of Linux Chrome. This only affects sites where
-          Chrome masking is already enabled.
-        </p>
-
-        <!-- Add site form for Linux Windows spoofing -->
-        <form id="add-linux-windows-site-form">
-          <input id="add-linux-windows-site-input" type="text" placeholder="www.example.com" />
-          <input type="submit" id="add-linux-windows-site-button" value="Add Site" />
-        </form>
-        <p id="add-linux-windows-site-explanation">Enter the hostname of a site that should use Windows spoofing</p>
-
-        <!-- List of sites using Windows spoofing -->
-        <div id="linux-windows-spoof-sites"></div>
-      </div>
-
-      <!-- Legacy global setting (deprecated but kept for backward compatibility) -->
-      <div class="platform-setting legacy-setting">
-        <h3>Legacy Global Setting</h3>
-        <label class="platform-toggle-label">
-          <input type="checkbox" id="linuxSpoofOption" />
-          <span id="linuxSpoofOptionText">Apply Windows spoofing to all sites (deprecated)</span>
-        </label>
-        <div class="platform-description">
-          <p id="linuxSpoofOptionDescription">
-            <strong>Deprecated:</strong> Use the per-site list above instead. This global setting affects all sites
-            where Chrome masking is enabled.
-          </p>
-          <p id="linuxSpoofOptionNote">
-            <strong>Migration:</strong> Consider adding specific sites to the Windows spoofing list above for better
-            control.
-          </p>
+      <div class="setting-card">
+        <h2 data-i18n="linuxPlatformTitle"></h2>
+        <div class="platform-specific-setting">
+          <h3 data-i18n="optionsLinuxSpoofTitle"></h3>
+          <p data-i18n="optionsLinuxSpoofDescription"></p>
+          <form id="add-linux-windows-site-form">
+            <input id="add-linux-windows-site-input" type="text" data-i18n-placeholder="optionsInputPlaceholder" />
+            <button
+              type="submit"
+              id="add-linux-windows-site-button"
+              class="button button-primary"
+              data-i18n="addSiteButton"
+            ></button>
+          </form>
+          <div id="linux-windows-spoof-sites"></div>
         </div>
       </div>
-    </section>
-
-    <section>
-      <h2 id="masked-sites-title"></h2>
-      <div id="masked-sites"></div>
     </section>
   </body>
 </html>

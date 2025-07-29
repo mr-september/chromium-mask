@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "Dopo l'attivazione, aggiorna forzatamente la pagina (Ctrl+F5) per applicare le modifiche e cancellare il contenuto memorizzato nella cache."
+    "message": "Potrebbe essere necessario un aggiornamento forzato (Ctrl+F5) per cancellare la cache e applicare le modifiche."
   },
 
   "manageSitesButton": {
@@ -104,8 +104,31 @@
   "linuxPlatformTitle": {
     "message": "Impostazioni Piattaforma Linux"
   },
-
+  "optionsLinuxSpoofTitle": {
+    "message": "Spoofing Windows su Linux",
+    "description": "Il sottotitolo H3 per la funzione di spoofing Windows su Linux."
+  },
+  "optionsLinuxSpoofDescription": {
+    "message": "Per qualsiasi sito mascherato, puoi abilitare lo spoofing Windows per risolvere problemi specifici degli utenti Linux (ad esempio con servizi di streaming video).",
+    "description": "Il paragrafo che spiega la funzione di spoofing Windows su Linux."
+  },
+  "addSiteErrorAlreadySpoofing": {
+    "message": "Questo sito è già nella lista di spoofing Windows.",
+    "description": "Errore quando si tenta di aggiungere un sito già presente nella lista di spoofing."
+  },
+  "optionsLinuxSpoofEmpty": {
+    "message": "Nessun sito è configurato per lo spoofing Windows.",
+    "description": "Messaggio mostrato quando la lista di spoofing Linux è vuota."
+  },
+  "optionsSpoofingAsWindows": {
+    "message": "(Spoofing come Windows)",
+    "description": "Testo piccolo accanto a un hostname che indica che viene effettuato lo spoofing come Windows."
+  },
   "linuxSpoofOptionNote": {
     "message": "Questo influisce su tutti i siti dove è abilitata la mascheratura Chrome. Puoi cambiare questa impostazione in qualsiasi momento."
+  },
+  "managePlatformLinkText": {
+    "message": "Gestisci le impostazioni della piattaforma per sito",
+    "description": "Testo del link nel popup per aprire la pagina delle opzioni per le impostazioni specifiche di Linux."
   }
 }

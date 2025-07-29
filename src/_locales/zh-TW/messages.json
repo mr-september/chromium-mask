@@ -50,7 +50,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "啟用後，請強制重新整理頁面（Ctrl+F5）以套用變更並清除快取內容。"
+    "message": "可能需要強制重新整理（Ctrl+F5）以清除快取內容並套用變更。"
   },
 
   "manageSitesButton": {
@@ -107,5 +107,9 @@
 
   "linuxSpoofOptionNote": {
     "message": "這會影響所有啟用 Chrome 偽裝的網站。您隨時可以變更此設定。"
+  },
+  "managePlatformLinkText": {
+    "message": "管理每個網站的平台設定",
+    "description": "在彈出視窗中的連結文字，用於開啟 Linux 特定設定的選項頁面。"
   }
 }

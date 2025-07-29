@@ -51,7 +51,7 @@
   },
 
   "mainToggleDescription": {
-    "message": "启用后，请强制刷新页面（Ctrl+F5）以应用更改并清除缓存内容。"
+    "message": "可能需要强制刷新（Ctrl+F5）以清除缓存内容并应用更改。"
   },
 
   "manageSitesButton": {
@@ -108,5 +108,9 @@
 
   "linuxSpoofOptionNote": {
     "message": "这会影响所有启用了 Chrome 伪装的网站。您可以随时更改此设置。"
+  },
+  "managePlatformLinkText": {
+    "message": "管理每个网站的平台设置",
+    "description": "弹窗中的链接文本，用于打开 Linux 特定设置的选项页面。"
   }
 }

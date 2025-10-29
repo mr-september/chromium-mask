@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera"
+    "message": "Chromium Mask"
   },
 
   "extensionDescription": {
-    "message": "Opera'ya, başka türlü çalışmayan, websitelere Chrome gibi gözükmesi için maske giydirir."
+    "message": "Chromium tarayıcılarını (Opera, Brave, Edge, Vivaldi, Arc vb.) başka türlü çalışmayan websitelerle uyumlu hale getirir."
   },
 
   "supportMessage": {
@@ -17,11 +17,11 @@
   },
 
   "breakageWarning": {
-    "message": "Eğer \"Desteklenmeyen tarayıcı\" mesajı görüyorsanız Chrome Mask for Opera yardımcı olabilir ama bazı sitelerde beklenmeyen sorunlara yol açabilir."
+    "message": "Eğer \"Desteklenmeyen tarayıcı\" mesajı görüyorsanız Chromium Mask yardımcı olabilir ama bazı sitelerde beklenmeyen sorunlara yol açabilir."
   },
 
   "reportBrokenSite": {
-    "message": "Eğer Chrome Mask for Opera ile daha iyi çalışan bir site bulursan lütfen $WEBCOMPAT$ bildirin. Teşekkür ederiz! &hearts;",
+    "message": "Eğer Chromium Mask ile daha iyi çalışan bir site bulursan lütfen $WEBCOMPAT$ bildirin. Teşekkür ederiz! &hearts;",
     "placeholders": {
       "WEBCOMPAT": {
         "content": "$1"
@@ -30,7 +30,7 @@
   },
 
   "inProductReporterLinkText": {
-    "message": "Opera Yardım ve Destek aracılığıyla"
+    "message": "Tarayıcınızın Yardım ve Destek aracılığıyla"
   },
 
   "webcompatLinkText": {
@@ -42,11 +42,11 @@
   },
 
   "maskStatusOff": {
-    "message": "Maske kapalı. Bu siteye Opera olarak gözüküyorum."
+    "message": "Maske kapalı. Bu siteye tarayıcınız olarak gözüküyorum."
   },
 
   "maskStatusUnsupported": {
-    "message": "Chrome Mask for Opera bu sitede desteklenmiyor."
+    "message": "Chromium Mask bu sitede desteklenmiyor."
   },
 
   "mainToggleDescription": {
@@ -58,7 +58,7 @@
   },
 
   "manageSitesFallback": {
-    "message": "Site ekleyip kaldırmak için lütfen Eklenti Yöneticisi'ni açın, Chrome Mask for Opera'yi seçin ve Ayarlar'a tıklayın."
+    "message": "Site ekleyip kaldırmak için lütfen Eklenti Yöneticisi'ni açın, Chromium Mask'yi seçin ve Ayarlar'a tıklayın."
   },
 
   "addSiteTitle": {
@@ -70,7 +70,7 @@
   },
 
   "addSiteHostnameExplanation": {
-    "message": "Not: Herzaman tam alan adını yazın. Eğer example.com yazarsanız Chrome Mask for Opera www.example.com da açılmayacaktır!"
+    "message": "Not: Herzaman tam alan adını yazın. Eğer example.com yazarsanız Chromium Mask www.example.com da açılmayacaktır!"
   },
 
   "addSiteErrorInvalid": {
@@ -78,7 +78,7 @@
   },
 
   "addSiteErrorAlreadyActive": {
-    "message": "Chrome Mask for Opera bu alan adı için zaten aktif!"
+    "message": "Chromium Mask bu alan adı için zaten aktif!"
   },
 
   "maskedSitesTitle": {
@@ -90,7 +90,7 @@
   },
 
   "siteListEmpty": {
-    "message": "Daha herhangi bir sitede Chrome Mask for Opera'yi aktifleştirmedin!"
+    "message": "Daha herhangi bir sitede Chromium Mask'yi aktifleştirmedin!"
   },
 
   "linuxSpoofToggle": {

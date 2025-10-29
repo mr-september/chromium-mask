@@ -7,8 +7,8 @@
     <script src="shared.js"></script>
     <script src="popup.js"></script>
   </head>
-  <body>
-    <h2 id="maskStatus">The mask is off. I look like Opera to this site.</h2>
+  <body class="loading">
+    <h2 id="maskStatus"></h2>
     <section class="fancy_toggle_container">
       <label class="fancy_toggle" for="mask_enabled">
         <input name="mask_enabled" type="checkbox" id="mask_enabled" />
@@ -34,11 +34,6 @@
             <p id="linuxToggleDescriptionText" style="margin-top: 8px; text-align: center"></p>
           </div>
         </span>
-      </div>
-      <div class="platform_details">
-        <div id="platformActionLink" class="platform_action_link">
-          <a href="#" id="managePlatformLink"></a>
-        </div>
       </div>
     </section>
     <hr />

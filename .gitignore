@@ -3,3 +3,5 @@ node_modules/
 opera-chrome-mask.zip
 web-ext-artifacts/
 *.xpi
+REMAINING_TASKS.md
+chrome-store-listing.md

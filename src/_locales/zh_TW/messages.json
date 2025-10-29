@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera"
+    "message": "Chromium Mask"
   },
 
   "extensionDescription": {
-    "message": "讓 Opera 戴上面具偽裝成 Chrome，以便在不支援的網站上正常運作。"
+    "message": "讓 Chromium 瀏覽器（Opera、Brave、Edge、Vivaldi、Arc 等）在不支援的網站上正常運作。"
   },
 
   "supportMessage": {
@@ -17,11 +17,11 @@
   },
 
   "breakageWarning": {
-    "message": "雖然 Chrome Mask for Opera 可能在您看到「不支援的瀏覽器」訊息時提供幫助，但它可能會在某些網站上造成意外問題。"
+    "message": "雖然 Chromium Mask 可能在您看到「不支援的瀏覽器」訊息時提供幫助，但它可能會在某些網站上造成意外問題。"
   },
 
   "reportBrokenSite": {
-    "message": "如果您發現啟用 Chrome Mask for Opera 後運作更好的網站，請$WEBCOMPAT$回報。謝謝！&hearts;",
+    "message": "如果您發現啟用 Chromium Mask 後運作更好的網站，請$WEBCOMPAT$回報。謝謝！&hearts;",
     "placeholders": {
       "WEBCOMPAT": {
         "content": "$1"
@@ -30,7 +30,7 @@
   },
 
   "inProductReporterLinkText": {
-    "message": "透過 Opera 說明與支援"
+    "message": "透過您的瀏覽器說明與支援"
   },
 
   "webcompatLinkText": {
@@ -42,7 +42,7 @@
   },
 
   "maskStatusOff": {
-    "message": "面具已關閉。我在此網站上顯示為 Opera。"
+    "message": "面具已關閉。我在此網站上顯示為您的瀏覽器。"
   },
 
   "maskStatusUnsupported": {
@@ -58,7 +58,7 @@
   },
 
   "manageSitesFallback": {
-    "message": "若要新增或移除網站，請開啟擴充功能管理員，選擇 Chrome Mask for Opera，然後點選設定。"
+    "message": "若要新增或移除網站，請開啟擴充功能管理員，選擇 Chromium Mask，然後點選設定。"
   },
 
   "addSiteTitle": {
@@ -78,7 +78,7 @@
   },
 
   "addSiteErrorAlreadyActive": {
-    "message": "此網域已啟用 Chrome Mask for Opera！"
+    "message": "此網域已啟用 Chromium Mask！"
   },
 
   "maskedSitesTitle": {
@@ -90,7 +90,7 @@
   },
 
   "siteListEmpty": {
-    "message": "您尚未在任何網站上啟用 Chrome Mask for Opera！"
+    "message": "您尚未在任何網站上啟用 Chromium Mask！"
   },
 
   "linuxSpoofToggle": {

@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera"
+    "message": "Chromium Mask"
   },
 
   "extensionDescription": {
-    "message": "Zieht Opera eine Chrome-Maske auf, für Webseiten die sonst nicht funktionieren."
+    "message": "Macht Chromium-Browser (Opera, Brave, Edge, Vivaldi, Arc usw.) kompatibel mit Websites, die sonst nicht funktionieren."
   },
 
   "supportMessage": {
@@ -17,11 +17,11 @@
   },
 
   "breakageWarning": {
-    "message": "Die Chrome Mask for Opera kann helfen wenn du eine \"Browser nicht unterstüzt\"-Warnung siehst, aber sie kann auch unerwartete Probleme auf manchen Seiten auslösen."
+    "message": "Chromium Mask kann helfen wenn du eine \"Browser nicht unterstüzt\"-Warnung siehst, aber sie kann auch unerwartete Probleme auf manchen Seiten auslösen."
   },
 
   "reportBrokenSite": {
-    "message": "Wenn du eine Seite findest, die mit Chrome Mask for Opera besser funktioniert als ohne, melde das bitte $WEBCOMPAT$. Dankeschön! &hearts;",
+    "message": "Wenn du eine Seite findest, die mit Chromium Mask besser funktioniert als ohne, melde das bitte $WEBCOMPAT$. Dankeschön! &hearts;",
     "placeholders": {
       "WEBCOMPAT": {
         "content": "$1"
@@ -30,7 +30,7 @@
   },
 
   "inProductReporterLinkText": {
-    "message": "über Opera Hilfe & Support"
+    "message": "über die Hilfe & Support deines Browsers"
   },
 
   "webcompatLinkText": {
@@ -42,7 +42,7 @@
   },
 
   "maskStatusOff": {
-    "message": "Die Maske ist inaktiv! Die Seite sieht mich als Opera."
+    "message": "Die Maske ist inaktiv! Die Seite sieht mich als deinen Browser."
   },
 
   "maskStatusUnsupported": {
@@ -58,7 +58,7 @@
   },
 
   "manageSitesFallback": {
-    "message": "Um Seiten hinzuzufügen oder zu entfernen, benutze bitte den Extension Manager, wähle dort Chrome Mask for Opera aus, und öffne dann die Einstellungen."
+    "message": "Um Seiten hinzuzufügen oder zu entfernen, benutze bitte den Extension Manager, wähle dort Chromium Mask aus, und öffne dann die Einstellungen."
   },
 
   "addSiteTitle": {
@@ -70,7 +70,7 @@
   },
 
   "addSiteHostnameExplanation": {
-    "message": "Hinweis: Bitte gib immer die volle Domain an. Wenn du example.com angibst, wird die Chrome Mask for Opera auf www.example.com nicht aktiv sein!"
+    "message": "Hinweis: Bitte gib immer die volle Domain an. Wenn du example.com angibst, wird Chromium Mask auf www.example.com nicht aktiv sein!"
   },
 
   "addSiteErrorInvalid": {
@@ -78,7 +78,7 @@
   },
 
   "addSiteErrorAlreadyActive": {
-    "message": "Die Chrome Mask for Opera ist auf dieser Seite bereits aktiv!"
+    "message": "Chromium Mask ist auf dieser Seite bereits aktiv!"
   },
   "linuxSpoofOptionNote": {
     "message": "Dies betrifft alle Seiten, auf denen Chrome-Maskierung aktiviert ist. Du kannst diese Einstellung jederzeit ändern."
@@ -95,7 +95,7 @@
     "message": "Entfernen"
   },
   "siteListEmpty": {
-    "message": "Die Chrome Mask for Opera ist noch auf keiner Seite aktiv!"
+    "message": "Chromium Mask ist noch auf keiner Seite aktiv!"
   },
   "linuxSpoofToggle": {
     "message": "Als Windows statt Linux ausgeben"

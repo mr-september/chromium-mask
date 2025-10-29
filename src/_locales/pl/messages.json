@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera"
+    "message": "Chromium Mask"
   },
 
   "extensionDescription": {
-    "message": "Sprawia, że Opera przyjmuje maskę, aby wyglądać jak Chrome dla stron internetowych, które w przeciwnym razie nie będą działać."
+    "message": "Sprawia, że przeglądarki Chromium (Opera, Brave, Edge, Vivaldi, Arc itp.) są kompatybilne ze stronami, które w przeciwnym razie nie będą działać."
   },
 
   "supportMessage": {
@@ -17,11 +17,11 @@
   },
 
   "breakageWarning": {
-    "message": "Chociaż Chrome Mask for Opera może pomóc, jeśli widzisz komunikat \"Przeglądarka nie jest obsługiwana\", może powodować nieoczekiwane problemy na niektórych stronach."
+    "message": "Chociaż Chromium Mask może pomóc, jeśli widzisz komunikat \"Przeglądarka nie jest obsługiwana\", może powodować nieoczekiwane problemy na niektórych stronach."
   },
 
   "reportBrokenSite": {
-    "message": "Jeśli znajdziesz stronę, która działa lepiej z włączonym Chrome Mask for Opera, prosimy o zgłoszenie tego $WEBCOMPAT$. Dziękuję! &hearts;",
+    "message": "Jeśli znajdziesz stronę, która działa lepiej z włączonym Chromium Mask, prosimy o zgłoszenie tego $WEBCOMPAT$. Dziękuję! &hearts;",
     "placeholders": {
       "WEBCOMPAT": {
         "content": "$1"
@@ -30,7 +30,7 @@
   },
 
   "inProductReporterLinkText": {
-    "message": "przez Opera Pomoc i Wsparcie"
+    "message": "poprzez Pomoc i Wsparcie twojej przeglądarki"
   },
 
   "webcompatLinkText": {
@@ -42,7 +42,7 @@
   },
 
   "maskStatusOff": {
-    "message": "Maska jest wyłączona. Na tej stronie wyglądam jak Opera."
+    "message": "Maska jest wyłączona. Na tej stronie wyglądam jak twoja przeglądarka."
   },
 
   "maskStatusUnsupported": {
@@ -58,7 +58,7 @@
   },
 
   "manageSitesFallback": {
-    "message": "Aby dodać lub usunąć strony, otwórz Menedżer rozszerzeń, wybierz Chrome Mask for Opera i naciśnij Ustawienia."
+    "message": "Aby dodać lub usunąć strony, otwórz Menedżer rozszerzeń, wybierz Chromium Mask i naciśnij Ustawienia."
   },
 
   "addSiteTitle": {
@@ -78,7 +78,7 @@
   },
 
   "addSiteErrorAlreadyActive": {
-    "message": "Chrome Mask for Opera jest już włączona dla tej domeny!"
+    "message": "Chromium Mask jest już włączona dla tej domeny!"
   },
 
   "maskedSitesTitle": {
@@ -90,7 +90,7 @@
   },
 
   "siteListEmpty": {
-    "message": "Jeszcze nie włączyłeś Chrome Mask for Opera na żadnej stronie!"
+    "message": "Jeszcze nie włączyłeś Chromium Mask na żadnej stronie!"
   },
 
   "linuxSpoofToggle": {

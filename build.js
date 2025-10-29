@@ -11,11 +11,20 @@ async function build() {
   const version = packageJson.version;
 
   // Determine output filename
-  const outputFilename = isSimple ? "chrome-mask-for-opera.zip" : `chrome-mask-for-opera-v${version}.zip`;
+  const outputFilename = isSimple ? "chromium-mask.zip" : `chromium-mask-v${version}.zip`;
 
   const outputPath = path.join("dist", outputFilename);
 
+  // Files to exclude from production build
+  const excludeFiles = [
+    "dev-localhost-setup.js",
+    "assets/Untitled-1.png",
+    "assets/Untitled-1.psd",
+    "assets/linux-icon.png",
+  ];
+
   console.log(`Building ${outputFilename}...`);
+  console.log(`Excluding development files: ${excludeFiles.join(", ")}`);
 
   try {
     // Change to src directory
@@ -23,15 +32,18 @@ async function build() {
 
     // Try to use native zip command first (available on Unix and newer Windows)
     try {
-      execSync(`zip -r "../${outputPath}" .`, { stdio: "inherit" });
+      // Build exclude pattern for zip command
+      const excludePattern = excludeFiles.map((f) => `-x "${f}"`).join(" ");
+      execSync(`zip -r "../${outputPath}" . ${excludePattern}`, { stdio: "inherit" });
       console.log(`✓ Successfully created ${outputFilename} using zip command`);
       return;
     } catch (error) {
       // If zip command fails, try PowerShell Compress-Archive (Windows)
       try {
-        execSync(`powershell -Command "Compress-Archive -Path * -DestinationPath '../${outputPath}' -Force"`, {
-          stdio: "inherit",
-        });
+        // PowerShell exclude is more complex - need to filter files first
+        const excludePatterns = excludeFiles.map((f) => `"${f}"`).join(",");
+        const psCommand = `powershell -Command "Get-ChildItem -Recurse | Where-Object { $exclude = @(${excludePatterns}); $match = $false; foreach($pattern in $exclude) { if($_.FullName -like '*' + $pattern) { $match = $true; break } }; -not $match } | Compress-Archive -DestinationPath '../${outputPath}' -Force"`;
+        execSync(psCommand, { stdio: "inherit" });
         console.log(`✓ Successfully created ${outputFilename} using PowerShell`);
         return;
       } catch (psError) {
@@ -57,7 +69,17 @@ async function build() {
         });
 
         archive.pipe(output);
-        archive.directory("src/", false);
+
+        // Add files while excluding development files
+        const isExcluded = (filePath) => {
+          return excludeFiles.some((pattern) => filePath.includes(pattern));
+        };
+
+        archive.glob("**/*", {
+          cwd: "src/",
+          ignore: excludeFiles,
+        });
+
         await archive.finalize();
         return;
       }

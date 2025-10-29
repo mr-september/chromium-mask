@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera"
+    "message": "Chromium Mask"
   },
 
   "extensionDescription": {
-    "message": "Opera ஐ Chrome போல் தோற்றமளிக்க முகமூடி அணிவித்து, இல்லையெனில் வேலை செய்யாத வலைதளங்களில் வேலை செய்ய வைக்கிறது."
+    "message": "Chromium உலாவிகளை (Opera, Brave, Edge, Vivaldi, Arc போன்றவை) இல்லையெனில் வேலை செய்யாத வலைதளங்களுடன் இணக்கமாக்குகிறது."
   },
 
   "supportMessage": {
@@ -17,11 +17,11 @@
   },
 
   "breakageWarning": {
-    "message": "\"ஆதரிக்கப்படாத உலாவி\" செய்தியை நீங்கள் பார்த்தால் Chrome Mask for Opera உதவலாம், ஆனால் இது சில தளங்களில் எதிர்பாராத பிரச்சினைகளை ஏற்படுத்தலாம்."
+    "message": "\"ஆதரிக்கப்படாத உலாவி\" செய்தியை நீங்கள் பார்த்தால் Chromium Mask உதவலாம், ஆனால் இது சில தளங்களில் எதிர்பாராத பிரச்சினைகளை ஏற்படுத்தலாம்."
   },
 
   "reportBrokenSite": {
-    "message": "Chrome Mask for Opera இயக்கப்பட்டால் சிறப்பாக வேலை செய்யும் தளத்தை நீங்கள் கண்டறிந்தால், தயவுசெய்து அதை $WEBCOMPAT$ அறிவிக்கவும். நன்றி! &hearts;",
+    "message": "Chromium Mask இயக்கப்பட்டால் சிறப்பாக வேலை செய்யும் தளத்தை நீங்கள் கண்டறிந்தால், தயவுசெய்து அதை $WEBCOMPAT$ அறிவிக்கவும். நன்றி! &hearts;",
     "placeholders": {
       "WEBCOMPAT": {
         "content": "$1"
@@ -30,7 +30,7 @@
   },
 
   "inProductReporterLinkText": {
-    "message": "Opera உதவி மற்றும் ஆதரவு மூலம்"
+    "message": "உங்கள் உலாவியின் உதவி மற்றும் ஆதரவு மூலம்"
   },
 
   "webcompatLinkText": {
@@ -42,7 +42,7 @@
   },
 
   "maskStatusOff": {
-    "message": "முகமூடி அணையப்பட்டுள்ளது. இந்த தளத்தில் நான் Opera போல் தோற்றமளிக்கிறேன்."
+    "message": "முகமூடி அணையப்பட்டுள்ளது. இந்த தளத்தில் நான் உங்கள் உலாவி போல் தோற்றமளிக்கிறேன்."
   },
 
   "maskStatusUnsupported": {
@@ -58,7 +58,7 @@
   },
 
   "manageSitesFallback": {
-    "message": "தளங்களை சேர்க்க அல்லது அகற்ற, நீட்டிப்பு மேலாளரை திறந்து, Chrome Mask for Opera ஐ தேர்ந்தெடுத்து, அமைப்புகளைத் தாக்கவும்."
+    "message": "தளங்களை சேர்க்க அல்லது அகற்ற, நீட்டிப்பு மேலாளரை திறந்து, Chromium Mask ஐ தேர்ந்தெடுத்து, அமைப்புகளைத் தாக்கவும்."
   },
 
   "addSiteTitle": {
@@ -78,7 +78,7 @@
   },
 
   "addSiteErrorAlreadyActive": {
-    "message": "இந்த டொமைனுக்கு Chrome Mask for Opera ஏற்கனவே இயக்கப்பட்டுள்ளது!"
+    "message": "இந்த டொமைனுக்கு Chromium Mask ஏற்கனவே இயக்கப்பட்டுள்ளது!"
   },
 
   "maskedSitesTitle": {
@@ -90,7 +90,7 @@
   },
 
   "siteListEmpty": {
-    "message": "நீங்கள் இன்னும் எந்த தளத்திலும் Chrome Mask for Opera ஐ இயக்கவில்லை!"
+    "message": "நீங்கள் இன்னும் எந்த தளத்திலும் Chromium Mask ஐ இயக்கவில்லை!"
   },
 
   "linuxSpoofToggle": {

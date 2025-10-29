@@ -1,4 +1,100 @@
-# Changelog - Chrome Mask for Opera
+# Changelog - Chromium Mask
+
+## 2.0.0 (Chromium Browser Rebrand) - October 2025
+
+**🎨 Major Rebrand: Chrome Mask for Opera → Chromium Mask**
+
+Complete rebranding and expansion to support all Chromium-based browsers, not just Opera. This is a major release that transforms the extension from an Opera-specific tool to a universal Chromium browser compatibility solution.
+
+### ✨ New Brand Identity
+
+- **New Name**: `Chromium Mask - Browser Identity Switcher`
+- **Universal Compatibility**: Now officially supports Opera, Brave, Edge, Vivaldi, Arc, and all Chromium browsers
+- **Chrome Web Store**: Prepared for Chrome Web Store submission for broader distribution
+- **Repository**: Moved to `github.com/mr-september/chromium-mask`
+
+### 🌍 Expanded Browser Support
+
+The extension now emphasizes support for:
+
+- 🎨 **AI-powered browsers**: Atlas, Comet, Arc, Sidekick, SigmaOS
+- 🛡️ **Privacy-focused browsers**: Brave, DuckDuckGo Browser
+- ⚡ **Performance browsers**: Opera, Vivaldi
+- 💼 **Enterprise browsers**: Edge, Brave for Work
+- 🌐 **Regional browsers**: Any Chromium-based browser
+
+### 📋 What Changed
+
+- **Extension Name**: "Chrome Mask for Opera" → "Chromium Mask"
+- **Repository Name**: `chrome-mask-for-opera` → `chromium-mask`
+- **All Localization**: Updated 14 languages to reflect new branding and broader browser support
+- **Documentation**: Complete rewrite of README.md, PRIVACY_POLICY.md, and store listings
+- **Build System**: Updated output filenames to `chromium-mask`
+- **URLs**: All GitHub URLs updated to new repository
+
+### 🔧 Localization Updates (14 Languages)
+
+All language files updated with:
+
+- Extension name changed to "Chromium Mask"
+- Descriptions updated to mention Chromium browsers instead of just Opera
+- Generic "your browser" language instead of Opera-specific references
+- Maintained translation quality and cultural appropriateness
+
+**Languages Updated**:
+
+- English, German, French, Italian, Polish, Turkish
+- Russian, Hindi, Tamil, Malay
+- Japanese, Korean, Chinese Simplified, Chinese Traditional
+
+### 📦 Store Listing Changes
+
+- **New Store Listing**: Created chrome-store-listing.md for Chrome Web Store
+- **Opera Listing**: Preserved opera-store-listing.md for historical reference
+- **Categories**: Productivity (primary), Developer Tools (secondary)
+- **Tags**: Updated to include chromium, opera, brave, edge, vivaldi, arc
+
+### 🎯 Policy Compliance
+
+- ✅ **Chrome Web Store Compliant**: Uses "Chromium" (open-source project) instead of "Chrome"
+- ✅ **No Trademark Issues**: Verified naming is acceptable per Chrome Web Store policies
+- ✅ **Transparent Functionality**: All features clearly described, no hidden behavior
+- ✅ **Privacy Maintained**: No changes to privacy policy or data handling
+
+### 🚀 Technical Changes
+
+- **Functionality**: Zero changes to core spoofing functionality - all features work identically
+- **Compatibility**: Still works perfectly on all previously supported platforms
+- **Version Bump**: Semantic versioning major increment (1.x → 2.0.0) due to branding change
+- **Build Process**: Updated to generate `chromium-mask.zip` artifacts
+
+### 📝 Migration Notes
+
+**For Existing Users**:
+
+- All settings and site preferences are preserved
+- Functionality remains 100% identical
+- No action required - update like any normal extension update
+- Privacy and data handling unchanged
+
+**For New Users**:
+
+- Install from Chrome Web Store (coming soon) or manual installation
+- Works on any Chromium browser, not just Opera
+- Same powerful features, broader compatibility
+
+### 🔗 Important Links
+
+- **New Repository**: https://github.com/mr-september/chromium-mask
+- **Chrome Web Store**: Coming soon
+- **Privacy Policy**: Updated for new branding, policies unchanged
+- **Documentation**: Completely rewritten for multi-browser audience
+
+---
+
+**Note**: This release contains ONLY branding changes. All functionality, privacy policies, and features remain identical to v1.5.1. This is a semantic major version bump due to the significant name and scope change.
+
+---
 
 ## 1.5.1 (Linux Toggle & UI Unification) - July 2025
 

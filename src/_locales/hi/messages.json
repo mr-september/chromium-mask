@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera"
+    "message": "Chromium Mask"
   },
 
   "extensionDescription": {
-    "message": "Opera को Chrome की तरह दिखने के लिए मास्क पहनाता है ताकि यह उन वेबसाइटों पर काम करे जो अन्यथा काम नहीं करतीं।"
+    "message": "Chromium ब्राउज़रों (Opera, Brave, Edge, Vivaldi, Arc आदि) को उन वेबसाइटों पर काम करने योग्य बनाता है जो अन्यथा काम नहीं करतीं।"
   },
 
   "supportMessage": {
@@ -17,11 +17,11 @@
   },
 
   "breakageWarning": {
-    "message": "जबकि Chrome Mask for Opera मदद कर सकता है यदि आप \"ब्राउज़र समर्थित नहीं\" संदेश देखते हैं, यह कुछ साइटों पर अनपेक्षित समस्याएं पैदा कर सकता है।"
+    "message": "जबकि Chromium Mask मदद कर सकता है यदि आप \"ब्राउज़र समर्थित नहीं\" संदेश देखते हैं, यह कुछ साइटों पर अनपेक्षित समस्याएं पैदा कर सकता है।"
   },
 
   "reportBrokenSite": {
-    "message": "यदि आप कोई साइट पाते हैं जो Chrome Mask for Opera सक्षम होने पर बेहतर काम करती है, तो कृपया इसे $WEBCOMPAT$ रिपोर्ट करें। धन्यवाद! &hearts;",
+    "message": "यदि आप कोई साइट पाते हैं जो Chromium Mask सक्षम होने पर बेहतर काम करती है, तो कृपया इसे $WEBCOMPAT$ रिपोर्ट करें। धन्यवाद! &hearts;",
     "placeholders": {
       "WEBCOMPAT": {
         "content": "$1"
@@ -30,7 +30,7 @@
   },
 
   "inProductReporterLinkText": {
-    "message": "Opera सहायता और समर्थन के माध्यम से"
+    "message": "आपके ब्राउज़र की सहायता और समर्थन के माध्यम से"
   },
 
   "webcompatLinkText": {
@@ -42,7 +42,7 @@
   },
 
   "maskStatusOff": {
-    "message": "मास्क बंद है। मैं इस साइट पर Opera की तरह दिखता हूं।"
+    "message": "मास्क बंद है। मैं इस साइट पर आपके ब्राउज़र की तरह दिखता हूं।"
   },
 
   "maskStatusUnsupported": {
@@ -58,7 +58,7 @@
   },
 
   "manageSitesFallback": {
-    "message": "साइटें जोड़ने या हटाने के लिए, कृपया एक्सटेंशन मैनेजर खोलें, Chrome Mask for Opera का चयन करें, और सेटिंग्स दबाएं।"
+    "message": "साइटें जोड़ने या हटाने के लिए, कृपया एक्सटेंशन मैनेजर खोलें, Chromium Mask का चयन करें, और सेटिंग्स दबाएं।"
   },
 
   "addSiteTitle": {
@@ -78,7 +78,7 @@
   },
 
   "addSiteErrorAlreadyActive": {
-    "message": "इस डोमेन के लिए Chrome Mask for Opera पहले से ही सक्षम है!"
+    "message": "इस डोमेन के लिए Chromium Mask पहले से ही सक्षम है!"
   },
 
   "maskedSitesTitle": {
@@ -90,7 +90,7 @@
   },
 
   "siteListEmpty": {
-    "message": "आपने अभी तक किसी भी साइट पर Chrome Mask for Opera सक्षम नहीं किया है!"
+    "message": "आपने अभी तक किसी भी साइट पर Chromium Mask सक्षम नहीं किया है!"
   },
 
   "linuxSpoofToggle": {

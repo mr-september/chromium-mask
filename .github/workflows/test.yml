@@ -64,16 +64,16 @@ jobs:
 
       - name: Verify build output
         run: |
-          if [ ! -f "dist/chrome-mask-for-opera.zip" ]; then
+          if [ ! -f "dist/chromium-mask.zip" ]; then
             echo "❌ Build failed - no ZIP file created"
             exit 1
           fi
 
           # Check if ZIP contains expected files
-          if ! unzip -l dist/chrome-mask-for-opera.zip | grep -q "manifest.json"; then
+          if ! unzip -l dist/chromium-mask.zip | grep -q "manifest.json"; then
             echo "❌ Build failed - no manifest.json in ZIP"
             exit 1
           fi
 
           echo "✓ Build successful"
-          unzip -l dist/chrome-mask-for-opera.zip
+          unzip -l dist/chromium-mask.zip

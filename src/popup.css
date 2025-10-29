@@ -60,6 +60,14 @@ body {
   width: 320px;
 }
 
+/* Prevent animation flash on initial load */
+body.loading .fancy_toggle div,
+body.loading .fancy_toggle div::after,
+body.loading .linux_toggle div,
+body.loading .linux_toggle div::after {
+  transition: none !important;
+}
+
 h2 {
   text-align: center;
   font-size: 1.3rem;
@@ -170,15 +178,16 @@ hr {
   flex-shrink: 0;
 }
 
-.platform_details {
-  flex: 1;
-}
-
 #platformStatusText {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--color);
   margin-bottom: 0.25rem;
+}
+
+/* STYLES FOR REDUNDANT LINK (NOW REMOVED)
+.platform_details {
+  flex: 1;
 }
 
 .platform_action_link {
@@ -195,6 +204,7 @@ hr {
 .platform_action_link a:hover {
   text-decoration: underline;
 }
+*/
 
 .fancy_toggle,
 .linux_toggle {
@@ -241,7 +251,7 @@ hr {
 
 .fancy_toggle {
   div::after {
-    background-image: url(assets/toggler-icon-opera.png);
+    background-image: var(--browser-icon, url(assets/toggler-icon-chromium.png));
   }
 
   input:checked ~ div::after {
@@ -259,8 +269,32 @@ hr {
   }
 }
 
+/* === NEW MODERN BUTTON STYLES === */
 button {
   display: block;
-  line-height: 1.5rem;
   width: 100%;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  background-color: var(--link-color);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+  -webkit-font-smoothing: antialiased; /* Smoother text rendering */
+}
+
+button:hover {
+  /* Slightly brighten the button on hover for feedback */
+  filter: brightness(1.15);
+}
+
+button:active {
+  /* Give a "pressed" effect when clicked */
+  transform: scale(0.98);
+  filter: brightness(1.05);
 }

@@ -61,13 +61,13 @@ jobs:
       - name: Verify build output
         run: |
           ls -la dist/
-          unzip -l dist/chrome-mask-for-opera-v${{ steps.version.outputs.version }}.zip
+          unzip -l dist/chromium-mask-v${{ steps.version.outputs.version }}.zip
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: chrome-mask-for-opera-${{ steps.version.outputs.version }}
-          path: dist/chrome-mask-for-opera-v${{ steps.version.outputs.version }}.zip
+          name: chromium-mask-${{ steps.version.outputs.version }}
+          path: dist/chromium-mask-v${{ steps.version.outputs.version }}.zip
           retention-days: 90
 
       - name: Cleanup old artifacts
@@ -81,7 +81,7 @@ jobs:
 
             // Keep only the 3 most recent artifacts for this extension
             const extensionArtifacts = artifacts.data.artifacts
-              .filter(artifact => artifact.name.startsWith('chrome-mask-for-opera-'))
+              .filter(artifact => artifact.name.startsWith('chromium-mask-'))
               .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
             const artifactsToDelete = extensionArtifacts.slice(3);
@@ -113,7 +113,7 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: chrome-mask-for-opera-${{ steps.version.outputs.version }}
+          name: chromium-mask-${{ steps.version.outputs.version }}
           path: ./
 
       - name: Verify downloaded files
@@ -123,9 +123,9 @@ jobs:
           echo "Looking for zip files:"
           find . -name "*.zip" -type f
           # Remove any non-versioned zip files to avoid confusion
-          if [ -f "chrome-mask-for-opera.zip" ]; then
+          if [ -f "chromium-mask.zip" ]; then
             echo "Removing non-versioned zip file"
-            rm chrome-mask-for-opera.zip
+            rm chromium-mask.zip
           fi
           echo "Final zip files:"
           find . -name "*.zip" -type f
@@ -169,11 +169,19 @@ jobs:
             echo ""
             echo "## Installation"
             echo ""
+            echo "### From Chrome Web Store (Recommended)"
+            echo "Coming soon - extension is being prepared for Chrome Web Store submission"
+            echo ""
             echo "### Manual Installation"
-            echo "1. Download \`chrome-mask-for-opera-v${{ steps.version.outputs.version }}.zip\` from the assets below"
+            echo "1. Download \`chromium-mask-v${{ steps.version.outputs.version }}.zip\` from the assets below"
             echo "2. Extract the ZIP file"
-            echo "3. Open Opera and go to \`opera://extensions/\`"
-            echo "4. Enable \"Developer mode\" in the top right corner"
+            echo "3. Open your Chromium browser's extensions page:"
+            echo "   - **Opera**: \`opera://extensions/\`"
+            echo "   - **Brave**: \`brave://extensions/\`"
+            echo "   - **Edge**: \`edge://extensions/\`"
+            echo "   - **Vivaldi**: \`vivaldi://extensions/\`"
+            echo "   - **Chrome**: \`chrome://extensions/\`"
+            echo "4. Enable \"Developer mode\" (usually in the top right corner)"
             echo "5. Click \"Load unpacked\" and select the extracted folder"
             echo ""
             if [ -n "$LAST_TAG" ]; then
@@ -186,10 +194,10 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Chrome Mask for Opera v${{ steps.version.outputs.version }}
+          name: Chromium Mask v${{ steps.version.outputs.version }}
           body_path: release_notes.md
           files: |
-            chrome-mask-for-opera-v${{ steps.version.outputs.version }}.zip
+            chromium-mask-v${{ steps.version.outputs.version }}.zip
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
         env:

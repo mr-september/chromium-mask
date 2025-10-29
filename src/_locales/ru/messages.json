@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera"
+    "message": "Chromium Mask"
   },
 
   "extensionDescription": {
-    "message": "Заставляет Opera носить маску Chrome для лучшей совместимости с веб-сайтами."
+    "message": "Делает браузеры Chromium (Opera, Brave, Edge, Vivaldi, Arc и др.) совместимыми с веб-сайтами."
   },
 
   "supportMessage": {
@@ -17,11 +17,11 @@
   },
 
   "breakageWarning": {
-    "message": "Хотя Chrome Mask for Opera может помочь, если вы видите сообщение «Браузер не поддерживается», это может вызвать неожиданные проблемы на некоторых сайтах."
+    "message": "Хотя Chromium Mask может помочь, если вы видите сообщение «Браузер не поддерживается», это может вызвать неожиданные проблемы на некоторых сайтах."
   },
 
   "reportBrokenSite": {
-    "message": "Если вы найдете сайт, который работает лучше с включенным Chrome Mask for Opera, пожалуйста, сообщите об этом $WEBCOMPAT$. Спасибо! &hearts;",
+    "message": "Если вы найдете сайт, который работает лучше с включенным Chromium Mask, пожалуйста, сообщите об этом $WEBCOMPAT$. Спасибо! &hearts;",
     "placeholders": {
       "WEBCOMPAT": {
         "content": "$1"
@@ -30,7 +30,7 @@
   },
 
   "inProductReporterLinkText": {
-    "message": "через Opera Help & Support"
+    "message": "через Help & Support вашего браузера"
   },
 
   "webcompatLinkText": {
@@ -42,7 +42,7 @@
   },
 
   "maskStatusOff": {
-    "message": "Маска выключена. Я выгляжу как Opera на этом сайте."
+    "message": "Маска выключена. Я выгляжу как ваш браузер на этом сайте."
   },
 
   "maskStatusUnsupported": {
@@ -58,7 +58,7 @@
   },
 
   "manageSitesFallback": {
-    "message": "Чтобы добавить или удалить сайты, откройте Менеджер расширений, выберите Chrome Mask for Opera и нажмите Настройки."
+    "message": "Чтобы добавить или удалить сайты, откройте Менеджер расширений, выберите Chromium Mask и нажмите Настройки."
   },
 
   "addSiteTitle": {
@@ -78,7 +78,7 @@
   },
 
   "addSiteErrorAlreadyActive": {
-    "message": "Chrome Mask for Opera уже включен для этого домена!"
+    "message": "Chromium Mask уже включен для этого домена!"
   },
 
   "maskedSitesTitle": {
@@ -90,7 +90,7 @@
   },
 
   "siteListEmpty": {
-    "message": "Вы еще не включили Chrome Mask for Opera ни на одном сайте!"
+    "message": "Вы еще не включили Chromium Mask ни на одном сайте!"
   },
 
   "linuxSpoofToggle": {

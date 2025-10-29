@@ -1,6 +1,16 @@
 // Import shared classes and utilities
 importScripts("shared.js");
 
+// Debug logging control - set to false for production builds
+// Can also be controlled via chrome.storage.local.set({ debugLogging: true/false })
+const DEBUG_LOGGING = true;
+
+// Helper functions for conditional logging
+const log = (...args) => DEBUG_LOGGING && console.log(...args);
+const warn = (...args) => DEBUG_LOGGING && console.warn(...args);
+const error = console.error.bind(console); // Always log errors
+const debug = (...args) => DEBUG_LOGGING && console.debug(...args);
+
 // Global instances
 let chromeUAStringManager;
 let enabledHostnames;
@@ -11,10 +21,10 @@ let contentScriptUpdateInProgress = false;
 
 // Service worker initialization
 chrome.runtime.onInstalled.addListener(async () => {
-  console.log("Extension installed, initializing...");
+  log("Extension installed, initializing...");
   initPromise = init()
     .catch((error) => {
-      console.error("Service worker initialization failed:", error);
+      error("Service worker initialization failed:", error);
     })
     .finally(() => {
       initPromise = null;
@@ -23,10 +33,10 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.runtime.onStartup.addListener(async () => {
-  console.log("Extension startup, initializing...");
+  log("Extension startup, initializing...");
   initPromise = init()
     .catch((error) => {
-      console.error("Service worker initialization failed:", error);
+      error("Service worker initialization failed:", error);
     })
     .finally(() => {
       initPromise = null;
@@ -37,7 +47,7 @@ chrome.runtime.onStartup.addListener(async () => {
 // Handle alarms for periodic tasks
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === "version-check") {
-    console.log("Version check alarm fired");
+    log("Version check alarm fired");
     if (chromeUAStringManager) {
       const previousUA = chromeUAStringManager.getUAString();
 
@@ -52,11 +62,11 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
       // Only reload tabs if the UA string actually changed
       if (previousUA !== newUA) {
-        console.log("UA string changed during version check, reloading affected tabs");
+        log("UA string changed during version check, reloading affected tabs");
         const currentHostnames = new Set(enabledHostnames.get_values());
         await reloadAffectedTabsSelectively(currentHostnames, currentHostnames, "version_update");
       } else {
-        console.log("UA string unchanged during version check, no reload needed");
+        log("UA string unchanged during version check, no reload needed");
       }
     }
   }
@@ -64,22 +74,22 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
 // Handle messages from popup/options
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  console.log("Message received:", msg);
+  log("Message received:", msg);
 
   // Handle async operations
   (async () => {
     try {
-      console.log("Processing message:", msg.action);
+      log("Processing message:", msg.action);
 
       // Wait for initialization to complete if it's still in progress
       if (initPromise) {
-        console.log("Waiting for initialization to complete...");
+        log("Waiting for initialization to complete...");
         await initPromise;
       }
 
       // Check if we need to reinitialize (in case of service worker restart)
       if (!chromeUAStringManager || !enabledHostnames) {
-        console.log("Reinitializing due to missing objects...");
+        log("Reinitializing due to missing objects...");
         await init();
       }
 
@@ -92,13 +102,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           break;
         case "get_platform_info":
           try {
-            console.log("Getting platform info...");
+            log("Getting platform info...");
             const platformInfo = await chrome.runtime.getPlatformInfo();
-            console.log("Platform info from runtime:", platformInfo);
+            log("Platform info from runtime:", platformInfo);
 
             // Ensure ChromeUAStringManager is initialized
             if (!chromeUAStringManager) {
-              console.warn("ChromeUAStringManager not initialized, using fallback values");
+              warn("ChromeUAStringManager not initialized, using fallback values");
               const responseData = {
                 success: true,
                 data: {
@@ -107,7 +117,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                   platformInfo,
                 },
               };
-              console.log("Sending fallback platform info response:", responseData);
+              log("Sending fallback platform info response:", responseData);
               sendResponse(responseData);
               return;
             }
@@ -124,45 +134,45 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
               },
             };
 
-            console.log("Sending platform info response:", responseData);
+            log("Sending platform info response:", responseData);
             sendResponse(responseData);
           } catch (platformError) {
-            console.error("Error getting platform info:", platformError);
+            error("Error getting platform info:", platformError);
             sendResponse({ success: false, error: platformError.message });
           }
           return;
         case "set_linux_spoof":
-          console.log("Processing set_linux_spoof message with enabled:", msg.enabled);
+          log("Processing set_linux_spoof message with enabled:", msg.enabled);
 
           if (chromeUAStringManager) {
             try {
               await chromeUAStringManager.setLinuxSpoofAsWindows(msg.enabled);
-              console.log("Linux spoof setting updated in ChromeUAStringManager");
+              log("Linux spoof setting updated in ChromeUAStringManager");
 
               await updateDeclarativeNetRequestRules();
-              console.log("DNR rules updated");
+              log("DNR rules updated");
 
               await updateContentScriptRegistration();
-              console.log("Content script registration updated");
+              log("Content script registration updated");
 
               // Use the same logic as handleLinuxSpoofChanged for consistency
               const storage = await chrome.storage.local.get("linuxSpoofReloadAllTabs");
               if (storage.linuxSpoofReloadAllTabs === true) {
-                console.log("Linux spoof reload all tabs enabled - reloading all enabled sites");
+                log("Linux spoof reload all tabs enabled - reloading all enabled sites");
                 const currentHostnames = new Set(enabledHostnames.get_values());
                 await reloadAffectedTabsSelectively(currentHostnames, currentHostnames, "ua_change");
               } else {
-                console.log("Linux spoof changed via message - headers updated, no reload");
+                log("Linux spoof changed via message - headers updated, no reload");
               }
 
-              console.log("Linux spoof setting change completed successfully");
+              log("Linux spoof setting change completed successfully");
               sendResponse({ success: true });
             } catch (error) {
-              console.error("Error updating Linux spoof setting:", error);
+              error("Error updating Linux spoof setting:", error);
               sendResponse({ success: false, error: error.message });
             }
           } else {
-            console.error("ChromeUAStringManager not available");
+            error("ChromeUAStringManager not available");
             sendResponse({ success: false, error: "ChromeUAStringManager not available" });
           }
           return;
@@ -192,11 +202,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           });
           return;
         default:
-          console.warn("Unexpected message received:", msg);
+          warn("Unexpected message received:", msg);
           sendResponse({ success: false, error: "Unknown action" });
       }
     } catch (error) {
-      console.error("Error handling message:", error);
+      error("Error handling message:", error);
       sendResponse({ success: false, error: error.message });
     }
   })();
@@ -217,13 +227,22 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
       await updateBadgeStatus(tab);
     }
   } catch (error) {
-    console.error("Error updating badge status:", error);
+    error("Error updating badge status:", error);
   }
 });
 
 async function init() {
   try {
-    console.log("Starting service worker initialization...");
+    log("Starting service worker initialization...");
+
+    // Detect and store browser information first
+    try {
+      const browserInfo = await BrowserDetector.storeBrowserInfo();
+      log("Browser detected:", browserInfo.displayName, browserInfo.version);
+    } catch (error) {
+      error("Failed to detect browser:", error);
+      // Non-critical, continue initialization
+    }
 
     // Initialize global instances
     chromeUAStringManager = new ChromeUAStringManager();
@@ -233,74 +252,74 @@ async function init() {
     // Initialize managers with error handling
     try {
       await chromeUAStringManager.init();
-      console.log("ChromeUAStringManager initialized successfully");
+      log("ChromeUAStringManager initialized successfully");
     } catch (error) {
-      console.error("Failed to initialize ChromeUAStringManager:", error);
+      error("Failed to initialize ChromeUAStringManager:", error);
       // Don't fail completely, just continue with defaults
     }
 
     try {
       await enabledHostnames.load();
-      console.log("EnabledHostnamesList loaded successfully");
+      log("EnabledHostnamesList loaded successfully");
     } catch (error) {
-      console.error("Failed to load EnabledHostnamesList:", error);
+      error("Failed to load EnabledHostnamesList:", error);
       // Don't fail completely, just continue with empty list
     }
 
     try {
       await linuxWindowsSpoofList.load();
-      console.log("LinuxWindowsSpoofList loaded successfully");
+      log("LinuxWindowsSpoofList loaded successfully");
 
       // Make linuxWindowsSpoofList available globally for ChromeUAStringManager
       self.linuxWindowsSpoofList = linuxWindowsSpoofList;
     } catch (error) {
-      console.error("Failed to load LinuxWindowsSpoofList:", error);
+      error("Failed to load LinuxWindowsSpoofList:", error);
       // Don't fail completely, just continue with empty list
     } // Store spoofing data for content script access
     try {
       await chromeUAStringManager.storeSpoofingData();
-      console.log("Spoofing data stored successfully");
+      log("Spoofing data stored successfully");
 
       // Verify the spoofing data was stored correctly
       const storage = await chrome.storage.local.get("spoofingData");
       if (storage.spoofingData) {
-        console.log("Verified spoofing data in storage:", {
+        log("Verified spoofing data in storage:", {
           userAgent: storage.spoofingData.userAgent?.substring(0, 50) + "...",
           vendor: storage.spoofingData.vendor,
           platform: storage.spoofingData.userAgentData?.platform,
         });
       } else {
-        console.error("Spoofing data was not stored properly!");
+        error("Spoofing data was not stored properly!");
       }
     } catch (error) {
-      console.error("Failed to store spoofing data:", error);
+      error("Failed to store spoofing data:", error);
     }
 
     // Set up initial DNR rules
     try {
       await updateDeclarativeNetRequestRules();
-      console.log("DNR rules updated successfully");
+      log("DNR rules updated successfully");
     } catch (error) {
-      console.error("Failed to update DNR rules:", error);
+      error("Failed to update DNR rules:", error);
     }
 
     // Set up content script registration
     try {
       await updateContentScriptRegistration();
-      console.log("Content script registration updated successfully");
+      log("Content script registration updated successfully");
     } catch (error) {
-      console.error("Failed to update content script registration:", error);
+      error("Failed to update content script registration:", error);
     }
 
-    console.log("Service worker initialized successfully");
+    log("Service worker initialized successfully");
   } catch (error) {
-    console.error("Failed to initialize service worker:", error);
+    error("Failed to initialize service worker:", error);
     // Don't re-throw the error, just log it
   }
 }
 
 async function handleEnabledHostnamesChanged() {
-  console.log("Handling enabled hostnames changed");
+  log("Handling enabled hostnames changed");
 
   // Get the previous hostname list before reloading
   const previousHostnames = new Set(enabledHostnames.get_values());
@@ -325,7 +344,7 @@ async function handleEnabledHostnamesChanged() {
 }
 
 async function handleLinuxWindowsSpoofHostnamesChanged() {
-  console.log("Handling Linux Windows spoof hostnames changed");
+  log("Handling Linux Windows spoof hostnames changed");
 
   // Get the previous hostname list before reloading
   const previousHostnames = new Set(linuxWindowsSpoofList.get_values());
@@ -364,15 +383,15 @@ async function handleLinuxWindowsSpoofHostnamesChanged() {
   }
 
   if (affectedHostnames.size > 0) {
-    console.log("Linux Windows spoof hostnames changed, reloading affected sites:", Array.from(affectedHostnames));
+    log("Linux Windows spoof hostnames changed, reloading affected sites:", Array.from(affectedHostnames));
     await reloadAffectedTabsSelectively(affectedHostnames, affectedHostnames, "platform_change");
   } else {
-    console.log("Linux Windows spoof hostnames changed - headers updated, no tab reload needed");
+    log("Linux Windows spoof hostnames changed - headers updated, no tab reload needed");
   }
 }
 
 async function handleLinuxSpoofChanged() {
-  console.log("Handling Linux spoof setting changed");
+  log("Handling Linux spoof setting changed");
 
   // Get current hostnames for selective reload
   const currentHostnames = new Set(enabledHostnames.get_values());
@@ -391,20 +410,20 @@ async function handleLinuxSpoofChanged() {
   // Only reload if user specifically wants immediate effect for all sites
   const storage = await chrome.storage.local.get("linuxSpoofReloadAllTabs");
   if (storage.linuxSpoofReloadAllTabs === true) {
-    console.log("Linux spoof reload all tabs enabled - reloading all enabled sites");
+    log("Linux spoof reload all tabs enabled - reloading all enabled sites");
     await reloadAffectedTabsSelectively(currentHostnames, currentHostnames, "ua_change");
   } else {
-    console.log("Linux spoof change - headers updated, no tab reload (new requests will use new platform)");
-    console.log("   Benefits: No disruption to current browsing session");
-    console.log("   Effect: New requests and JavaScript will use updated platform info");
-    console.log("   Note: Set 'linuxSpoofReloadAllTabs' to true in storage for immediate reload behavior");
+    log("Linux spoof change - headers updated, no tab reload (new requests will use new platform)");
+    log("   Benefits: No disruption to current browsing session");
+    log("   Effect: New requests and JavaScript will use updated platform info");
+    log("   Note: Set 'linuxSpoofReloadAllTabs' to true in storage for immediate reload behavior");
   }
 }
 
 async function updateDeclarativeNetRequestRules() {
   // Prevent concurrent DNR updates
   if (dnrUpdateInProgress) {
-    console.log("DNR update already in progress, waiting...");
+    log("DNR update already in progress, waiting...");
     // Wait for the current update to complete instead of skipping
     let retries = 0;
     while (dnrUpdateInProgress && retries < 10) {
@@ -412,25 +431,25 @@ async function updateDeclarativeNetRequestRules() {
       retries++;
     }
     if (dnrUpdateInProgress) {
-      console.warn("DNR update still in progress after waiting, proceeding anyway");
+      warn("DNR update still in progress after waiting, proceeding anyway");
     }
   }
 
   dnrUpdateInProgress = true;
 
   try {
-    console.log("Starting DNR rules update...");
+    log("Starting DNR rules update...");
 
     const hostnames = Array.from(enabledHostnames.get_values());
     const uaString = chromeUAStringManager.getUAString();
 
-    console.log(`Updating DNR rules for ${hostnames.length} hostnames with UA: ${uaString.substring(0, 50)}...`);
+    log(`Updating DNR rules for ${hostnames.length} hostnames with UA: ${uaString.substring(0, 50)}...`);
 
     // Get current dynamic rules to remove them
     const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
     const existingRuleIds = existingRules.map((rule) => rule.id);
 
-    console.log(`Found ${existingRules.length} existing DNR rules to remove`);
+    log(`Found ${existingRules.length} existing DNR rules to remove`);
 
     // Create new rules for enabled hostnames
     const newRules = generateDNRRules(hostnames, uaString);
@@ -439,7 +458,7 @@ async function updateDeclarativeNetRequestRules() {
     const newRuleIds = newRules.map((rule) => rule.id);
     const conflictingIds = newRuleIds.filter((id) => existingRuleIds.includes(id));
     if (conflictingIds.length > 0) {
-      console.warn(`Found conflicting rule IDs: ${conflictingIds.join(", ")}, regenerating rules...`);
+      warn(`Found conflicting rule IDs: ${conflictingIds.join(", ")}, regenerating rules...`);
       // Regenerate with different starting ID to avoid conflicts
       const maxExistingId = Math.max(0, ...existingRuleIds);
       const newRulesWithoutConflicts = generateDNRRules(hostnames, uaString, maxExistingId + 1);
@@ -454,15 +473,15 @@ async function updateDeclarativeNetRequestRules() {
 
     await chrome.declarativeNetRequest.updateDynamicRules(updateOptions);
 
-    console.log(`✅ Successfully updated DNR rules:`);
-    console.log(`   - Removed: ${existingRuleIds.length} rules`);
-    console.log(`   - Added: ${newRules.length} rules`);
+    log(`✅ Successfully updated DNR rules:`);
+    log(`   - Removed: ${existingRuleIds.length} rules`);
+    log(`   - Added: ${newRules.length} rules`);
 
     // Log the new rules for debugging
-    if (newRules.length > 0) {
-      console.log("New DNR rules:");
+    if (newRules.length > 0 && DEBUG_LOGGING) {
+      log("New DNR rules:");
       newRules.forEach((rule) => {
-        console.log(
+        log(
           `   Rule ${rule.id}: ${rule.condition.urlFilter} -> ${rule.action.requestHeaders[0].value.substring(0, 50)}...`,
         );
       });
@@ -478,7 +497,7 @@ async function updateDeclarativeNetRequestRules() {
       },
     });
   } catch (error) {
-    console.error("❌ Error updating DNR rules:", error);
+    error("❌ Error updating DNR rules:", error);
 
     // Store error info for debugging
     await chrome.storage.local.set({
@@ -495,229 +514,138 @@ async function updateDeclarativeNetRequestRules() {
   }
 }
 
+/**
+ * Helper function to create a DNR rule for a single hostname
+ * @param {string} hostname - The hostname to create rule for
+ * @param {number} ruleId - The rule ID to use
+ * @returns {Object} - Object with the created rule and next available ruleId
+ */
+function createDNRRuleForHostname(hostname, ruleId) {
+  // Get hostname-specific UA string and platform info
+  const hostnameUAString = chromeUAStringManager.getUAStringForHostname(hostname);
+  const hostnameUserAgentData = chromeUAStringManager.getUserAgentData(hostname);
+
+  // Extract Chrome version from hostname-specific UA string
+  const chromeVersionMatch = hostnameUAString.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
+  const chromeVersion = chromeVersionMatch ? chromeVersionMatch[1] : "134.0.0.0";
+  const chromeMajorVersion = chromeVersion.split(".")[0];
+
+  const platformName = hostnameUserAgentData.platform;
+  const platformVersion = hostnameUserAgentData.highEntropyValues.platformVersion;
+
+  // Create rule for the hostname
+  const rule = {
+    id: ruleId,
+    priority: 1,
+    action: {
+      type: "modifyHeaders",
+      requestHeaders: [
+        {
+          header: "User-Agent",
+          operation: "set",
+          value: hostnameUAString,
+        },
+        {
+          header: "sec-ch-ua",
+          operation: "set",
+          value: `"Chromium";v="${chromeMajorVersion}", "Not:A-Brand";v="24", "Google Chrome";v="${chromeMajorVersion}"`,
+        },
+        {
+          header: "sec-ch-ua-mobile",
+          operation: "set",
+          value: "?0",
+        },
+        {
+          header: "sec-ch-ua-platform",
+          operation: "set",
+          value: `"${platformName}"`,
+        },
+        {
+          header: "sec-ch-ua-platform-version",
+          operation: "set",
+          value: `"${platformVersion}"`,
+        },
+        {
+          header: "sec-ch-ua-model",
+          operation: "set",
+          value: '""',
+        },
+        {
+          header: "sec-ch-ua-full-version-list",
+          operation: "set",
+          value: `"Chromium";v="${chromeVersion}", "Not:A-Brand";v="24.0.0.0", "Google Chrome";v="${chromeVersion}"`,
+        },
+        {
+          header: "sec-ch-ua-arch",
+          operation: "set",
+          value: '"x86"',
+        },
+        {
+          header: "sec-ch-ua-bitness",
+          operation: "set",
+          value: '"64"',
+        },
+        {
+          header: "sec-ch-ua-wow64",
+          operation: "set",
+          value: "?0",
+        },
+        {
+          header: "sec-fetch-user",
+          operation: "set",
+          value: "?1",
+        },
+        // Remove any browser-specific headers that might leak through
+        {
+          header: "x-opera-mini-mode",
+          operation: "remove",
+        },
+        {
+          header: "x-opera-info",
+          operation: "remove",
+        },
+        {
+          header: "x-forwarded-for-opera-mini",
+          operation: "remove",
+        },
+      ],
+    },
+    condition: {
+      urlFilter: `*://${hostname}/*`,
+      resourceTypes: [
+        "main_frame",
+        "sub_frame",
+        "xmlhttprequest",
+        "websocket",
+        "script",
+        "stylesheet",
+        "image",
+        "font",
+        "object",
+        "other",
+      ],
+    },
+  };
+
+  return { rule, nextRuleId: ruleId + 1 };
+}
+
 function generateDNRRules(hostnames, uaString, startingRuleId = 1000) {
   const rules = [];
-
-  // Base rule ID - start from provided starting ID to avoid conflicts
   let ruleId = startingRuleId;
 
   for (const hostname of hostnames) {
-    // Get hostname-specific UA string and platform info
-    const hostnameUAString = chromeUAStringManager.getUAStringForHostname(hostname);
-    const hostnameUserAgentData = chromeUAStringManager.getUserAgentData(hostname);
-
-    // Extract Chrome version from hostname-specific UA string
-    const chromeVersionMatch = hostnameUAString.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
-    const chromeVersion = chromeVersionMatch ? chromeVersionMatch[1] : "134.0.0.0";
-    const chromeMajorVersion = chromeVersion.split(".")[0];
-
-    const platformName = hostnameUserAgentData.platform;
-    const platformVersion = hostnameUserAgentData.highEntropyValues.platformVersion;
-
-    // Create rule for the hostname
-    const rule = {
-      id: ruleId++,
-      priority: 1,
-      action: {
-        type: "modifyHeaders",
-        requestHeaders: [
-          {
-            header: "User-Agent",
-            operation: "set",
-            value: hostnameUAString,
-          },
-          {
-            header: "sec-ch-ua",
-            operation: "set",
-            value: `"Chromium";v="${chromeMajorVersion}", "Not:A-Brand";v="24", "Google Chrome";v="${chromeMajorVersion}"`,
-          },
-          {
-            header: "sec-ch-ua-mobile",
-            operation: "set",
-            value: "?0",
-          },
-          {
-            header: "sec-ch-ua-platform",
-            operation: "set",
-            value: `"${platformName}"`,
-          },
-          {
-            header: "sec-ch-ua-platform-version",
-            operation: "set",
-            value: `"${platformVersion}"`,
-          },
-          {
-            header: "sec-ch-ua-model",
-            operation: "set",
-            value: '""',
-          },
-          {
-            header: "sec-ch-ua-full-version-list",
-            operation: "set",
-            value: `"Chromium";v="${chromeVersion}", "Not:A-Brand";v="24.0.0.0", "Google Chrome";v="${chromeVersion}"`,
-          },
-          {
-            header: "sec-ch-ua-arch",
-            operation: "set",
-            value: '"x86"',
-          },
-          {
-            header: "sec-ch-ua-bitness",
-            operation: "set",
-            value: '"64"',
-          },
-          {
-            header: "sec-ch-ua-wow64",
-            operation: "set",
-            value: "?0",
-          },
-          {
-            header: "sec-fetch-user",
-            operation: "set",
-            value: "?1",
-          },
-          // Remove any Opera-specific headers that might leak through
-          {
-            header: "x-opera-mini-mode",
-            operation: "remove",
-          },
-          {
-            header: "x-opera-info",
-            operation: "remove",
-          },
-          {
-            header: "x-forwarded-for-opera-mini",
-            operation: "remove",
-          },
-        ],
-      },
-      condition: {
-        urlFilter: `*://${hostname}/*`,
-        resourceTypes: [
-          "main_frame",
-          "sub_frame",
-          "xmlhttprequest",
-          "websocket",
-          "script",
-          "stylesheet",
-          "image",
-          "font",
-          "object",
-          "other",
-        ],
-      },
-    };
-
+    // Create rule for main hostname
+    const { rule, nextRuleId } = createDNRRuleForHostname(hostname, ruleId);
     rules.push(rule);
+    ruleId = nextRuleId;
 
     // Also create a rule for www subdomain if not already present
     if (!hostname.startsWith("www.") && !hostnames.includes(`www.${hostname}`)) {
       const wwwHostname = `www.${hostname}`;
-      const wwwUAString = chromeUAStringManager.getUAStringForHostname(wwwHostname);
-      const wwwUserAgentData = chromeUAStringManager.getUserAgentData(wwwHostname);
-
-      // Extract Chrome version from www-specific UA string
-      const wwwChromeVersionMatch = wwwUAString.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
-      const wwwChromeVersion = wwwChromeVersionMatch ? wwwChromeVersionMatch[1] : "134.0.0.0";
-      const wwwChromeMajorVersion = wwwChromeVersion.split(".")[0];
-
-      const wwwPlatformName = wwwUserAgentData.platform;
-      const wwwPlatformVersion = wwwUserAgentData.highEntropyValues.platformVersion;
-
-      const wwwRule = {
-        id: ruleId++,
-        priority: 1,
-        action: {
-          type: "modifyHeaders",
-          requestHeaders: [
-            {
-              header: "User-Agent",
-              operation: "set",
-              value: wwwUAString,
-            },
-            {
-              header: "sec-ch-ua",
-              operation: "set",
-              value: `"Chromium";v="${wwwChromeMajorVersion}", "Not:A-Brand";v="24", "Google Chrome";v="${wwwChromeMajorVersion}"`,
-            },
-            {
-              header: "sec-ch-ua-mobile",
-              operation: "set",
-              value: "?0",
-            },
-            {
-              header: "sec-ch-ua-platform",
-              operation: "set",
-              value: `"${wwwPlatformName}"`,
-            },
-            {
-              header: "sec-ch-ua-platform-version",
-              operation: "set",
-              value: `"${wwwPlatformVersion}"`,
-            },
-            {
-              header: "sec-ch-ua-model",
-              operation: "set",
-              value: '""',
-            },
-            {
-              header: "sec-ch-ua-full-version-list",
-              operation: "set",
-              value: `"Chromium";v="${chromeVersion}", "Not:A-Brand";v="24.0.0.0", "Google Chrome";v="${chromeVersion}"`,
-            },
-            {
-              header: "sec-ch-ua-arch",
-              operation: "set",
-              value: '"x86"',
-            },
-            {
-              header: "sec-ch-ua-bitness",
-              operation: "set",
-              value: '"64"',
-            },
-            {
-              header: "sec-ch-ua-wow64",
-              operation: "set",
-              value: "?0",
-            },
-            {
-              header: "sec-fetch-user",
-              operation: "set",
-              value: "?1",
-            },
-            // Remove any Opera-specific headers that might leak through
-            {
-              header: "x-opera-mini-mode",
-              operation: "remove",
-            },
-            {
-              header: "x-opera-info",
-              operation: "remove",
-            },
-            {
-              header: "x-forwarded-for-opera-mini",
-              operation: "remove",
-            },
-          ],
-        },
-        condition: {
-          urlFilter: `*://www.${hostname}/*`,
-          resourceTypes: [
-            "main_frame",
-            "sub_frame",
-            "xmlhttprequest",
-            "websocket",
-            "script",
-            "stylesheet",
-            "image",
-            "font",
-            "object",
-            "other",
-          ],
-        },
-      };
-
+      const { rule: wwwRule, nextRuleId: newRuleId } = createDNRRuleForHostname(wwwHostname, ruleId);
       rules.push(wwwRule);
+      ruleId = newRuleId;
     }
   }
 
@@ -727,7 +655,7 @@ function generateDNRRules(hostnames, uaString, startingRuleId = 1000) {
 async function updateContentScriptRegistration() {
   // Prevent concurrent content script updates
   if (contentScriptUpdateInProgress) {
-    console.log("Content script update already in progress, waiting...");
+    log("Content script update already in progress, waiting...");
     // Wait for the current update to complete instead of skipping
     let retries = 0;
     while (contentScriptUpdateInProgress && retries < 10) {
@@ -735,7 +663,7 @@ async function updateContentScriptRegistration() {
       retries++;
     }
     if (contentScriptUpdateInProgress) {
-      console.warn("Content script update still in progress after waiting, proceeding anyway");
+      warn("Content script update still in progress after waiting, proceeding anyway");
     }
   }
 
@@ -753,7 +681,7 @@ async function updateContentScriptRegistration() {
 
     if (scriptsToUnregister.length > 0) {
       const scriptIds = scriptsToUnregister.map((script) => script.id);
-      console.log(`Unregistering existing content scripts: ${scriptIds.join(", ")}`);
+      log(`Unregistering existing content scripts: ${scriptIds.join(", ")}`);
       await chrome.scripting.unregisterContentScripts({ ids: scriptIds });
     }
 
@@ -791,12 +719,12 @@ async function updateContentScriptRegistration() {
         },
       ]);
 
-      console.log(`Registered content scripts for ${hostnames.length} hostnames (${matches.length} total patterns)`);
+      log(`Registered content scripts for ${hostnames.length} hostnames (${matches.length} total patterns)`);
     } else {
-      console.log("No hostnames enabled, content script not registered");
+      log("No hostnames enabled, content script not registered");
     }
   } catch (error) {
-    console.error("Error updating content script registration:", error);
+    error("Error updating content script registration:", error);
   } finally {
     contentScriptUpdateInProgress = false;
   }
@@ -827,7 +755,7 @@ async function updateBadgeStatus(tab) {
       title: chrome.i18n.getMessage(`maskStatus${isEnabled ? "On" : "Off"}`),
     });
   } catch (error) {
-    console.error("Error updating badge status:", error);
+    error("Error updating badge status:", error);
   }
 }
 
@@ -841,7 +769,7 @@ async function updateBadgeStatus(tab) {
  */
 async function reloadAffectedTabsSelectively(previousHostnames, currentHostnames, changeType) {
   try {
-    console.log(`Selective tab reload for ${changeType}:`, {
+    log(`Selective tab reload for ${changeType}:`, {
       previous: Array.from(previousHostnames || []),
       current: Array.from(currentHostnames || []),
     });
@@ -849,7 +777,7 @@ async function reloadAffectedTabsSelectively(previousHostnames, currentHostnames
     // Check for legacy reload mode preference (for advanced users who might need it)
     const storage = await chrome.storage.local.get("forceLegacyTabReload");
     if (storage.forceLegacyTabReload === true) {
-      console.log("Legacy tab reload mode enabled - using original behavior");
+      log("Legacy tab reload mode enabled - using original behavior");
       await reloadAffectedTabsLegacy();
       return;
     }
@@ -860,7 +788,7 @@ async function reloadAffectedTabsSelectively(previousHostnames, currentHostnames
       const added = new Set([...currentHostnames].filter((x) => !previousHostnames.has(x)));
       const removed = new Set([...previousHostnames].filter((x) => !currentHostnames.has(x)));
 
-      console.log("Hostname changes detected:", {
+      log("Hostname changes detected:", {
         added: Array.from(added),
         removed: Array.from(removed),
       });
@@ -876,25 +804,25 @@ async function reloadAffectedTabsSelectively(previousHostnames, currentHostnames
 
         for (const tab of tabs) {
           if (tab.id !== chrome.tabs.TAB_ID_NONE) {
-            console.log(`Reloading newly enabled site: ${new URL(tab.url).hostname}`);
+            log(`Reloading newly enabled site: ${new URL(tab.url).hostname}`);
             await chrome.tabs.reload(tab.id, { bypassCache: true });
           }
         }
 
-        console.log(`✅ Reloaded ${tabs.length} tabs for newly enabled sites`);
+        log(`✅ Reloaded ${tabs.length} tabs for newly enabled sites`);
       }
 
       // For sites being disabled (removed), no reload needed - they can continue as normal
       if (removed.size > 0) {
-        console.log(`✅ ${removed.size} sites disabled - no reload needed (graceful degradation)`);
+        log(`✅ ${removed.size} sites disabled - no reload needed (graceful degradation)`);
       }
 
       // If no actual changes, skip entirely
       if (added.size === 0 && removed.size === 0) {
-        console.log("✅ No hostname changes detected - skipping reload");
+        log("✅ No hostname changes detected - skipping reload");
       }
 
-      console.log("   Benefits: Only affected sites reloaded, others remain undisturbed");
+      log("   Benefits: Only affected sites reloaded, others remain undisturbed");
       return;
     }
 
@@ -902,7 +830,7 @@ async function reloadAffectedTabsSelectively(previousHostnames, currentHostnames
     if (changeType === "ua_change") {
       const hostnames = Array.from(currentHostnames);
       if (hostnames.length === 0) {
-        console.log("No enabled hostnames for UA change reload");
+        log("No enabled hostnames for UA change reload");
         return;
       }
 
@@ -920,7 +848,7 @@ async function reloadAffectedTabsSelectively(previousHostnames, currentHostnames
         }
       }
 
-      console.log(`Reloaded ${tabs.length} tabs due to UA string change`);
+      log(`Reloaded ${tabs.length} tabs due to UA string change`);
       return;
     }
 
@@ -928,7 +856,7 @@ async function reloadAffectedTabsSelectively(previousHostnames, currentHostnames
     if (changeType === "version_update" || changeType === "critical_update") {
       const hostnames = Array.from(currentHostnames);
       if (hostnames.length === 0) {
-        console.log("No enabled hostnames for version update reload");
+        log("No enabled hostnames for version update reload");
         return;
       }
 
@@ -946,15 +874,15 @@ async function reloadAffectedTabsSelectively(previousHostnames, currentHostnames
         }
       }
 
-      console.log(`Reloaded ${tabs.length} tabs due to ${changeType}`);
+      log(`Reloaded ${tabs.length} tabs due to ${changeType}`);
       return;
     }
 
-    console.log(`Unknown change type: ${changeType}, skipping reload`);
+    log(`Unknown change type: ${changeType}, skipping reload`);
   } catch (error) {
-    console.error("Error in selective tab reload:", error);
+    error("Error in selective tab reload:", error);
     // Fallback to legacy behavior on error
-    console.log("Falling back to legacy reload behavior");
+    log("Falling back to legacy reload behavior");
     await reloadAffectedTabsLegacy();
   }
 }
@@ -981,9 +909,9 @@ async function reloadAffectedTabsLegacy() {
       }
     }
 
-    console.log(`Legacy reload: Reloaded ${tabs.length} affected tabs`);
+    log(`Legacy reload: Reloaded ${tabs.length} affected tabs`);
   } catch (error) {
-    console.error("Error reloading affected tabs (legacy):", error);
+    error("Error reloading affected tabs (legacy):", error);
   }
 }
 
@@ -993,14 +921,14 @@ async function inspectDNRRules() {
     const dynamicRules = await chrome.declarativeNetRequest.getDynamicRules();
     const sessionRules = await chrome.declarativeNetRequest.getSessionRules();
 
-    console.log("📊 Current DNR Rules Status:");
-    console.log(`   Dynamic Rules: ${dynamicRules.length}`);
-    console.log(`   Session Rules: ${sessionRules.length}`);
+    log("📊 Current DNR Rules Status:");
+    log(`   Dynamic Rules: ${dynamicRules.length}`);
+    log(`   Session Rules: ${sessionRules.length}`);
 
-    if (dynamicRules.length > 0) {
-      console.log("   Dynamic Rules Details:");
+    if (dynamicRules.length > 0 && DEBUG_LOGGING) {
+      log("   Dynamic Rules Details:");
       dynamicRules.forEach((rule) => {
-        console.log(
+        log(
           `     Rule ${rule.id}: ${rule.condition.urlFilter} -> ${rule.action.requestHeaders[0].value.substring(0, 50)}...`,
         );
       });
@@ -1010,13 +938,13 @@ async function inspectDNRRules() {
     const storage = await chrome.storage.local.get(["dnrStats", "dnrError"]);
 
     if (storage.dnrStats) {
-      console.log("   Last Update:", new Date(storage.dnrStats.lastUpdate).toLocaleString());
-      console.log("   Hostnames:", storage.dnrStats.hostnames);
+      log("   Last Update:", new Date(storage.dnrStats.lastUpdate).toLocaleString());
+      log("   Hostnames:", storage.dnrStats.hostnames);
     }
 
     if (storage.dnrError) {
-      console.log("   Last Error:", new Date(storage.dnrError.timestamp).toLocaleString());
-      console.log("   Error Message:", storage.dnrError.error);
+      log("   Last Error:", new Date(storage.dnrError.timestamp).toLocaleString());
+      log("   Error Message:", storage.dnrError.error);
     }
 
     return {
@@ -1026,7 +954,7 @@ async function inspectDNRRules() {
       error: storage.dnrError,
     };
   } catch (error) {
-    console.error("Error inspecting DNR rules:", error);
+    error("Error inspecting DNR rules:", error);
     return null;
   }
 }
@@ -1034,7 +962,7 @@ async function inspectDNRRules() {
 // Initialize when service worker starts
 initPromise = init()
   .catch((error) => {
-    console.error("Service worker initialization failed:", error);
+    error("Service worker initialization failed:", error);
   })
   .finally(() => {
     // Clear the promise once initialization is complete

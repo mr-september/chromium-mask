@@ -1,7 +1,7 @@
 {
-  "name": "chrome-mask-for-opera",
-  "version": "1.5.2",
-  "description": "Makes Opera wear a Chrome mask for better website compatibility.",
+  "name": "chromium-mask",
+  "version": "2.0.0",
+  "description": "Makes Chromium browsers (Opera, Brave, Edge, Vivaldi, Arc, etc.) compatible with sites requiring mainstream browsers.",
   "author": "mr-september",
   "license": "MIT",
   "private": true,

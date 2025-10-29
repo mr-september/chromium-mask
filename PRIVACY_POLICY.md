@@ -1,10 +1,10 @@
-# Privacy Policy for Chrome Mask for Opera
+# Privacy Policy for Chromium Mask
 
-**Last Updated**: July 16, 2025
+**Last Updated**: October 29, 2025
 
 ## Overview
 
-Chrome Mask for Opera is committed to protecting your privacy. This privacy policy explains how our extension handles data and what information, if any, is collected during its use.
+Chromium Mask is committed to protecting your privacy. This privacy policy explains how our extension handles data and what information, if any, is collected during its use.
 
 ## Data Collection
 
@@ -26,8 +26,8 @@ Chrome Mask for Opera is committed to protecting your privacy. This privacy poli
 
 ### Local Storage Only
 
-- **Site Preferences**: Your enabled/disabled sites list is stored locally in your Opera browser
-- **Settings**: Extension configuration is saved locally using Opera's built-in storage API
+- **Site Preferences**: Your enabled/disabled sites list is stored locally in your browser
+- **Settings**: Extension configuration is saved locally using your browser's built-in storage API
 - **Cache**: Chrome version information is cached locally for performance
 - **No Cloud Storage**: No data is uploaded to external servers or cloud services
 
@@ -35,7 +35,7 @@ Chrome Mask for Opera is committed to protecting your privacy. This privacy poli
 
 - All data remains on your device
 - Data is automatically removed if you uninstall the extension
-- You can clear extension data through Opera's settings at any time
+- You can clear extension data through your browser's settings at any time
 
 ## Network Requests
 
@@ -84,9 +84,9 @@ The extension requires certain permissions to function:
 
 ### Local Security
 
-- All data is stored using Opera's secure storage APIs
+- All data is stored using your browser's secure storage APIs
 - No data is transmitted to external parties
-- Extension follows Opera's security guidelines and best practices
+- Extension follows browser security guidelines and best practices
 
 ### Network Security
 
@@ -126,14 +126,14 @@ The extension requires certain permissions to function:
 
 For privacy-related questions or concerns:
 
-- **GitHub Issues**: [Create an issue](https://github.com/mr-september/chrome-mask-for-opera/issues)
+- **GitHub Issues**: [Create an issue](https://github.com/mr-september/chromium-mask/issues)
 - **Email**: Contact through GitHub profile
 
 ## Compliance
 
 This extension is designed to comply with:
 
-- Opera Add-ons Store policies
+- Chrome Web Store policies
 - General Data Protection Regulation (GDPR) principles
 - California Consumer Privacy Act (CCPA) guidelines
 - Browser extension privacy best practices
@@ -148,4 +148,4 @@ This extension operates the same way for all users regardless of location. No ge
 
 ---
 
-**Summary**: Chrome Mask for Opera is designed with privacy-first principles. It collects no user data, operates locally, and only makes minimal network requests to maintain functionality. Your browsing habits, personal information, and privacy remain completely protected.
+**Summary**: Chromium Mask is designed with privacy-first principles. It collects no user data, operates locally, and only makes minimal network requests to maintain functionality. Your browsing habits, personal information, and privacy remain completely protected.

@@ -1,28 +1,32 @@
-// Chrome Mask for Opera - Content Script Spoofer
+// Chromium Mask - Content Script Spoofer
 // This script implements robust JavaScript-level spoofing using Object.defineProperty()
 // to make changes non-configurable and non-writable
 
-// Chrome Mask for Opera - Content Script Spoofer
-// This script implements robust JavaScript-level spoofing using Object.defineProperty()
-// to make changes non-configurable and non-writable
-
+/**
+ * Main spoofing IIFE - Implements comprehensive browser masking
+ * Runs at document_start to intercept detection before page scripts execute
+ */
 (function () {
   "use strict";
 
   // Check if spoofing has already been applied to avoid double-spoofing
   if (window.__chromeMaskSpoofingApplied) {
-    console.debug("Chrome Mask spoofing already applied, skipping");
+    console.debug("Chromium Mask spoofing already applied, skipping");
     return;
   }
 
-  // IMMEDIATE SPOOFING - before any other scripts can detect Opera
+  // IMMEDIATE SPOOFING - before any other scripts can detect the browser
   // This must happen synchronously at document_start
 
-  // Create a comprehensive Opera detection blocker
-  const operaBlocked = Symbol("opera-blocked");
+  // Create a comprehensive browser detection blocker
+  const browserBlocked = Symbol("browser-blocked");
 
-  // Immediately block access to common Opera detection methods
-  const blockOperaAccess = (obj, properties) => {
+  /**
+   * Blocks access to browser-specific properties by making them undefined and non-configurable
+   * @param {Object} obj - The object to modify (window, navigator, etc.)
+   * @param {string[]} properties - Array of property names to block
+   */
+  const blockBrowserAccess = (obj, properties) => {
     properties.forEach((prop) => {
       try {
         Object.defineProperty(obj, prop, {
@@ -46,29 +50,111 @@
     });
   };
 
-  // Block Opera properties immediately
+  /**
+   * Browser detection configuration mapping
+   * Maps browser user-agent patterns to their specific API properties to block
+   */
+  const BROWSER_API_MAP = {
+    opera: {
+      patterns: ["OPR/", "Opera/"],
+      apis: [
+        "opera",
+        "opr",
+        "operaVersion",
+        "operaBuild",
+        "operaAPI",
+        "operaPrefs",
+        "operaTouchAPI",
+        "operaMailAPI",
+        "operaMediaAPI",
+        "operaHistory",
+        "operaExtension",
+      ],
+      name: "Opera",
+    },
+    brave: {
+      patterns: ["Brave/"],
+      checkProperty: "brave", // Also check navigator.brave property
+      apis: ["brave", "braveSolana", "braveWallet"],
+      name: "Brave",
+    },
+    edge: {
+      patterns: ["Edg/"],
+      apis: ["edge"],
+      name: "Edge",
+    },
+    vivaldi: {
+      patterns: ["Vivaldi/"],
+      apis: ["vivaldi", "vivaldiPrivate"],
+      name: "Vivaldi",
+    },
+    yandex: {
+      patterns: ["YaBrowser/"],
+      apis: ["yandex", "yandexBrowser"],
+      name: "Yandex",
+    },
+  };
+
+  /**
+   * Detects which browser is being used and returns appropriate APIs to block
+   * @param {string} userAgent - The browser's user agent string
+   * @returns {Object} { browserAPIs: string[], browserName: string }
+   */
+  function detectBrowserAPIs(userAgent) {
+    for (const [key, config] of Object.entries(BROWSER_API_MAP)) {
+      // Check user agent patterns
+      const matchesUA = config.patterns.some((pattern) => userAgent.includes(pattern));
+      // Check for property if specified (e.g., navigator.brave for Brave)
+      const matchesProperty =
+        config.checkProperty && typeof navigator !== "undefined" && navigator[config.checkProperty];
+
+      if (matchesUA || matchesProperty) {
+        console.debug(`Chromium Mask: Detected ${config.name} browser, blocking ${config.name}-specific APIs`);
+        return { browserAPIs: config.apis, browserName: config.name };
+      }
+    }
+
+    console.debug("Chromium Mask: Generic Chromium browser detected, minimal API blocking");
+    return { browserAPIs: ["opera", "opr"], browserName: "Chromium" }; // Default minimal set
+  }
+
+  // Detect browser-specific APIs to block based on user agent
+  const originalUserAgent = navigator.userAgent;
+  const { browserAPIs: browserAPIsToBlock, browserName } = detectBrowserAPIs(originalUserAgent);
+
+  // Block browser-specific properties immediately
   if (typeof window !== "undefined") {
-    blockOperaAccess(window, ["opera", "opr", "operaVersion", "operaBuild", "operaAPI"]);
+    blockBrowserAccess(window, browserAPIsToBlock);
   }
 
   if (typeof navigator !== "undefined") {
-    blockOperaAccess(navigator, ["opera", "opr", "operaVersion", "operaBuild"]);
+    blockBrowserAccess(navigator, browserAPIsToBlock);
   }
 
-  // Execute immediately before any other scripts can run
-  const originalUserAgent = navigator.userAgent;
-  const isAlreadySpoofed =
-    originalUserAgent.includes("Chrome/") &&
-    !originalUserAgent.includes("OPR/") &&
-    !originalUserAgent.includes("Opera/");
+  /**
+   * Checks if the user agent already appears to be Chrome (no spoofing needed)
+   * @param {string} userAgent - The user agent string to check
+   * @returns {boolean} True if already spoofed as Chrome
+   */
+  function isAlreadyChrome(userAgent) {
+    return (
+      userAgent.includes("Chrome/") &&
+      !userAgent.includes("OPR/") &&
+      !userAgent.includes("Opera/") &&
+      !userAgent.includes("Edg/") &&
+      !userAgent.includes("Brave/") &&
+      !userAgent.includes("Vivaldi/") &&
+      !userAgent.includes("YaBrowser/")
+    );
+  }
 
   // Don't spoof if already looks like Chrome (avoid double-spoofing)
-  if (isAlreadySpoofed) {
+  if (isAlreadyChrome(originalUserAgent)) {
     console.log("Chrome user agent already detected, skipping spoofing");
     return;
   }
 
-  // CRITICAL: Immediately hide any traces of Opera/OPR in the user agent before other scripts can see it
+  // CRITICAL: Immediately hide any traces of browser-specific identifiers in the user agent before other scripts can see it
   // Store original values before any spoofing
   const originalValues = {
     userAgent: navigator.userAgent,
@@ -77,7 +163,18 @@
     userAgentData: navigator.userAgentData,
   };
 
-  if (originalUserAgent.includes("OPR/") || originalUserAgent.includes("Opera/")) {
+  /**
+   * Checks if a browser needs immediate temporary user agent spoofing
+   * Some browsers (like Opera) need UA spoofed before async storage loads
+   * @param {string} browserName - The detected browser name
+   * @returns {boolean} True if immediate spoofing is needed
+   */
+  function needsImmediateSpoofing(browserName) {
+    return ["Opera", "Vivaldi", "Yandex"].includes(browserName);
+  }
+
+  // Apply immediate temporary spoofing for browsers that need it
+  if (needsImmediateSpoofing(browserName)) {
     // Create a temporary Chrome-like user agent immediately
     const tempChromeUA =
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36";
@@ -437,24 +534,41 @@
       window.chrome = Object.assign(window.chrome || {}, chromeAPIs);
     }
 
-    // Remove Opera-specific properties and APIs
-    const operaProperties = [
-      "opera",
-      "opr",
-      "addons",
-      "sidebar",
-      "operaVersion",
-      "operaBuild",
-      "operaPrefs",
-      "operaAPI",
-      "operaTouchAPI",
-      "operaMailAPI",
-      "operaMediaAPI",
-      "operaHistory",
-      "operaExtension",
-    ];
+    // Remove browser-specific properties and APIs (for all Chromium browsers)
+    // Dynamically build list based on detected browser
+    const browserSpecificProperties = [];
 
-    operaProperties.forEach((prop) => {
+    // Always add common browser detection properties
+    browserSpecificProperties.push(...["addons", "sidebar"]);
+
+    // Add browser-specific APIs based on UA detection
+    if (originalUserAgent.includes("OPR/") || originalUserAgent.includes("Opera/")) {
+      browserSpecificProperties.push(
+        "opera",
+        "opr",
+        "operaVersion",
+        "operaBuild",
+        "operaPrefs",
+        "operaAPI",
+        "operaTouchAPI",
+        "operaMailAPI",
+        "operaMediaAPI",
+        "operaHistory",
+        "operaExtension",
+      );
+    } else if (originalUserAgent.includes("Brave/") || (typeof navigator !== "undefined" && navigator.brave)) {
+      browserSpecificProperties.push("brave", "braveSolana", "braveWallet");
+    } else if (originalUserAgent.includes("Edg/")) {
+      browserSpecificProperties.push("edge");
+    } else if (originalUserAgent.includes("Vivaldi/")) {
+      browserSpecificProperties.push("vivaldi", "vivaldiPrivate");
+    } else if (originalUserAgent.includes("YaBrowser/")) {
+      browserSpecificProperties.push("yandex", "yandexBrowser");
+    }
+
+    console.debug(`Chromium Mask: Removing ${browserSpecificProperties.length} browser-specific properties`);
+
+    browserSpecificProperties.forEach((prop) => {
       if (window[prop]) {
         try {
           delete window[prop];
@@ -478,7 +592,7 @@
     });
 
     // Also remove from navigator if present
-    operaProperties.forEach((prop) => {
+    browserSpecificProperties.forEach((prop) => {
       if (navigator[prop]) {
         try {
           delete navigator[prop];
@@ -499,15 +613,23 @@
       }
     });
 
-    // Hide Opera-specific CSS features and capabilities
+    // Hide browser-specific CSS features and capabilities
     try {
-      // Override CSS supports to hide Opera-specific features
+      // Override CSS supports to hide browser-specific features
       const originalSupports = CSS.supports;
       CSS.supports = function (property, value) {
-        // Hide Opera-specific CSS properties
+        // Hide browser-specific CSS properties and vendor prefixes
         if (property && typeof property === "string") {
-          const operaCSSFeatures = ["-o-", "opera-", "-webkit-opera-"];
-          if (operaCSSFeatures.some((prefix) => property.toLowerCase().includes(prefix))) {
+          // Detect which browser-specific CSS prefixes to hide
+          let browserCSSFeatures = [];
+          if (originalUserAgent.includes("OPR/") || originalUserAgent.includes("Opera/")) {
+            browserCSSFeatures = ["-o-", "opera-", "-webkit-opera-"];
+          } else if (originalUserAgent.includes("Edg/")) {
+            browserCSSFeatures = ["-ms-", "edge-"];
+          }
+          // Most other Chromium browsers don't have unique CSS prefixes
+
+          if (browserCSSFeatures.some((prefix) => property.toLowerCase().includes(prefix))) {
             return false;
           }
         }
@@ -517,9 +639,9 @@
       // CSS.supports might not be available
     }
 
-    // Spoof console properties that might reveal Opera
+    // Spoof console properties that might reveal browser identity
     try {
-      // Some Opera versions add console.profile methods or modify console behavior
+      // Some browser versions add console.profile methods or modify console behavior
       if (console.profile && console.profileEnd) {
         const originalProfile = console.profile;
         const originalProfileEnd = console.profileEnd;
@@ -590,7 +712,7 @@
       };
     }
 
-    // Spoof fetch and XMLHttpRequest headers that might reveal Opera
+    // Spoof fetch and XMLHttpRequest headers that might reveal browser identity
     if (window.fetch) {
       const originalFetch = window.fetch;
       window.fetch = function (input, init) {
@@ -619,17 +741,23 @@
       };
     }
 
-    // Spoof Error stack traces that might reveal Opera in file paths
+    // Spoof Error stack traces that might reveal browser identity in file paths
     try {
       const originalError = window.Error;
       window.Error = function (...args) {
         const error = new originalError(...args);
         if (error.stack) {
-          // Replace any Opera-related paths in stack traces
+          // Replace any browser-related paths in stack traces
           error.stack = error.stack
             .replace(/opera[\/\\]/gi, "chrome/")
             .replace(/opr[\/\\]/gi, "chrome/")
-            .replace(/Opera[\/\\]/gi, "Chrome/");
+            .replace(/Opera[\/\\]/gi, "Chrome/")
+            .replace(/brave[\/\\]/gi, "chrome/")
+            .replace(/Brave[\/\\]/gi, "Chrome/")
+            .replace(/edge[\/\\]/gi, "chrome/")
+            .replace(/Edge[\/\\]/gi, "Chrome/")
+            .replace(/vivaldi[\/\\]/gi, "chrome/")
+            .replace(/Vivaldi[\/\\]/gi, "Chrome/");
         }
         return error;
       };

@@ -1,10 +1,10 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera"
+    "message": "Chromium Mask"
   },
 
   "extensionDescription": {
-    "message": "Opera가 Chrome처럼 보이게 하여 지원하지 않는 웹사이트에서 작동하도록 합니다."
+    "message": "Chromium 브라우저(Opera, Brave, Edge, Vivaldi, Arc 등)를 지원하지 않는 웹사이트에서 작동하도록 합니다."
   },
 
   "supportMessage": {
@@ -17,11 +17,11 @@
   },
 
   "breakageWarning": {
-    "message": "Chrome Mask for Opera는 \"지원되지 않는 브라우저\" 메시지가 표시될 때 도움이 될 수 있지만, 일부 사이트에서 예상치 못한 문제를 일으킬 수 있습니다."
+    "message": "Chromium Mask는 \"지원되지 않는 브라우저\" 메시지가 표시될 때 도움이 될 수 있지만, 일부 사이트에서 예상치 못한 문제를 일으킬 수 있습니다."
   },
 
   "reportBrokenSite": {
-    "message": "Chrome Mask for Opera를 활성화했을 때 더 잘 작동하는 사이트를 발견하면 $WEBCOMPAT$로 신고해 주세요. 감사합니다! &hearts;",
+    "message": "Chromium Mask를 활성화했을 때 더 잘 작동하는 사이트를 발견하면 $WEBCOMPAT$로 신고해 주세요. 감사합니다! &hearts;",
     "placeholders": {
       "WEBCOMPAT": {
         "content": "$1"
@@ -30,7 +30,7 @@
   },
 
   "inProductReporterLinkText": {
-    "message": "Opera 도움말 및 지원을 통해"
+    "message": "브라우저의 도움말 및 지원을 통해"
   },
 
   "webcompatLinkText": {
@@ -42,7 +42,7 @@
   },
 
   "maskStatusOff": {
-    "message": "마스크가 꺼져 있습니다. 이 사이트에서 Opera로 보입니다."
+    "message": "마스크가 꺼져 있습니다. 이 사이트에서 브라우저로 보입니다."
   },
 
   "maskStatusUnsupported": {
@@ -58,7 +58,7 @@
   },
 
   "manageSitesFallback": {
-    "message": "사이트를 추가하거나 제거하려면 확장 프로그램 관리자를 열고 Chrome Mask for Opera를 선택한 후 설정을 클릭하세요."
+    "message": "사이트를 추가하거나 제거하려면 확장 프로그램 관리자를 열고 Chromium Mask를 선택한 후 설정을 클릭하세요."
   },
 
   "addSiteTitle": {
@@ -78,7 +78,7 @@
   },
 
   "addSiteErrorAlreadyActive": {
-    "message": "이 도메인에서는 이미 Chrome Mask for Opera가 활성화되어 있습니다!"
+    "message": "이 도메인에서는 이미 Chromium Mask가 활성화되어 있습니다!"
   },
 
   "maskedSitesTitle": {
@@ -90,7 +90,7 @@
   },
 
   "siteListEmpty": {
-    "message": "아직 어떤 사이트에서도 Chrome Mask for Opera를 활성화하지 않았습니다!"
+    "message": "아직 어떤 사이트에서도 Chromium Mask를 활성화하지 않았습니다!"
   },
 
   "linuxSpoofToggle": {

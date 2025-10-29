@@ -1,11 +1,20 @@
 const enabledHostnames = new EnabledHostnamesList();
 const linuxWindowsSpoofList = new LinuxWindowsSpoofList();
 
-// Helper function to set text from localization files
-function localizePage() {
+/**
+ * Localizes the options page by replacing i18n placeholders with translated text
+ * @returns {Promise<void>}
+ */
+async function localizePage() {
+  // Get detected browser for dynamic messaging
+  const browserInfo = await BrowserDetector.getStoredBrowserInfo();
+  const browserName = browserInfo?.displayName || "your browser";
+
   // Localize text content
   document.querySelectorAll("[data-i18n]").forEach((el) => {
-    el.textContent = chrome.i18n.getMessage(el.dataset.i18n);
+    const messageKey = el.dataset.i18n;
+    const message = chrome.i18n.getMessage(messageKey, [browserName]);
+    el.textContent = message;
   });
 
   // Localize placeholder attributes
@@ -14,6 +23,10 @@ function localizePage() {
   });
 }
 
+/**
+ * Initializes the options page UI by applying translations and setting up interactive elements
+ * @returns {Promise<void>}
+ */
 async function initUi() {
   // First, apply all translations to the static HTML
   localizePage();
@@ -24,6 +37,10 @@ async function initUi() {
   setupSiteList();
 }
 
+/**
+ * Sets up the Linux-specific platform section if user is on Linux
+ * @returns {Promise<void>}
+ */
 async function setupLinuxPlatformSection() {
   const response = await PlatformInfoHelper.getPlatformInfoWithRetry();
   if (!response) {
@@ -41,6 +58,11 @@ async function setupLinuxPlatformSection() {
   }
 }
 
+/**
+ * Validates a hostname input
+ * @param {string} input - The hostname to validate
+ * @returns {boolean} True if valid hostname
+ */
 function tryValidateHostname(input) {
   try {
     if (URL.canParse(input)) return new URL(input).hostname;

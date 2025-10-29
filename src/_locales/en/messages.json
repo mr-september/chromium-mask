@@ -1,19 +1,35 @@
 {
   "extensionName": {
-    "message": "Chrome Mask for Opera",
+    "message": "Chromium Mask",
     "description": "The name of the extension."
   },
   "extensionDescription": {
-    "message": "Makes Opera wear a mask to look like Chrome to websites that otherwise won't work.",
+    "message": "Makes Chromium browsers (Brave, Edge, Vivaldi, Opera, Arc, etc.) compatible with sites that otherwise won't work.",
     "description": "The description of the extension shown in the add-on store."
+  },
+  "extensionDescriptionDynamic": {
+    "message": "Makes $BROWSER$ and other Chromium browsers compatible with sites that don't support them. Spoof as Chrome with one click!",
+    "description": "Dynamic description shown in the popup with detected browser name.",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Opera"
+      }
+    }
   },
   "maskStatusOn": {
     "message": "The mask is on! I pretend to be Chrome on this site.",
     "description": "Status message in the popup when masking is active for the current site."
   },
   "maskStatusOff": {
-    "message": "The mask is off. I appear as Opera for this site.",
-    "description": "Status message in the popup when masking is inactive for the current site."
+    "message": "The mask is off. I appear as $BROWSER$ for this site.",
+    "description": "Status message in the popup when masking is inactive for the current site.",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Opera"
+      }
+    }
   },
   "maskStatusUnsupported": {
     "message": "The mask cannot work on this site.",
@@ -28,7 +44,7 @@
     "description": "Button text in the popup that opens the options page."
   },
   "manageSitesFallback": {
-    "message": "To add or remove sites, please open the Extension Manager, select Chrome Mask for Opera, and hit Settings.",
+    "message": "To add or remove sites, please open the Extension Manager, select Chromium Mask, and hit Settings.",
     "description": "Fallback text for when the options page cannot be opened directly."
   },
   "linuxSpoofToggle": {
@@ -48,12 +64,18 @@
     "description": "The title of the options HTML page's browser tab."
   },
   "optionsMainTitle": {
-    "message": "Chrome Masking for Opera",
+    "message": "Chromium Masking",
     "description": "The main H2 title on the options page."
   },
   "optionsMainDescription": {
-    "message": "For sites that don't work correctly in Opera, add them here to make them identify as Chrome.",
-    "description": "The primary paragraph explaining the main feature on the options page."
+    "message": "For sites that don't work correctly in $BROWSER$, add them here to make them identify as Chrome.",
+    "description": "The primary paragraph explaining the main feature on the options page.",
+    "placeholders": {
+      "browser": {
+        "content": "$1",
+        "example": "Opera"
+      }
+    }
   },
   "optionsInputPlaceholder": {
     "message": "e.g., www.example.com",
@@ -113,11 +135,11 @@
     }
   },
   "breakageWarning": {
-    "message": "While Chrome Mask for Opera may help if you see a \"Browser unsupported\" message, it could cause unexpected breakage on some sites.",
+    "message": "While Chromium Mask may help if you see a \"Browser unsupported\" message, it could cause unexpected breakage on some sites.",
     "description": "A general warning about potential side effects."
   },
   "reportBrokenSite": {
-    "message": "If you find a site which works better with Chrome Mask for Opera enabled, please report it $WEBCOMPAT$. Thank you! ♥",
+    "message": "If you find a site which works better with Chromium Mask enabled, please report it $WEBCOMPAT$. Thank you! ♥",
     "description": "A message asking users to report sites.",
     "placeholders": {
       "WEBCOMPAT": {
@@ -126,7 +148,7 @@
     }
   },
   "inProductReporterLinkText": {
-    "message": "through Opera Help & Support",
+    "message": "through your browser's Help & Support",
     "description": "Link text for a specific reporting method."
   },
   "webcompatLinkText": {

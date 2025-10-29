@@ -1,6 +1,11 @@
 const enabledHostnames = new EnabledHostnamesList();
 const linuxWindowsSpoofList = new LinuxWindowsSpoofList();
 
+/**
+ * Gets the currently active tab in the current window
+ * @returns {Promise<chrome.tabs.Tab>} The active tab object
+ * @throws {Error} If no active tab is found
+ */
 async function getActiveTab() {
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
   if (tabs.length < 1) {
@@ -10,6 +15,11 @@ async function getActiveTab() {
   return tabs[0];
 }
 
+/**
+ * Updates the popup UI based on current tab, platform, and extension state
+ * Handles browser detection, platform-specific toggles, and status messages
+ * @returns {Promise<void>}
+ */
 async function updateUiState() {
   const activeTab = await getActiveTab();
   const currentUrl = new URL(activeTab.url);
@@ -27,6 +37,15 @@ async function updateUiState() {
   // Use unified platform info helper - reduces code duplication
   const platformInfo = await PlatformInfoHelper.getPlatformInfoWithRetry();
 
+  // Get detected browser info for dynamic messaging
+  const browserInfo = await BrowserDetector.getStoredBrowserInfo();
+
+  // Set browser-specific icon for the main toggle using CSS custom properties
+  if (browserInfo && browserInfo.slug) {
+    const browserIconPath = BrowserDetector.getBrowserIcon(browserInfo.slug);
+    document.documentElement.style.setProperty("--browser-icon", `url(assets/${browserIconPath})`);
+  }
+
   // Get shared tooltip message from i18n
   const toggleDescription = chrome.i18n.getMessage("mainToggleDescription");
 
@@ -34,7 +53,6 @@ async function updateUiState() {
   if (platformInfo && platformInfo.actualPlatform === "linux") {
     linuxPlatformInfo.style.display = "block";
 
-    const managePlatformLink = document.getElementById("managePlatformLink");
     const linuxToggleCheckbox = document.getElementById("linux_mask_enabled");
     const linuxToggleDescriptionText = document.getElementById("linuxToggleDescriptionText");
 
@@ -47,15 +65,6 @@ async function updateUiState() {
     if (linuxToggleDescriptionText) {
       linuxToggleDescriptionText.innerText = toggleDescription;
     }
-
-    // Set the text for the manage platform link and add click handler
-    if (managePlatformLink) {
-      managePlatformLink.innerText = chrome.i18n.getMessage("managePlatformLinkText");
-      managePlatformLink.addEventListener("click", async (e) => {
-        e.preventDefault();
-        await chrome.runtime.openOptionsPage();
-      });
-    }
   } else {
     linuxPlatformInfo.style.display = "none";
   }
@@ -67,7 +76,10 @@ async function updateUiState() {
     maskStatus.innerText = chrome.i18n.getMessage("maskStatusOn");
     checkbox.checked = true;
   } else {
-    maskStatus.innerText = chrome.i18n.getMessage("maskStatusOff");
+    // Dynamic message based on detected browser
+    const browserName = browserInfo?.displayName || "your browser";
+    const maskOffMessage = chrome.i18n.getMessage("maskStatusOff", [browserName]);
+    maskStatus.innerText = maskOffMessage;
     checkbox.checked = false;
   }
 
@@ -82,7 +94,7 @@ async function updateUiState() {
 
   // Create support link
   const supportLink = document.createElement("a");
-  supportLink.href = "https://github.com/mr-september/chrome-mask-for-opera#readme";
+  supportLink.href = "https://github.com/mr-september/chromium-mask#readme";
   supportLink.innerText = "supporting its development";
   supportLink.target = "_blank";
 
@@ -119,6 +131,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   await enabledHostnames.load();
   await linuxWindowsSpoofList.load();
   await updateUiState();
+
+  // Remove loading class to enable transitions after initial state is set
+  // Use requestAnimationFrame to ensure the browser has painted the initial state
+  // before enabling transitions (prevents animation flash on rapid popup opens)
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.body.classList.remove("loading");
+    });
+  });
 
   document.getElementById("mask_enabled").addEventListener("change", async (ev) => {
     const activeTab = await getActiveTab();

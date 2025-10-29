@@ -1,6 +1,14 @@
+/**
+ * Manages the list of hostnames where Chrome user-agent masking is enabled
+ * Persists to chrome.storage.local and handles migration from sync storage
+ */
 class EnabledHostnamesList {
   #set = new Set();
 
+  /**
+   * Loads the enabled hostnames from storage and handles migration from V2 sync storage
+   * @returns {Promise<void>}
+   */
   async load() {
     const storage = await chrome.storage.local.get(["enabledHostnames", "storageVersion"]);
     if (storage?.enabledHostnames) {
@@ -31,6 +39,11 @@ class EnabledHostnamesList {
     await chrome.storage.local.set({ storageVersion: 3 });
   }
 
+  /**
+   * Persists the current set to storage and notifies other extension contexts
+   * @private
+   * @returns {Promise<void>}
+   */
   async #persist() {
     const enabledHostnames = Array.from(this.#set.values());
     await chrome.storage.local.set({ enabledHostnames });
@@ -42,58 +55,102 @@ class EnabledHostnamesList {
     }
   }
 
+  /**
+   * Adds a hostname to the enabled list
+   * @param {string} hostname - The hostname to add (e.g., "www.example.com")
+   * @returns {Promise<void>}
+   */
   async add(hostname) {
     this.#set.add(hostname);
     await this.#persist();
   }
 
+  /**
+   * Removes a hostname from the enabled list
+   * @param {string} hostname - The hostname to remove
+   * @returns {Promise<void>}
+   */
   async remove(hostname) {
     this.#set.delete(hostname);
     await this.#persist();
   }
 
+  /**
+   * Checks if a hostname is in the enabled list
+   * @param {string} hostname - The hostname to check
+   * @returns {boolean} True if hostname is enabled for masking
+   */
   contains(hostname) {
     return this.#set.has(hostname);
   }
 
+  /**
+   * Returns an iterator of all enabled hostnames
+   * @returns {IterableIterator<string>}
+   */
   get_values() {
     return this.#set.values();
   }
 
+  /**
+   * Returns the count of enabled hostnames
+   * @returns {number}
+   */
   size() {
     return this.#set.size;
   }
 }
 
 // Linux Windows spoofing hostnames list - similar to EnabledHostnamesList but for platform-specific control
+/**
+ * Manages the list of hostnames where Linux users should be spoofed as Windows
+ * Similar to EnabledHostnamesList but specifically for platform spoofing
+ */
 class LinuxWindowsSpoofList {
   #set = new Set();
 
+  /**
+   * Loads the Linux Windows spoof list from storage and handles migration from global setting
+   * @returns {Promise<void>}
+   */
   async load() {
-    const storage = await chrome.storage.local.get(["linuxWindowsSpoofHostnames", "storageVersion"]);
+    const storage = await chrome.storage.local.get([
+      "linuxWindowsSpoofHostnames",
+      "storageVersion",
+      "linuxWindowsSpoofMigrated",
+    ]);
     if (storage?.linuxWindowsSpoofHostnames) {
       this.#set = new Set(storage.linuxWindowsSpoofHostnames);
       return;
     }
 
     // Migration: if user had global linuxSpoofAsWindows enabled, migrate to per-site for all currently enabled sites
-    if (storage?.storageVersion >= 3) {
+    // Only run this migration once using the linuxWindowsSpoofMigrated flag
+    if (storage?.storageVersion >= 3 && !storage?.linuxWindowsSpoofMigrated) {
       const globalSetting = await chrome.storage.local.get("linuxSpoofAsWindows");
       if (globalSetting?.linuxSpoofAsWindows === true) {
         // Get currently enabled hostnames and add them to Linux Windows spoof list
         const enabledStorage = await chrome.storage.local.get("enabledHostnames");
         if (enabledStorage?.enabledHostnames) {
           this.#set = new Set(enabledStorage.enabledHostnames);
-          await this.#persist();
+          await chrome.storage.local.set({
+            linuxWindowsSpoofHostnames: Array.from(this.#set),
+            linuxWindowsSpoofMigrated: true,
+          });
           console.info("Migrated global Linux Windows spoofing to per-site for all enabled hostnames");
+          return;
         }
       }
-      return;
+      // Mark migration as complete even if no migration was needed
+      await chrome.storage.local.set({ linuxWindowsSpoofMigrated: true });
     }
-
-    await chrome.storage.local.set({ storageVersion: 3 });
   }
 
+  /**
+   * Persists the current set to storage and notifies other extension contexts
+   * @private
+   * @returns {Promise<void>}
+   */
   async #persist() {
     const linuxWindowsSpoofHostnames = Array.from(this.#set.values());
     await chrome.storage.local.set({ linuxWindowsSpoofHostnames });
@@ -105,32 +162,74 @@ class LinuxWindowsSpoofList {
     }
   }
 
+  /**
+   * Adds a hostname to the Windows spoof list
+   * @param {string} hostname - The hostname to add
+   * @returns {Promise<void>}
+   */
   async add(hostname) {
     this.#set.add(hostname);
     await this.#persist();
   }
 
+  /**
+   * Removes a hostname from the Windows spoof list
+   * @param {string} hostname - The hostname to remove
+   * @returns {Promise<void>}
+   */
   async remove(hostname) {
     this.#set.delete(hostname);
     await this.#persist();
   }
 
+  /**
+   * Checks if a hostname is in the Windows spoof list
+   * @param {string} hostname - The hostname to check
+   * @returns {boolean} True if hostname should spoof Windows
+   */
   contains(hostname) {
     return this.#set.has(hostname);
   }
 
+  /**
+   * Returns an iterator of all Windows spoof hostnames
+   * @returns {IterableIterator<string>}
+   */
   get_values() {
     return this.#set.values();
   }
 
+  /**
+   * Returns the count of Windows spoof hostnames
+   * @returns {number}
+   */
   size() {
     return this.#set.size;
   }
 }
 
 // Unified platform info helper to reduce code duplication
+/**
+ * Helper class for retrieving platform information with caching and retry logic
+ * Reduces repeated expensive calls to the service worker
+ */
 class PlatformInfoHelper {
-  static async getPlatformInfoWithRetry(maxRetries = 5) {
+  static #cachedPlatformInfo = null;
+  static #cacheTimestamp = 0;
+  static #CACHE_DURATION_MS = 60000; // Cache for 60 seconds
+
+  /**
+   * Gets platform information with retry logic and caching
+   * @param {number} maxRetries - Maximum number of retry attempts (default: 5)
+   * @param {boolean} useCache - Whether to use cached results (default: true)
+   * @returns {Promise<Object>} Platform info object with actualPlatform, linuxSpoofAsWindows, platformInfo
+   */
+  static async getPlatformInfoWithRetry(maxRetries = 5, useCache = true) {
+    // Return cached result if still valid
+    if (useCache && this.#cachedPlatformInfo && Date.now() - this.#cacheTimestamp < this.#CACHE_DURATION_MS) {
+      return this.#cachedPlatformInfo;
+    }
+
     let retryCount = 0;
 
     while (retryCount < maxRetries) {
@@ -146,6 +245,9 @@ class PlatformInfoHelper {
 
         if (response && response.success) {
           console.log("Successfully got platform info:", response.data);
+          // Cache the successful result
+          this.#cachedPlatformInfo = response.data;
+          this.#cacheTimestamp = Date.now();
           return response.data;
         } else {
           console.warn(`Failed to get platform info (attempt ${retryCount + 1}/${maxRetries}) - response:`, response);
@@ -164,57 +266,255 @@ class PlatformInfoHelper {
     console.warn("Using fallback platform info after all retries failed");
     try {
       const fallbackPlatformInfo = await chrome.runtime.getPlatformInfo();
-      return {
+      const fallbackData = {
         actualPlatform: fallbackPlatformInfo.os,
         linuxSpoofAsWindows: true,
         platformInfo: fallbackPlatformInfo,
       };
+      // Cache fallback result too
+      this.#cachedPlatformInfo = fallbackData;
+      this.#cacheTimestamp = Date.now();
+      return fallbackData;
     } catch (fallbackError) {
       console.error("Failed to get fallback platform info:", fallbackError);
-      return {
+      const errorData = {
         actualPlatform: "unknown",
         linuxSpoofAsWindows: true,
         platformInfo: null,
       };
+      // Don't cache error results
+      return errorData;
     }
+  }
+
+  /**
+   * Clear the cached platform info (useful for testing or force refresh)
+   * @returns {void}
+   */
+  static clearCache() {
+    this.#cachedPlatformInfo = null;
+    this.#cacheTimestamp = 0;
   }
 }
 
-// Unified toggle helper to reduce code duplication between different toggle types
-class ToggleHelper {
-  static async handleToggleChange(checkboxElement, action, actionData, options = {}) {
-    const originalState = checkboxElement.checked;
-    const toggleName = options.toggleName || "setting";
+// Browser Detection Helper - Identifies the actual Chromium browser being used
+class BrowserDetector {
+  static #browserInfo = null;
 
-    try {
-      console.log(`${toggleName} toggle changed to:`, originalState);
-
-      const response = await chrome.runtime.sendMessage({
-        action: action,
-        ...actionData,
-      });
-
-      if (!response || !response.success) {
-        console.error(`Failed to update ${toggleName} setting - response:`, response);
-        // Revert the checkbox state
-        checkboxElement.checked = !originalState;
-        return false;
-      }
-
-      console.log(`${toggleName} setting updated successfully`);
-
-      // Call optional post-success callback (e.g., refreshing UI state)
-      if (options.onSuccess) {
-        await options.onSuccess();
-      }
-
-      return true;
-    } catch (error) {
-      console.error(`Error updating ${toggleName} setting:`, error);
-      // Revert the checkbox state
-      checkboxElement.checked = !originalState;
-      return false;
+  /**
+   * Detects the actual browser from the user agent string and browser APIs
+   * Works in both browser context (window) and service worker context (self)
+   * @returns {Object} Browser information: { name, version, displayName, slug, hasNativeAPI }
+   */
+  static detect() {
+    if (this.#browserInfo) {
+      return this.#browserInfo;
     }
+
+    // Get navigator from current context (works in both window and service worker)
+    const nav = typeof navigator !== "undefined" ? navigator : self.navigator;
+    const ua = nav.userAgent;
+
+    // Get global object (window in pages, self in service workers)
+    const globalObj = typeof window !== "undefined" ? window : self;
+
+    let name = "chromium";
+    let version = "unknown";
+    let displayName = "Chromium Browser";
+    let slug = "chromium";
+    let hasNativeAPI = false;
+
+    // Detection order matters - check most specific patterns first
+
+    // Opera / Opera GX
+    if (ua.includes("OPR/") || ua.includes("Opera/")) {
+      const match = ua.match(/(?:OPR|Opera)\/(\d+\.\d+\.\d+\.\d+)/);
+      name = "opera";
+      displayName = ua.includes("GX") ? "Opera GX" : "Opera";
+      slug = "opera";
+      version = match ? match[1] : "unknown";
+      hasNativeAPI = globalObj.opr !== undefined || globalObj.opera !== undefined;
+    }
+    // Brave
+    else if (ua.includes("Brave/") || nav.brave !== undefined) {
+      const match = ua.match(/Brave\/(\d+\.\d+\.\d+\.\d+)/);
+      name = "brave";
+      displayName = "Brave";
+      slug = "brave";
+      version = match ? match[1] : "unknown";
+      hasNativeAPI = nav.brave !== undefined;
+    }
+    // Microsoft Edge (Chromium-based)
+    else if (ua.includes("Edg/")) {
+      const match = ua.match(/Edg\/(\d+\.\d+\.\d+\.\d+)/);
+      name = "edge";
+      displayName = "Microsoft Edge";
+      slug = "edge";
+      version = match ? match[1] : "unknown";
+      hasNativeAPI = globalObj.chrome !== undefined;
+    }
+    // Vivaldi
+    else if (ua.includes("Vivaldi/")) {
+      const match = ua.match(/Vivaldi\/(\d+\.\d+\.\d+\.\d+)/);
+      name = "vivaldi";
+      displayName = "Vivaldi";
+      slug = "vivaldi";
+      version = match ? match[1] : "unknown";
+      hasNativeAPI = globalObj.vivaldi !== undefined;
+    }
+    // Arc Browser
+    else if (ua.includes("Arc/")) {
+      const match = ua.match(/Arc\/(\d+\.\d+\.\d+\.\d+)/);
+      name = "arc";
+      displayName = "Arc";
+      slug = "arc";
+      version = match ? match[1] : "unknown";
+      hasNativeAPI = false; // Arc doesn't expose a unique API
+    }
+    // Yandex Browser
+    else if (ua.includes("YaBrowser/")) {
+      const match = ua.match(/YaBrowser\/(\d+\.\d+\.\d+\.\d+)/);
+      name = "yandex";
+      displayName = "Yandex Browser";
+      slug = "yandex";
+      version = match ? match[1] : "unknown";
+      hasNativeAPI = globalObj.yandex !== undefined;
+    }
+    // Google Chrome (must be after Edge/Opera/etc checks)
+    else if (ua.includes("Chrome/")) {
+      const match = ua.match(/Chrome\/(\d+\.\d+\.\d+\.\d+)/);
+      name = "chrome";
+      displayName = "Google Chrome";
+      slug = "chrome";
+      version = match ? match[1] : "unknown";
+      hasNativeAPI = globalObj.chrome !== undefined;
+    }
+    // Chromium (generic fallback)
+    else if (ua.includes("Chromium/")) {
+      const match = ua.match(/Chromium\/(\d+\.\d+\.\d+\.\d+)/);
+      name = "chromium";
+      displayName = "Chromium Browser";
+      slug = "chromium";
+      version = match ? match[1] : "unknown";
+      hasNativeAPI = false;
+    }
+
+    this.#browserInfo = {
+      name,
+      version,
+      displayName,
+      slug,
+      hasNativeAPI,
+      userAgent: ua,
+      detectedAt: Date.now(),
+    };
+
+    return this.#browserInfo;
+  }
+
+  /**
+   * Get browser-specific API properties that should be blocked/hidden
+   * @returns {Array<string>} Array of property names to block
+   */
+  static getBrowserSpecificAPIs() {
+    const browser = this.detect();
+    const commonAPIs = [];
+
+    switch (browser.name) {
+      case "opera":
+        return [
+          "opera",
+          "opr",
+          "operaVersion",
+          "operaBuild",
+          "operaPrefs",
+          "operaAPI",
+          "operaTouchAPI",
+          "operaMailAPI",
+          "operaMediaAPI",
+          "operaHistory",
+          "operaExtension",
+        ];
+      case "brave":
+        return ["brave", "braveSolana", "braveWallet"];
+      case "edge":
+        return ["edge"]; // Edge uses standard Chrome APIs mostly
+      case "vivaldi":
+        return ["vivaldi", "vivaldiPrivate"];
+      case "yandex":
+        return ["yandex", "yandexBrowser"];
+      case "arc":
+        return ["arc"]; // Arc doesn't expose much
+      default:
+        return commonAPIs;
+    }
+  }
+
+  /**
+   * Get CSS vendor prefixes that should be hidden for this browser
+   * @returns {Array<string>} Array of CSS prefix patterns
+   */
+  static getBrowserCSSPrefixes() {
+    const browser = this.detect();
+
+    switch (browser.name) {
+      case "opera":
+        return ["-o-", "opera-", "-webkit-opera-"];
+      case "edge":
+        return ["-ms-", "edge-"];
+      default:
+        return []; // Most Chromium browsers don't have unique prefixes
+    }
+  }
+
+  /**
+   * Get the icon filename for this browser
+   * @returns {string} Icon filename (without path)
+   */
+  static getBrowserIcon() {
+    const browser = this.detect();
+    // Map to available icon files - each browser uses its specific icon
+    const iconMap = {
+      opera: "toggler-icon-opera.png",
+      brave: "toggler-icon-brave.png",
+      edge: "toggler-icon-edge.png",
+      vivaldi: "toggler-icon-vivaldi.png",
+      chrome: "toggler-icon-chrome.png",
+      yandex: "toggler-icon-chromium.png", // No specific icon, use generic Chromium
+      arc: "toggler-icon-chromium.png", // No specific icon, use generic Chromium
+      chromium: "toggler-icon-chromium.png", // Generic Chromium fallback
+    };
+
+    return iconMap[browser.slug] || "toggler-icon-chromium.png";
+  }
+
+  /**
+   * Store browser detection results in chrome.storage for global access
+   */
+  static async storeBrowserInfo() {
+    const browserInfo = this.detect();
+    await chrome.storage.local.set({ detectedBrowser: browserInfo });
+    console.log("Browser detection stored:", browserInfo);
+    return browserInfo;
+  }
+
+  /**
+   * Retrieve stored browser info (faster than re-detecting)
+   */
+  static async getStoredBrowserInfo() {
+    const stored = await chrome.storage.local.get("detectedBrowser");
+    if (stored?.detectedBrowser) {
+      return stored.detectedBrowser;
+    }
+    // Fallback to fresh detection
+    return this.detect();
+  }
+
+  /**
+   * Clear cached browser info (force re-detection)
+   */
+  static clearCache() {
+    this.#browserInfo = null;
   }
 }
 

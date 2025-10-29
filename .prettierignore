@@ -9,3 +9,6 @@ dist/
 *.svg
 *.ico
 package-lock.json
+
+# Google Search Console verification file - must not be modified
+docs/google*.html

@@ -1,4 +1,3 @@
-```markdown
 <div align="center">
 
 # Chromium Mask
@@ -13,7 +12,6 @@ Available on the Chrome Web Store for all Chromium browsers!
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Coming%20Soon-orange.svg)](https://chromewebstore.google.com/)
 [![Chromium Compatible](https://img.shields.io/badge/Chromium-Compatible-brightgreen.svg)](https://www.chromium.org/)
-```
 
 ## 💖 Support FOSS Projects
 

@@ -10,7 +10,7 @@ Available on the Chrome Web Store for all Chromium browsers!
 [![GitHub downloads](https://img.shields.io/github/downloads/mr-september/chromium-mask/total.svg)](https://github.com/mr-september/chromium-mask/releases)
 [![Extension Version](https://img.shields.io/badge/Extension-v2.0.0-blue.svg)](https://github.com/mr-september/chromium-mask/releases)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Coming%20Soon-orange.svg)](https://chromewebstore.google.com/)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Available%20Now-brightgreen.svg)](https://chromewebstore.google.com/detail/chromium-mask/mlbogcpkpneelepggdoicaelnojkifga)
 [![Chromium Compatible](https://img.shields.io/badge/Chromium-Compatible-brightgreen.svg)](https://www.chromium.org/)
 
 ## 💖 Support FOSS Projects
@@ -66,11 +66,10 @@ Even though browsers like **Opera**, **Brave**, **Edge**, **Vivaldi**, and **Arc
 
 ## ✅ Release Status
 
-**Current Version:** 2.0.0 (Rebranded & Cross-Browser Compatible)
+**Current Version:** 2.0.0
 
-The extension has been successfully rebranded and enhanced with cross-browser compatibility features:
+The extension has been enhanced with cross-browser compatibility features:
 
-- ✅ **Rebranding Complete**: Fully rebranded from "Chrome Mask for Opera" to "Chromium Mask"
 - ✅ **Cross-Browser Features**: Intelligent browser detection for Opera, Brave, Edge, Vivaldi, Arc, and more
 - ✅ **Build System**: Builds successfully with no errors, outputs `chromium-mask.zip`
 - ✅ **Cross-Browser Testing**: Tested in Opera, Brave, Edge, Chrome, and Vivaldi - all working perfectly
@@ -79,9 +78,7 @@ The extension has been successfully rebranded and enhanced with cross-browser co
 - ✅ **Documentation**: Consolidated to single source of truth (`REMAINING_TASKS.md`)
 - ✅ **Code Quality**: Formatted, linted, and ready for production
 
-**Status**: 🚀 **Production-ready! v2.0.0 tagged and ready for Chrome Web Store submission.**
-
-See `REMAINING_TASKS.md` for remaining pre-submission tasks (screenshots, store account setup).
+**Status**: 🚀 **Production-ready! v2.0.0 is now live on the Chrome Web Store.**
 
 ---
 
@@ -89,13 +86,9 @@ See `REMAINING_TASKS.md` for remaining pre-submission tasks (screenshots, store 
 
 ### From Chrome Web Store (Recommended)
 
-_Coming soon - extension is currently being prepared for submission_
-
-Once published, install directly from the Chrome Web Store to get automatic updates.
+https://chromewebstore.google.com/detail/chromium-mask/mlbogcpkpneelepggdoicaelnojkifga
 
 ### Manual Installation (Developer Mode)
-
-Works on **any Chromium browser**: Opera, Brave, Edge, Vivaldi, Arc, and more!
 
 1. Download and unzip the latest release from the [Releases page](https://github.com/mr-september/chromium-mask/releases)
 2. Open your browser's extensions page:

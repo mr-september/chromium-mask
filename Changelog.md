@@ -10,7 +10,7 @@ Complete rebranding and expansion to support all Chromium-based browsers, not ju
 
 - **New Name**: `Chromium Mask - Browser Identity Switcher`
 - **Universal Compatibility**: Now officially supports Opera, Brave, Edge, Vivaldi, Arc, and all Chromium browsers
-- **Chrome Web Store**: Prepared for Chrome Web Store submission for broader distribution
+- **Chrome Web Store**: Now live on the Chrome Web Store for Chromium browser compatibility
 - **Repository**: Moved to `github.com/mr-september/chromium-mask`
 
 ### 🌍 Expanded Browser Support
@@ -79,7 +79,7 @@ All language files updated with:
 
 **For New Users**:
 
-- Install from Chrome Web Store (coming soon) or manual installation
+- Install from Chrome Web Store or manual installation
 - Works on any Chromium browser, not just Opera
 - Same powerful features, broader compatibility
 

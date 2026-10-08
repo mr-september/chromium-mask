@@ -10,7 +10,7 @@
     "clean": "node -e \"require('fs').rmSync('dist', {recursive: true, force: true})\"",
     "build": "npm run clean && node build.js",
     "build-simple": "npm run clean && node build.js --simple",
-    "test": "node --test \"test/*.test.js\"",
+    "test": "node --test",
     "lint-check": "npx prettier --check .",
     "lint": "npx prettier --write .",
     "pre-commit": "lint-staged"

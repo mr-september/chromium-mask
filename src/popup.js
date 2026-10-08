@@ -16,15 +16,29 @@ async function getActiveTab() {
 }
 
 /**
+ * Parses the active tab's URL. Pages the extension cannot see (such as browser-internal ones)
+ * have no URL at all, which is treated like an unsupported page.
+ * @param {chrome.tabs.Tab} tab
+ * @returns {URL|null}
+ */
+function parseTabUrl(tab) {
+  try {
+    return new URL(tab.url);
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Updates the popup UI based on current tab, platform, and extension state
  * Handles browser detection, platform-specific toggles, and status messages
  * @returns {Promise<void>}
  */
 async function updateUiState() {
   const activeTab = await getActiveTab();
-  const currentUrl = new URL(activeTab.url);
-  const currentProtocol = currentUrl.protocol;
-  const currentHostname = currentUrl.hostname;
+  const currentUrl = parseTabUrl(activeTab);
+  const currentProtocol = currentUrl?.protocol ?? "";
+  const currentHostname = currentUrl?.hostname ?? "";
   const maskStatus = document.getElementById("maskStatus");
   const fancyContainer = document.querySelector("section.fancy_toggle_container");
   const checkbox = document.getElementById("mask_enabled");
@@ -34,23 +48,18 @@ async function updateUiState() {
   const breakageWarning = document.getElementById("breakageWarning");
   const reportBrokenSite = document.getElementById("reportBrokenSite");
 
-  // Use unified platform info helper - reduces code duplication
-  const platformInfo = await PlatformInfoHelper.getPlatformInfoWithRetry();
-
-  // Get detected browser info for dynamic messaging
-  const browserInfo = await BrowserDetector.getStoredBrowserInfo();
+  const actualPlatform = await getActualPlatform();
+  const browserInfo = BrowserDetector.detect();
 
   // Set browser-specific icon for the main toggle using CSS custom properties
-  if (browserInfo && browserInfo.slug) {
-    const browserIconPath = BrowserDetector.getBrowserIcon(browserInfo.slug);
-    document.documentElement.style.setProperty("--browser-icon", `url(assets/${browserIconPath})`);
-  }
+  const browserIcon = BrowserDetector.iconFor(browserInfo.slug);
+  document.documentElement.style.setProperty("--browser-icon", `url(assets/${browserIcon})`);
 
   // Get shared tooltip message from i18n
   const toggleDescription = chrome.i18n.getMessage("mainToggleDescription");
 
   // Show Linux platform info if on Linux
-  if (platformInfo && platformInfo.actualPlatform === "linux") {
+  if (actualPlatform === "linux") {
     linuxPlatformInfo.style.display = "block";
 
     const linuxToggleCheckbox = document.getElementById("linux_mask_enabled");
@@ -63,7 +72,7 @@ async function updateUiState() {
 
     // Set the tooltip text for the Linux toggle.
     if (linuxToggleDescriptionText) {
-      linuxToggleDescriptionText.innerText = toggleDescription;
+      linuxToggleDescriptionText.innerText = chrome.i18n.getMessage("linuxToggleDescription");
     }
   } else {
     linuxPlatformInfo.style.display = "none";
@@ -72,16 +81,16 @@ async function updateUiState() {
   if (currentProtocol == "chrome-extension:" || currentHostname == "") {
     maskStatus.innerText = chrome.i18n.getMessage("maskStatusUnsupported");
     fancyContainer.style.display = "none";
-  } else if (enabledHostnames.contains(currentHostname)) {
+  } else if (enabledHostnames.covers(currentHostname)) {
     maskStatus.innerText = chrome.i18n.getMessage("maskStatusOn");
     checkbox.checked = true;
   } else {
     // Dynamic message based on detected browser
-    const browserName = browserInfo?.displayName || "your browser";
-    const maskOffMessage = chrome.i18n.getMessage("maskStatusOff", [browserName]);
-    maskStatus.innerText = maskOffMessage;
+    maskStatus.innerText = chrome.i18n.getMessage("maskStatusOff", [browserInfo.displayName]);
     checkbox.checked = false;
   }
+
+  await showMaskProfile(currentHostname);
 
   // Update main toggle tooltip text
   const mainToggleDescriptionText = document.getElementById("mainToggleDescriptionText");
@@ -89,7 +98,7 @@ async function updateUiState() {
     mainToggleDescriptionText.innerText = toggleDescription;
   }
 
-  webcompatLink.href = linkWithSearch("https://webcompat.com/issues/new", [["url", activeTab.url]]);
+  webcompatLink.href = linkWithSearch("https://webcompat.com/issues/new", [["url", activeTab.url ?? ""]]);
   webcompatLink.innerText = chrome.i18n.getMessage("webcompatLinkText");
 
   // Create support link
@@ -106,17 +115,32 @@ async function updateUiState() {
 
   // On Android, opening the options page programmatically has limitations,
   // so we display a fallback text for Android users.
-  const platformInfoRuntime = await chrome.runtime.getPlatformInfo();
-  if (platformInfoRuntime.os == "android") {
+  if (actualPlatform === "android") {
     document.getElementById("manageSites").style.display = "none";
     document.getElementById("manageSitesFallbackText").innerText = chrome.i18n.getMessage("manageSitesFallback");
     document.getElementById("manageSitesFallback").style.display = "block";
   } else {
     const manageSitesButton = document.getElementById("manageSitesButton");
     manageSitesButton.innerText = chrome.i18n.getMessage("manageSitesButton");
-    manageSitesButton.addEventListener("click", async () => {
-      await chrome.runtime.openOptionsPage();
-    });
+  }
+}
+
+/**
+ * Shows which Chrome version and OS the mask presents on this site, as computed by the service
+ * worker. Hidden when masking is off or the worker has not published the profile yet.
+ * @param {string} hostname
+ */
+async function showMaskProfile(hostname) {
+  const element = document.getElementById("maskProfile");
+  const { spoofingState } = await chrome.storage.local.get("spoofingState");
+  const profile = spoofingState?.profiles?.[spoofingState.hostProfiles?.[hostname]];
+
+  element.hidden = !(profile && enabledHostnames.covers(hostname));
+  if (!element.hidden) {
+    element.innerText = chrome.i18n.getMessage("maskProfileDetail", [
+      String(spoofingState.chromeMajor),
+      profile.platform,
+    ]);
   }
 }
 
@@ -141,9 +165,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
+  document.getElementById("manageSitesButton").addEventListener("click", () => chrome.runtime.openOptionsPage());
+
   document.getElementById("mask_enabled").addEventListener("change", async (ev) => {
-    const activeTab = await getActiveTab();
-    const currentHostname = new URL(activeTab.url).hostname;
+    const currentHostname = parseTabUrl(await getActiveTab())?.hostname;
 
     if (!currentHostname) {
       ev.target.checked = false;
@@ -153,9 +178,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (ev.target.checked) {
       await enabledHostnames.add(currentHostname);
     } else {
-      await enabledHostnames.remove(currentHostname);
+      // The site may be masked through its parent entry (the implicit "www." variant).
+      await enabledHostnames.load();
+      await enabledHostnames.remove(enabledHostnames.resolve(currentHostname) ?? currentHostname);
     }
 
+    // Enabling reloads the tab automatically; disabling does not, so say what the user must do.
+    const reloadHint = document.getElementById("reloadHint");
+    reloadHint.innerText = chrome.i18n.getMessage("reloadToApplyHint");
+    reloadHint.hidden = ev.target.checked;
+
+    await enabledHostnames.load();
     await updateUiState();
   });
 
@@ -163,21 +196,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   const linuxToggleCheckbox = document.getElementById("linux_mask_enabled");
   if (linuxToggleCheckbox) {
     linuxToggleCheckbox.addEventListener("change", async () => {
-      const activeTab = await getActiveTab();
-      const currentHostname = new URL(activeTab.url).hostname;
+      const currentHostname = parseTabUrl(await getActiveTab())?.hostname;
+      if (!currentHostname) return;
 
       if (linuxToggleCheckbox.checked) {
-        // Add to spoof list if not present
-        if (!linuxWindowsSpoofList.contains(currentHostname)) {
-          await linuxWindowsSpoofList.add(currentHostname);
-        }
+        await linuxWindowsSpoofList.add(currentHostname);
       } else {
-        // Remove from spoof list if present
-        if (linuxWindowsSpoofList.contains(currentHostname)) {
-          await linuxWindowsSpoofList.remove(currentHostname);
-        }
+        await linuxWindowsSpoofList.remove(currentHostname);
       }
+      await linuxWindowsSpoofList.load();
       await updateUiState();
     });
   }
+
+  // The service worker publishes the profile asynchronously after a toggle.
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && changes.spoofingState) updateUiState();
+  });
 });

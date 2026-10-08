@@ -9,6 +9,7 @@
   </head>
   <body class="loading">
     <h2 id="maskStatus"></h2>
+    <p id="maskProfile" class="status_detail" hidden></p>
     <section class="fancy_toggle_container">
       <label class="fancy_toggle" for="mask_enabled">
         <input name="mask_enabled" type="checkbox" id="mask_enabled" />
@@ -21,6 +22,7 @@
         </div>
       </span>
     </section>
+    <p id="reloadHint" class="status_detail" hidden></p>
     <!-- Linux-specific platform info (only shown on Linux) -->
     <section class="linux_platform_info" id="linuxPlatformInfo" style="display: none">
       <div class="fancy_toggle_container linux_toggle_container">

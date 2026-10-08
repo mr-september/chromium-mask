@@ -7,8 +7,7 @@ const linuxWindowsSpoofList = new LinuxWindowsSpoofList();
  */
 async function localizePage() {
   // Get detected browser for dynamic messaging
-  const browserInfo = await BrowserDetector.getStoredBrowserInfo();
-  const browserName = browserInfo?.displayName || "your browser";
+  const browserName = BrowserDetector.detect().displayName;
 
   // Localize text content
   document.querySelectorAll("[data-i18n]").forEach((el) => {
@@ -42,19 +41,10 @@ async function initUi() {
  * @returns {Promise<void>}
  */
 async function setupLinuxPlatformSection() {
-  const response = await PlatformInfoHelper.getPlatformInfoWithRetry();
-  if (!response) {
-    console.error("Failed to get platform info - Linux platform section will not be available");
-    return;
-  }
-  try {
-    if (response.actualPlatform === "linux") {
-      document.getElementById("linuxPlatformSection").style.display = "block";
-      setupLinuxWindowsSpoofAddForm();
-      setupLinuxWindowsSpoofSiteList();
-    }
-  } catch (error) {
-    console.error("Error setting up Linux platform section:", error);
+  if ((await getActualPlatform()) === "linux") {
+    document.getElementById("linuxPlatformSection").style.display = "block";
+    setupLinuxWindowsSpoofAddForm();
+    setupLinuxWindowsSpoofSiteList();
   }
 }
 
@@ -64,12 +54,12 @@ async function setupLinuxPlatformSection() {
  * @returns {boolean} True if valid hostname
  */
 function tryValidateHostname(input) {
-  try {
-    if (URL.canParse(input)) return new URL(input).hostname;
-    if (URL.canParse(`https://${input}`)) return new URL(`https://${input}`).hostname;
-  } catch (e) {
-    // Catches cases like "http:// " which canParse but not construct
-    return undefined;
+  const value = input.trim();
+  for (const candidate of [value, `https://${value}`]) {
+    if (URL.canParse(candidate)) {
+      const { hostname } = new URL(candidate);
+      if (hostname) return hostname;
+    }
   }
   return undefined;
 }
@@ -96,20 +86,23 @@ function setupLinuxWindowsSpoofSiteList() {
   const siteList = document.getElementById("linux-windows-spoof-sites");
   siteList.innerHTML = "";
 
-  if (linuxWindowsSpoofList.size() < 1) {
+  if (linuxWindowsSpoofList.size < 1) {
     siteList.innerHTML = `<p class="empty-list-message">${chrome.i18n.getMessage("optionsLinuxSpoofEmpty")}</p>`;
     return;
   }
 
-  [...linuxWindowsSpoofList.get_values()]
+  linuxWindowsSpoofList
+    .values()
     .sort((a, b) => a.localeCompare(b))
     .forEach((hostname) => {
       const siteListItem = document.createElement("div");
       siteListItem.classList.add("list-item");
 
       const hostnameLabel = document.createElement("p");
-      const spoofDetailText = chrome.i18n.getMessage("optionsSpoofingAsWindows");
-      hostnameLabel.innerHTML = `${hostname} <span class="hostname-details">${spoofDetailText}</span>`;
+      const spoofDetail = document.createElement("span");
+      spoofDetail.className = "hostname-details";
+      spoofDetail.textContent = chrome.i18n.getMessage("optionsSpoofingAsWindows");
+      hostnameLabel.append(`${hostname} `, spoofDetail);
 
       const deleteButton = document.createElement("button");
       deleteButton.textContent = chrome.i18n.getMessage("siteListRemoveButton");
@@ -145,12 +138,13 @@ function setupSiteList() {
   const siteList = document.getElementById("masked-sites");
   siteList.innerHTML = "";
 
-  if (enabledHostnames.size() < 1) {
+  if (enabledHostnames.size < 1) {
     siteList.innerHTML = `<p class="empty-list-message">${chrome.i18n.getMessage("siteListEmpty")}</p>`;
     return;
   }
 
-  [...enabledHostnames.get_values()]
+  enabledHostnames
+    .values()
     .sort((a, b) => a.localeCompare(b))
     .forEach((hostname) => {
       const siteListItem = document.createElement("div");
@@ -158,6 +152,12 @@ function setupSiteList() {
 
       const hostnameLabel = document.createElement("p");
       hostnameLabel.textContent = hostname;
+      if (!hostname.startsWith("www.")) {
+        const wwwNote = document.createElement("span");
+        wwwNote.className = "hostname-details";
+        wwwNote.textContent = chrome.i18n.getMessage("optionsIncludesWww");
+        hostnameLabel.append(wwwNote);
+      }
 
       const deleteButton = document.createElement("button");
       deleteButton.textContent = chrome.i18n.getMessage("siteListRemoveButton");
@@ -176,18 +176,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   await linuxWindowsSpoofList.load();
   await initUi();
 
-  chrome.runtime.onMessage.addListener(async (msg) => {
-    switch (msg.action) {
-      case "enabled_hostnames_changed":
-        setupSiteList();
-        setupLinuxWindowsSpoofSiteList();
-        break;
-      case "linux_windows_spoof_hostnames_changed":
-        setupLinuxWindowsSpoofSiteList();
-        break;
-      default:
-        console.warn("Unexpected message received in options.js:", msg);
+  // The service worker reacts to the same storage changes; this keeps the lists on screen in sync
+  // with edits made here and from the popup.
+  chrome.storage.onChanged.addListener(async (changes, area) => {
+    if (area !== "local") return;
+    if (changes.enabledHostnames) {
+      await enabledHostnames.load();
+      setupSiteList();
     }
-    return true;
+    if (changes.linuxWindowsSpoofHostnames) {
+      await linuxWindowsSpoofList.load();
+      setupLinuxWindowsSpoofSiteList();
+    }
   });
 });

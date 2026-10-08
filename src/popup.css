@@ -85,6 +85,16 @@ p {
   }
 }
 
+.status_detail {
+  margin: -0.5rem 0 0;
+  opacity: 0.75;
+  text-align: center;
+}
+
+.status_detail[hidden] {
+  display: none;
+}
+
 hr {
   border: none;
   border-top: 1px solid var(--border-color);

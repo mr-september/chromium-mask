@@ -2,11 +2,9 @@
   "extensionName": {
     "message": "Chromium Mask"
   },
-
   "extensionDescription": {
     "message": "Делает браузеры Chromium (Opera, Brave, Edge, Vivaldi, Arc и др.) совместимыми с веб-сайтами."
   },
-
   "supportMessage": {
     "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
     "placeholders": {
@@ -15,11 +13,9 @@
       }
     }
   },
-
   "breakageWarning": {
     "message": "Хотя Chromium Mask может помочь, если вы видите сообщение «Браузер не поддерживается», это может вызвать неожиданные проблемы на некоторых сайтах."
   },
-
   "reportBrokenSite": {
     "message": "Если вы найдете сайт, который работает лучше с включенным Chromium Mask, пожалуйста, сообщите об этом $WEBCOMPAT$. Спасибо! &hearts;",
     "placeholders": {
@@ -28,88 +24,94 @@
       }
     }
   },
-
   "inProductReporterLinkText": {
     "message": "через Help & Support вашего браузера"
   },
-
   "webcompatLinkText": {
     "message": "на WebCompat.com"
   },
-
   "maskStatusOn": {
     "message": "Маска включена! Я притворяюсь Chrome на этом сайте."
   },
-
   "maskStatusOff": {
     "message": "Маска выключена. Я выгляжу как ваш браузер на этом сайте."
   },
-
   "maskStatusUnsupported": {
     "message": "Маска не может работать на этом сайте."
   },
-
   "mainToggleDescription": {
     "message": "Может потребоваться жесткая перезагрузка (Ctrl+F5), чтобы очистить кэш и применить изменения."
   },
-
   "manageSitesButton": {
     "message": "Добавить или удалить сайты"
   },
-
   "manageSitesFallback": {
     "message": "Чтобы добавить или удалить сайты, откройте Менеджер расширений, выберите Chromium Mask и нажмите Настройки."
   },
-
   "addSiteTitle": {
     "message": "Добавить сайт"
   },
-
   "addSiteButton": {
     "message": "Добавить сайт"
   },
-
   "addSiteHostnameExplanation": {
     "message": "Примечание: Введите доменное имя (например, example.com). Расширение будет работать на всех страницах и поддоменах этого сайта."
   },
-
   "addSiteErrorInvalid": {
     "message": "Пожалуйста, введите действительный домен!"
   },
-
   "addSiteErrorAlreadyActive": {
     "message": "Chromium Mask уже включен для этого домена!"
   },
-
   "maskedSitesTitle": {
     "message": "Текущие замаскированные сайты"
   },
-
   "siteListRemoveButton": {
     "message": "Удалить"
   },
-
   "siteListEmpty": {
     "message": "Вы еще не включили Chromium Mask ни на одном сайте!"
   },
-
   "linuxSpoofToggle": {
     "message": "Маскироваться под Windows вместо Linux"
   },
-
   "linuxSpoofToggleDescription": {
     "message": "Некоторые сайты блокируют браузеры Linux. Включите это, чтобы выглядеть как Windows Chrome вместо Linux Chrome."
   },
-
   "linuxPlatformTitle": {
     "message": "Настройки платформы Linux"
   },
-
   "linuxSpoofOptionNote": {
     "message": "Это влияет на все сайты, где включена маскировка Chrome. Вы можете изменить этот параметр в любое время."
   },
   "managePlatformLinkText": {
     "message": "Управлять настройками платформы для каждого сайта",
     "description": "Текст ссылки в всплывающем окне для открытия страницы опций настроек, специфичных для Linux."
+  },
+  "maskProfileDetail": {
+    "message": "Представляюсь как Chrome $VERSION$ на $PLATFORM$.",
+    "description": "Popup detail line showing the Chrome version and operating system the mask presents on this site.",
+    "placeholders": {
+      "version": {
+        "content": "$1",
+        "example": "155"
+      },
+      "platform": {
+        "content": "$2",
+        "example": "Windows"
+      }
+    }
+  },
+  "linuxToggleDescription": {
+    "message": "Представляться на этом сайте как Windows вместо Linux. Некоторые сайты блокируют браузеры Linux. Может потребоваться жесткая перезагрузка (Ctrl+F5).",
+    "description": "Tooltip for the Linux-only toggle in the popup."
+  },
+  "reloadToApplyHint": {
+    "message": "Перезагрузите страницу, чтобы прекратить маскировку.",
+    "description": "Popup hint shown after turning the mask off for a site, because the open page keeps the mask until it reloads."
+  },
+  "optionsIncludesWww": {
+    "message": "(+ www)",
+    "description": "Small text next to a hostname in the site list, meaning the www. variant is masked too."
   }
 }

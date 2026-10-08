@@ -2,11 +2,9 @@
   "extensionName": {
     "message": "Chromium Mask"
   },
-
   "extensionDescription": {
     "message": "Macht Chromium-Browser (Opera, Brave, Edge, Vivaldi, Arc usw.) kompatibel mit Websites, die sonst nicht funktionieren."
   },
-
   "supportMessage": {
     "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
     "placeholders": {
@@ -15,11 +13,9 @@
       }
     }
   },
-
   "breakageWarning": {
     "message": "Chromium Mask kann helfen wenn du eine \"Browser nicht unterstüzt\"-Warnung siehst, aber sie kann auch unerwartete Probleme auf manchen Seiten auslösen."
   },
-
   "reportBrokenSite": {
     "message": "Wenn du eine Seite findest, die mit Chromium Mask besser funktioniert als ohne, melde das bitte $WEBCOMPAT$. Dankeschön! &hearts;",
     "placeholders": {
@@ -28,55 +24,42 @@
       }
     }
   },
-
   "inProductReporterLinkText": {
     "message": "über die Hilfe & Support deines Browsers"
   },
-
   "webcompatLinkText": {
     "message": "auf WebCompat.com"
   },
-
   "maskStatusOn": {
     "message": "Die Maske ist aktiv! Ich tarne mich als Chrome."
   },
-
   "maskStatusOff": {
     "message": "Die Maske ist inaktiv! Die Seite sieht mich als deinen Browser."
   },
-
   "maskStatusUnsupported": {
     "message": "Die Maske kann auf dieser Seite nicht funktionieren."
   },
-
   "mainToggleDescription": {
     "message": "Möglicherweise ist ein Hard-Refresh (Strg+F5) erforderlich, um den Cache zu leeren und Änderungen anzuwenden."
   },
-
   "manageSitesButton": {
     "message": "Seiten hinzufügen oder entfernen"
   },
-
   "manageSitesFallback": {
     "message": "Um Seiten hinzuzufügen oder zu entfernen, benutze bitte den Extension Manager, wähle dort Chromium Mask aus, und öffne dann die Einstellungen."
   },
-
   "addSiteTitle": {
     "message": "Hinzufügen"
   },
-
   "addSiteButton": {
     "message": "Hinzufügen"
   },
-
   "addSiteHostnameExplanation": {
     "message": "Hinweis: Bitte gib immer die volle Domain an. Wenn du example.com angibst, wird Chromium Mask auf www.example.com nicht aktiv sein!"
   },
-
   "addSiteErrorInvalid": {
     "message": "Bitte gib eine valide Domain an!"
   },
-
   "addSiteErrorAlreadyActive": {
     "message": "Chromium Mask ist auf dieser Seite bereits aktiv!"
   },
@@ -87,7 +70,6 @@
     "message": "Plattformeinstellungen pro Seite verwalten",
     "description": "Linktext im Popup, um die Optionsseite für Linux-spezifische Einstellungen zu öffnen."
   },
-
   "maskedSitesTitle": {
     "message": "Gerade maskierte Seiten"
   },
@@ -113,5 +95,31 @@
   "optionsSpoofingAsWindows": {
     "message": "(Spoofing als Windows)",
     "description": "Kleiner Text neben einem Hostnamen, der anzeigt, dass als Windows gespooft wird."
+  },
+  "maskProfileDetail": {
+    "message": "Ich gebe mich als Chrome $VERSION$ unter $PLATFORM$ aus.",
+    "description": "Popup detail line showing the Chrome version and operating system the mask presents on this site.",
+    "placeholders": {
+      "version": {
+        "content": "$1",
+        "example": "155"
+      },
+      "platform": {
+        "content": "$2",
+        "example": "Windows"
+      }
+    }
+  },
+  "linuxToggleDescription": {
+    "message": "Diese Seite als Windows statt Linux ausgeben. Manche Seiten sperren Linux-Browser. Möglicherweise ist ein Hard-Refresh (Strg+F5) erforderlich.",
+    "description": "Tooltip for the Linux-only toggle in the popup."
+  },
+  "reloadToApplyHint": {
+    "message": "Lade diese Seite neu, um die Tarnung zu beenden.",
+    "description": "Popup hint shown after turning the mask off for a site, because the open page keeps the mask until it reloads."
+  },
+  "optionsIncludesWww": {
+    "message": "(+ www)",
+    "description": "Small text next to a hostname in the site list, meaning the www. variant is masked too."
   }
 }

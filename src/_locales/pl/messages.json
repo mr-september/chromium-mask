@@ -2,11 +2,9 @@
   "extensionName": {
     "message": "Chromium Mask"
   },
-
   "extensionDescription": {
     "message": "Sprawia, że przeglądarki Chromium (Opera, Brave, Edge, Vivaldi, Arc itp.) są kompatybilne ze stronami, które w przeciwnym razie nie będą działać."
   },
-
   "supportMessage": {
     "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
     "placeholders": {
@@ -15,11 +13,9 @@
       }
     }
   },
-
   "breakageWarning": {
     "message": "Chociaż Chromium Mask może pomóc, jeśli widzisz komunikat \"Przeglądarka nie jest obsługiwana\", może powodować nieoczekiwane problemy na niektórych stronach."
   },
-
   "reportBrokenSite": {
     "message": "Jeśli znajdziesz stronę, która działa lepiej z włączonym Chromium Mask, prosimy o zgłoszenie tego $WEBCOMPAT$. Dziękuję! &hearts;",
     "placeholders": {
@@ -28,88 +24,94 @@
       }
     }
   },
-
   "inProductReporterLinkText": {
     "message": "poprzez Pomoc i Wsparcie twojej przeglądarki"
   },
-
   "webcompatLinkText": {
     "message": "na WebCompat.com"
   },
-
   "maskStatusOn": {
     "message": "Maska jest włączona! Na tej stronie udaję Chrome."
   },
-
   "maskStatusOff": {
     "message": "Maska jest wyłączona. Na tej stronie wyglądam jak twoja przeglądarka."
   },
-
   "maskStatusUnsupported": {
     "message": "Maska nie może działać na tej stronie."
   },
-
   "mainToggleDescription": {
     "message": "Może być konieczne wymuszenie pełnego odświeżenia (Ctrl+F5), aby wyczyścić pamięć podręczną i zastosować zmiany."
   },
-
   "manageSitesButton": {
     "message": "Dodaj lub usuń strony"
   },
-
   "manageSitesFallback": {
     "message": "Aby dodać lub usunąć strony, otwórz Menedżer rozszerzeń, wybierz Chromium Mask i naciśnij Ustawienia."
   },
-
   "addSiteTitle": {
     "message": "Dodaj stronę"
   },
-
   "addSiteButton": {
     "message": "Dodaj stronę"
   },
-
   "addSiteHostnameExplanation": {
     "message": "Uwaga: Wprowadź nazwę domeny (np. example.com). Rozszerzenie będzie działać na wszystkich stronach i poddomenach tej witryny."
   },
-
   "addSiteErrorInvalid": {
     "message": "Proszę wprowadzić prawidłową domenę!"
   },
-
   "addSiteErrorAlreadyActive": {
     "message": "Chromium Mask jest już włączona dla tej domeny!"
   },
-
   "maskedSitesTitle": {
     "message": "Obecnie zamaskowane strony"
   },
-
   "siteListRemoveButton": {
     "message": "Usuń"
   },
-
   "siteListEmpty": {
     "message": "Jeszcze nie włączyłeś Chromium Mask na żadnej stronie!"
   },
-
   "linuxSpoofToggle": {
     "message": "Podawać się za Windows zamiast Linux"
   },
-
   "linuxSpoofToggleDescription": {
     "message": "Niektóre strony blokują przeglądarki Linux. Włącz to, aby wydawać się jak Chrome Windows zamiast Chrome Linux."
   },
-
   "linuxPlatformTitle": {
     "message": "Ustawienia platformy Linux"
   },
-
   "linuxSpoofOptionNote": {
     "message": "Wpływa to na wszystkie strony, na których włączone jest maskowanie Chrome. Możesz zmienić to ustawienie w każdej chwili."
   },
   "managePlatformLinkText": {
     "message": "Zarządzaj ustawieniami platformy dla każdej strony",
     "description": "Tekst linku w popupie do otwarcia strony opcji ustawień specyficznych dla Linuksa."
+  },
+  "maskProfileDetail": {
+    "message": "Przedstawiam się jako Chrome $VERSION$ w systemie $PLATFORM$.",
+    "description": "Popup detail line showing the Chrome version and operating system the mask presents on this site.",
+    "placeholders": {
+      "version": {
+        "content": "$1",
+        "example": "155"
+      },
+      "platform": {
+        "content": "$2",
+        "example": "Windows"
+      }
+    }
+  },
+  "linuxToggleDescription": {
+    "message": "Przedstawiaj tę witrynę jako Windows zamiast Linux. Niektóre witryny blokują przeglądarki z Linuksa. Może być konieczne wymuszenie pełnego odświeżenia (Ctrl+F5).",
+    "description": "Tooltip for the Linux-only toggle in the popup."
+  },
+  "reloadToApplyHint": {
+    "message": "Odśwież tę stronę, aby przestać ją maskować.",
+    "description": "Popup hint shown after turning the mask off for a site, because the open page keeps the mask until it reloads."
+  },
+  "optionsIncludesWww": {
+    "message": "(+ www)",
+    "description": "Small text next to a hostname in the site list, meaning the www. variant is masked too."
   }
 }

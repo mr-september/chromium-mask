@@ -2,11 +2,9 @@
   "extensionName": {
     "message": "Chromium Mask"
   },
-
   "extensionDescription": {
     "message": "Chromium உலாவிகளை (Opera, Brave, Edge, Vivaldi, Arc போன்றவை) இல்லையெனில் வேலை செய்யாத வலைதளங்களுடன் இணக்கமாக்குகிறது."
   },
-
   "supportMessage": {
     "message": "If this add-on has helped you, please consider $SUPPORT_LINK$ ☕",
     "placeholders": {
@@ -15,11 +13,9 @@
       }
     }
   },
-
   "breakageWarning": {
     "message": "\"ஆதரிக்கப்படாத உலாவி\" செய்தியை நீங்கள் பார்த்தால் Chromium Mask உதவலாம், ஆனால் இது சில தளங்களில் எதிர்பாராத பிரச்சினைகளை ஏற்படுத்தலாம்."
   },
-
   "reportBrokenSite": {
     "message": "Chromium Mask இயக்கப்பட்டால் சிறப்பாக வேலை செய்யும் தளத்தை நீங்கள் கண்டறிந்தால், தயவுசெய்து அதை $WEBCOMPAT$ அறிவிக்கவும். நன்றி! &hearts;",
     "placeholders": {
@@ -28,88 +24,94 @@
       }
     }
   },
-
   "inProductReporterLinkText": {
     "message": "உங்கள் உலாவியின் உதவி மற்றும் ஆதரவு மூலம்"
   },
-
   "webcompatLinkText": {
     "message": "WebCompat.com இல்"
   },
-
   "maskStatusOn": {
     "message": "முகமூடி இயக்கப்பட்டுள்ளது! நான் இந்த தளத்தில் Chrome போல் நடிக்கிறேன்."
   },
-
   "maskStatusOff": {
     "message": "முகமூடி அணையப்பட்டுள்ளது. இந்த தளத்தில் நான் உங்கள் உலாவி போல் தோற்றமளிக்கிறேன்."
   },
-
   "maskStatusUnsupported": {
     "message": "இந்த தளத்தில் முகமூடி வேலை செய்ய முடியாது."
   },
-
   "mainToggleDescription": {
     "message": "மாற்றங்களை செயல்படுத்த ஹார்ட் ரிஃப்ரெஷ் (Ctrl+F5) மூலம் கேஷ் உள்ளடக்கத்தை அழிக்க வேண்டியிருக்கலாம்."
   },
-
   "manageSitesButton": {
     "message": "தளங்களை சேர் அல்லது அகற்று"
   },
-
   "manageSitesFallback": {
     "message": "தளங்களை சேர்க்க அல்லது அகற்ற, நீட்டிப்பு மேலாளரை திறந்து, Chromium Mask ஐ தேர்ந்தெடுத்து, அமைப்புகளைத் தாக்கவும்."
   },
-
   "addSiteTitle": {
     "message": "தளத்தை சேர்"
   },
-
   "addSiteButton": {
     "message": "தளத்தை சேர்"
   },
-
   "addSiteHostnameExplanation": {
     "message": "குறிப்பு: டொமைன் பெயரை உள்ளிடவும் (உதாரணம்: example.com). நீட்டிப்பு அந்த தளத்தின் அனைத்து பக்கங்கள் மற்றும் துணை டொமைன்களில் வேலை செய்யும்."
   },
-
   "addSiteErrorInvalid": {
     "message": "தயவுசெய்து சரியான டொமைனை உள்ளிடவும்!"
   },
-
   "addSiteErrorAlreadyActive": {
     "message": "இந்த டொமைனுக்கு Chromium Mask ஏற்கனவே இயக்கப்பட்டுள்ளது!"
   },
-
   "maskedSitesTitle": {
     "message": "தற்போது முகமூடியிட்ட தளங்கள்"
   },
-
   "siteListRemoveButton": {
     "message": "அகற்று"
   },
-
   "siteListEmpty": {
     "message": "நீங்கள் இன்னும் எந்த தளத்திலும் Chromium Mask ஐ இயக்கவில்லை!"
   },
-
   "linuxSpoofToggle": {
     "message": "Linux க்கு பதிலாக Windows ஆக காட்டு"
   },
-
   "linuxSpoofToggleDescription": {
     "message": "சில தளங்கள் Linux உலாவிகளை தடுக்கின்றன. Linux Chrome க்கு பதிலாக Windows Chrome ஆக தோன்ற இதை இயக்கவும்."
   },
-
   "linuxPlatformTitle": {
     "message": "Linux தளம் அமைப்புகள்"
   },
-
   "linuxSpoofOptionNote": {
     "message": "இது Chrome முகமூடி இயக்கப்பட்ட அனைத்து தளங்களையும் பாதிக்கிறது. நீங்கள் எந்த நேரத்திலும் இந்த அமைப்பை மாற்றலாம்."
   },
   "managePlatformLinkText": {
     "message": "ஒவ்வொரு தளத்திற்கும் தள அமைப்புகளை நிர்வகிக்கவும்",
     "description": "Linux-க்கு உரிய அமைப்புகளுக்கான விருப்பங்கள் பக்கத்தை திறக்க பாப்அப்பில் உள்ள இணைப்பு உரை."
+  },
+  "maskProfileDetail": {
+    "message": "நான் $PLATFORM$ இல் Chrome $VERSION$ ஆக நடிக்கிறேன்.",
+    "description": "Popup detail line showing the Chrome version and operating system the mask presents on this site.",
+    "placeholders": {
+      "version": {
+        "content": "$1",
+        "example": "155"
+      },
+      "platform": {
+        "content": "$2",
+        "example": "Windows"
+      }
+    }
+  },
+  "linuxToggleDescription": {
+    "message": "இந்தத் தளத்திற்கு Linux-க்குப் பதிலாக Windows ஆக அடையாளப்படுத்தவும். சில தளங்கள் Linux உலாவிகளைத் தடுக்கின்றன. ஹார்ட் ரிஃப்ரெஷ் (Ctrl+F5) தேவைப்படலாம்.",
+    "description": "Tooltip for the Linux-only toggle in the popup."
+  },
+  "reloadToApplyHint": {
+    "message": "முகமூடியை அணைக்க இந்தப் பக்கத்தை மீண்டும் ஏற்றவும்.",
+    "description": "Popup hint shown after turning the mask off for a site, because the open page keeps the mask until it reloads."
+  },
+  "optionsIncludesWww": {
+    "message": "(+ www)",
+    "description": "Small text next to a hostname in the site list, meaning the www. variant is masked too."
   }
 }

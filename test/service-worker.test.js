@@ -79,14 +79,14 @@ test("startup applies one rule per hostname, www variant included, with the per-
   );
 
   assert.deepEqual(Object.keys(byFilter).sort(), [
-    "*://example.com/*",
-    "*://legacy.test/*",
-    "*://www.example.com/*",
-    "*://www.legacy.test/*",
+    "*://example.com^",
+    "*://legacy.test^",
+    "*://www.example.com^",
+    "*://www.legacy.test^",
   ]);
   // The www variant inherits the platform choice of the hostname that owns it.
-  assert.match(byFilter["*://www.example.com/*"], /Windows NT 10\.0/);
-  assert.match(byFilter["*://legacy.test/*"], /X11; Linux/);
+  assert.match(byFilter["*://www.example.com^"], /Windows NT 10\.0/);
+  assert.match(byFilter["*://legacy.test^"], /X11; Linux/);
   assert.deepEqual(calls.dnr.removeRuleIds, [1000]);
   assert.equal(new Set(rules.map((r) => r.id)).size, rules.length);
 

@@ -30,6 +30,9 @@ test("GREASE brand matches the lists real Chrome versions send", () => {
   assert.equal(format(120), "Not_A Brand;8|Chromium;120|Google Chrome;120");
   assert.equal(format(131), "Google Chrome;131|Chromium;131|Not_A Brand;24");
   assert.equal(format(138), "Not)A;Brand;8|Chromium;138|Google Chrome;138");
+  // Observed in the wild: Opera 136 (Chromium 152) and Edge 154.
+  assert.equal(format(152), "Chromium;152|Not?A_Brand;24|Google Chrome;152");
+  assert.equal(format(154), "Chromium;154|Google Chrome;154|Not A(Brand;99");
 });
 
 test("profile UA, headers and navigator values describe the same browser", () => {

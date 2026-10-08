@@ -10,6 +10,7 @@
 - The remote Chrome version is validated before it is stored. The offline fallback follows the browser's own engine version.
 - The `www.` variant of a site now follows the same Linux/Windows setting as the site itself.
 - Client hint brand lists are generated the way Chrome generates them, identically in headers and JavaScript. `sec-fetch-user` is no longer added to every request.
+- Header rewriting now also applies to sites served on a non-standard port.
 - The options page refreshes after you change the list. The toolbar icon updates as soon as a site is disabled.
 - The popup no longer fails on pages whose URL is unavailable, and turning the mask off on a `www.` page works when the parent hostname is the configured entry.
 

@@ -64,7 +64,7 @@ function resolvePlatformKey(os, linuxAsWindows) {
 
 // Chrome derives its "GREASE" brand from the major version. Reproducing the algorithm keeps the
 // brand list identical to what a real Chrome of that version sends.
-const GREASE_CHARS = [" ", " ", ":", "-", ".", "/", ")", ";", "=", "?", "_"];
+const GREASE_CHARS = [" ", "(", ":", "-", ".", "/", ")", ";", "=", "?", "_"];
 const GREASE_VERSIONS = ["8", "99", "24"];
 const BRAND_ORDERS = [
   [0, 1, 2],

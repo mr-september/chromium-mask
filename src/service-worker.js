@@ -100,7 +100,7 @@ async function syncDnrRules(profiles, hostProfiles) {
     id: index + 1,
     priority: 1,
     action: { type: "modifyHeaders", requestHeaders: operations[key] },
-    condition: { urlFilter: `*://${hostname}/*`, resourceTypes: RESOURCE_TYPES },
+    condition: { urlFilter: `*://${hostname}^`, resourceTypes: RESOURCE_TYPES },
   }));
 
   const existing = await chrome.declarativeNetRequest.getDynamicRules();

@@ -28,6 +28,9 @@ jobs:
       - name: Run style linting
         run: npm run lint-check
 
+      - name: Run unit tests
+        run: npm test
+
       - name: Validate extension manifest
         run: |
           # Basic JSON validation

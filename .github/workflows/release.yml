@@ -32,6 +32,9 @@ jobs:
       - name: Run linting
         run: npm run lint-check
 
+      - name: Run unit tests
+        run: npm test
+
       - name: Get version from tag or input
         id: version
         run: |

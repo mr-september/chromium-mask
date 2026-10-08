@@ -1,5 +1,36 @@
 # Changelog - Chromium Mask
 
+## 2.1.0 - October 2026
+
+### Fixes
+
+- `navigator.userAgent` and related properties now report the same Chrome version as the request headers. Previously the page-side values were fixed at Chrome 134.
+- Errors in the service worker are logged correctly instead of throwing a second error, which could leave the popup unresponsive.
+- The hourly Chrome version check now runs when it wakes a stopped service worker.
+- The remote Chrome version is validated before it is stored. The offline fallback follows the browser's own engine version.
+- The `www.` variant of a site now follows the same Linux/Windows setting as the site itself.
+- Client hint brand lists are generated the way Chrome generates them, identically in headers and JavaScript. `sec-fetch-user` is no longer added to every request.
+- The options page refreshes after you change the list. The toolbar icon updates as soon as a site is disabled.
+- The popup no longer fails on pages whose URL is unavailable, and turning the mask off on a `www.` page works when the parent hostname is the configured entry.
+
+### Changes
+
+- The popup shows what the mask presents on the current site, for example "Presenting as Chrome 155 on Windows".
+- After you turn the mask off, the popup reminds you to reload the page.
+- The Linux/Windows toggle has its own tooltip, and the site list marks entries that also cover their `www.` variant. The new strings are translated in all 14 languages.
+- Chrome version updates no longer reload open tabs. New requests use the new headers, and pages pick up the new JavaScript values on their next navigation.
+- Removed the undocumented `forceLegacyTabReload` and `linuxSpoofReloadAllTabs` storage flags.
+- `navigator.platform` is now spoofed, and browser-specific globals such as `window.opr` and `navigator.brave` are removed.
+- Removed wrappers around `Error`, `RTCPeerConnection`, `fetch`, `XMLHttpRequest`, `CSS.supports` and `screen`, and the fake plugin list. They had no useful effect and could break pages.
+
+### Internal
+
+- The service worker is stateless and driven by `chrome.storage.onChanged`. DNR rules, content scripts and spoof profiles are rebuilt from storage through a single queue, replacing the message passing between popup, options page and worker.
+- The content script is split into `content-main.js` (page world) and `content-bridge.js` (extension world). Profile construction moved to `ua-profile.js`.
+- Added unit tests (`npm test`), run in CI.
+- `build.js` no longer installs packages at build time and works with `zip` or the Windows `tar`.
+- Removed `dev-localhost-setup.js` and an unused icon.
+
 ## 2.0.0 (Chromium Browser Rebrand) - October 2025
 
 **🎨 Major Rebrand: Chrome Mask for Opera → Chromium Mask**

@@ -149,8 +149,9 @@ https://chromewebstore.google.com/detail/chromium-mask/mlbogcpkpneelepggdoicaeln
   - `navigator.userAgent`
   - `navigator.userAgentData` (including high-entropy values)
   - `navigator.vendor` → "Google Inc."
-  - `navigator.appVersion`
-  - `window.chrome` object (comprehensive Chrome APIs structure)
+  - `navigator.appVersion` and `navigator.platform`
+  - `window.chrome` object (added when the browser omits it)
+  - Browser-specific globals such as `window.opr` and `navigator.brave` are removed
 - **Platform Detection**: Automatically adapts to your OS or optionally spoofs as Windows on Linux
 
 ### What This Extension Does NOT Do
@@ -249,6 +250,9 @@ npm run lint
 
 # Check code formatting
 npm run lint-check
+
+# Run the unit tests (Node 20+, no browser needed)
+npm test
 ```
 
 ## 📄 License

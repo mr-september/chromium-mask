@@ -1,15 +1,16 @@
 {
   "name": "chromium-mask",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Makes Chromium browsers (Opera, Brave, Edge, Vivaldi, Arc, etc.) compatible with sites requiring mainstream browsers.",
   "author": "mr-september",
   "license": "MIT",
   "private": true,
   "type": "module",
   "scripts": {
-    "clean": "node -e \"const fs = require('fs'); if (fs.existsSync('dist')) fs.rmSync('dist', {recursive: true, force: true});\"",
-    "build": "npm run clean && node -e \"const fs = require('fs'); if (!fs.existsSync('dist')) fs.mkdirSync('dist');\" && node build.js",
-    "build-simple": "npm run clean && node -e \"const fs = require('fs'); if (!fs.existsSync('dist')) fs.mkdirSync('dist');\" && node build.js --simple",
+    "clean": "node -e \"require('fs').rmSync('dist', {recursive: true, force: true})\"",
+    "build": "npm run clean && node build.js",
+    "build-simple": "npm run clean && node build.js --simple",
+    "test": "node --test \"test/*.test.js\"",
     "lint-check": "npx prettier --check .",
     "lint": "npx prettier --write .",
     "pre-commit": "lint-staged"
